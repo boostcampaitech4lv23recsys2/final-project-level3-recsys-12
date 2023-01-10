@@ -7,12 +7,12 @@ assignees: ''
 
 ---
 
-? Issue
+:speech_balloon: Issue
 ---
 
 
 
-?? To do
+:heavy_check_mark: To do
 ---
 - [ ] 
 - [x] 완료된 일
@@ -20,5 +20,5 @@ assignees: ''
 
 
 
-? Reference
+:books: Reference
 ---
