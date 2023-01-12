@@ -1,0 +1,24 @@
+<script>
+	import { setContext } from 'svelte'
+	import Router from 'svelte-spa-router'
+	import Home from './Home.svelte'
+	import Detail from './Detail.svelte'
+	import Login from './Login.svelte'
+	import SignUp from './SignUp.svelte'
+	import Header from './Header.svelte'
+	import Footer from './Footer.svelte'
+
+	const routes = {
+		'/': Home,
+		'/detail/:id': Detail,
+		'/login': Login,
+		'/signup': SignUp,
+	}
+	export let house_list
+
+	setContext('house_list', house_list)
+	
+</script>
+<Header />
+<Router {routes} />
+<Footer />
