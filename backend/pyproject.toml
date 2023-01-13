@@ -1,16 +1,16 @@
 [tool.poetry]
-name = "test-fastapi"
+name = "backend"
 version = "0.1.0"
-description = "FASTAPI TEST"
-authors = ["Jisoo <cussion09@gmail.com>"]
+description = "Backend-FastAPI"
+authors = ["JisooRyu99 <cussion09@gmail.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "test_fastapi"}]
 
 [tool.poetry.dependencies]
-python = ">=3.6.2,<=3.10"
-fastapi = "^0.70.0"
-pandas = "1.0.0"
+python = "^3.8"
+fastapi = "^0.89.1"
+uvicorn = "^0.20.0"
+pandas = "^1.5.2"
 
 
 [build-system]

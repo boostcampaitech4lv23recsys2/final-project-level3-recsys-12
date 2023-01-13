@@ -2,14 +2,29 @@ from fastapi import FastAPI, Form, Request, HTTPException
 from model.predict import inference
 from pydantic import BaseModel, Field
 
+from fastapi.middleware.cors import CORSMiddleware
+import json
+
 app = FastAPI()
 
 # TODO : 로그인 구현, 상품 구현
 # TODO : 로그인(login) = Request
 # TODO : 상품(product) = 가구 추천 결과
+origins = [
+    "http://localhost:8080"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 import pandas as pd
-df = pd.read_csv('../item_v1.csv')
+
+df = pd.read_csv('item_v1.csv')
 
 fake_users = {
     "Boostcamp" : {
@@ -37,28 +52,33 @@ fake_users = {
 SUCCESS_CODE = 200
 FAIL_CODE = 400
 
+def type_to_json(df):
+    import random
+    num = random.randint(0,len(df)-6)
+    topk = df.loc[num:num+6]
+    topk = topk[['item','title','seller','price','image']]
+    topk_json = topk.to_json(orient="records")
+    topk_json = json.loads(topk_json)
+    return topk_json
+
 # 순서 -> item_id, 가구명, 가구파는 곳, 가격, 이미지 url
 @app.get('/')
 async def initial_main_page(): #item_id, 가구명, 가구파는 곳, 가격, 이미지 url
     # 모델 결과 Top-K
     # TODO: DB로 부터 초기 페이지 값 불러오기
-
-    return {"item_id" : df.item[18:24].tolist(), "funiture_name" : df.title[18:24].tolist(), "seller" : df.seller[18:24].tolist(),\
-        "price" : list(map(str,df.price[18:24].tolist())), "img_url" : df.image[18:24].tolist()} # user별 추천 item K개
+    return type_to_json(df)
 
 
 # 로그인 했을 때 메인 페이지
 @app.get('/{user_id}') #가구명, 가구파는 곳, 가격, 이미지 url, item_id
 async def main_page_with_user(
     user_id: str, # index -> user_id
-    item_id : int,
-    furniture_name : str,
-    seller : str,
-    price : float,
-    img_url : str,
 ):
    # id -> 개인별 추천상품
-    return inference(user_id, item_id, furniture_name, seller, price, img_url) # top-k list
+    model_result, item_list = inference(user_id) # model이 item id를 주지..?
+    
+    
+    return  # top-k list
 
 # login 했을 때 존재하는 아이디인지 확인
 @app.get('/login/{user_id}')

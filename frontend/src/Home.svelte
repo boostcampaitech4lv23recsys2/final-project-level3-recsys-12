@@ -2,19 +2,21 @@
 	import { getContext } from 'svelte'
 	import { link } from 'svelte-spa-router'
 
-	// let item_list
+	let item_list
 
-	// fetch("http://localhost:8000/").then((response) => {
-	// 	response.json().then((json) => {
-	// 		item_list = json.message;
-	// 	})
-	// })
+	fetch("http://localhost:8000/").then((response) => {
+		console.log(response)
+	})
 
 	// 상위 컴포넌트(main.js)에서 전달한 props 가지고 옴.
-	const item_list = getContext('house_list')
+	// const item_list = getContext('house_list')
 </script>
 
 <hr>
+
+{#each item_list as item}
+{item["funiture_name"]}
+{/each}
 
 <!-- Section-->
 <section class="py-3">
