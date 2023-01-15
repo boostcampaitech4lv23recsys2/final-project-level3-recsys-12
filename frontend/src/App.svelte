@@ -1,5 +1,5 @@
 <script>
-	import { setContext } from 'svelte'
+
 	import Router from 'svelte-spa-router'
 	import Home from './Home.svelte'
 	import Detail from './Detail.svelte'
@@ -14,11 +14,9 @@
 		'/login': Login,
 		'/signup': SignUp,
 	}
-	export let house_list
-
-	setContext('house_list', house_list)
 	
 </script>
+
 <Header />
 <Router {routes} />
 <Footer />
