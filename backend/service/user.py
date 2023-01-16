@@ -1,4 +1,5 @@
 from main import fake_users
+# from db.models import Item
 
 def get_user_info(user_id):
     if user_id in fake_users:
