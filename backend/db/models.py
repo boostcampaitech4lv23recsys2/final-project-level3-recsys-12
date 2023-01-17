@@ -1,3 +1,5 @@
+# PK-FK가 연결되어있는 것이 구현 난이도가 올라가는것 같아서 일단은 배제
+
 # 1. DB를 띄우면서 테이블 생성
 # 2. api 서버 동작할 때 테이블 생성
 
@@ -57,7 +59,7 @@ class HouseItem(Base):
     # house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
     # item_id = Column(Integer, ForeignKey("item.item_id")) # 가구 id: FK
     house_id = Column(Integer, nullable=False, primary_key=True) # 집들이 id: PK
-    item_id = Column(Integer, nullable=False, primary_key=True) # 가구 id: PK
+    item_id = Column(Integer, nullable=False, primary_key=True) # 가구 ID: PK
     
     # # Foreign Key인 house_id와 item_id를 
     # # house Table의 Primary Key인 house_id와 
@@ -70,8 +72,7 @@ class HouseItem(Base):
 class HouseColor(Base):
     
     __tablename__ = "house_color" # MySQL DB Table 이름
-    # house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
-    house_id = Column(Integer, nullable=False, primary_key=True) # 집들이 id: PK
+    house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
     color_0 = Column(BINARY, nullable=False, default=0) # 검정색
     color_1 = Column(BINARY, nullable=False, default=0) # 하얀색
     color_2 = Column(BINARY, nullable=False, default=0) # 회색
@@ -94,8 +95,7 @@ class HouseColor(Base):
 class Member(Base):
     
     __tablename__ = "member" # MySQL DB Table 이름
-    # house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
-    house_id = Column(Integer, nullable=False, primary_key=True) # 집들이 id: PK
+    house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
     member_email = Column(String(255), nullable=False) # 회원 email
     
     # # Foreign Key인 house_id를 house Table의 Primary Key인 house_id와 연결
