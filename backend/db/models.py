@@ -1,3 +1,5 @@
+# PK-FK가 연결되어있는 것이 구현 난이도가 올라가는것 같아서 일단은 배제
+
 # 1. DB를 띄우면서 테이블 생성
 # 2. api 서버 동작할 때 테이블 생성
 
@@ -20,14 +22,14 @@ class House(Base):
     style = Column(String(100), nullable=True) # 스타일
     detail = Column(String(100), nullable=True) # 세부공사
     
-    # Primary Key인 house_id를 house_item Table의 Foreign Key인 house_id와 연결
-    house_item = relationship("HouseItem", back_populates="house")
-    # Primary Key인 house_id를 house_color Table의 Foreign Key인 house_id와 연결
-    house_color = relationship("HouseColor", back_populates="house")
-    # Primary Key인 house_id를 member Table의 Foreign Key인 house_id와 연결
-    member = relationship("Member", back_populates="house")
-    # Primary Key인 house_id를 house_card Table의 Foreign Key인 house_id와 연결
-    house_card = relationship("HouseCard", back_populates="house")
+    # # Primary Key인 house_id를 house_item Table의 Foreign Key인 house_id와 연결
+    # house_item = relationship("HouseItem", back_populates="house")
+    # # Primary Key인 house_id를 house_color Table의 Foreign Key인 house_id와 연결
+    # house_color = relationship("HouseColor", back_populates="house")
+    # # Primary Key인 house_id를 member Table의 Foreign Key인 house_id와 연결
+    # member = relationship("Member", back_populates="house")
+    # # Primary Key인 house_id를 house_card Table의 Foreign Key인 house_id와 연결
+    # house_card = relationship("HouseCard", back_populates="house")
 
 
 # 가구
@@ -46,22 +48,24 @@ class Item(Base):
     available_product = Column(String(100), nullable=True) # 판매여부
     predict_price = Column(String(100), nullable=True) # 예상가격
     
-    # Primary Key인 item_id를 house_item Table의 Foreign Key인 item_id와 연결
-    house_item = relationship("HouseItem", back_populates="item")
+    # # Primary Key인 item_id를 house_item Table의 Foreign Key인 item_id와 연결
+    # house_item = relationship("HouseItem", back_populates="item")
 
 
 # 집들이_가구
 class HouseItem(Base):
     
     __tablename__ = "house_item" # MySQL DB Table 이름
-    house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
-    item_id = Column(Integer, ForeignKey("item.item_id")) # 가구 id: FK
+    # house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
+    # item_id = Column(Integer, ForeignKey("item.item_id")) # 가구 id: FK
+    house_id = Column(Integer, nullable=False, primary_key=True) # 집들이 id: PK
+    item_id = Column(Integer, nullable=False, primary_key=True) # 가구 ID: PK
     
-    # Foreign Key인 house_id와 item_id를 
-    # house Table의 Primary Key인 house_id와 
-    # item Table의 Primary Key인 item_id와 연결
-    house = relationship("House", back_populates="house_item")
-    item = relationship("Item", back_populates="house_item")
+    # # Foreign Key인 house_id와 item_id를 
+    # # house Table의 Primary Key인 house_id와 
+    # # item Table의 Primary Key인 item_id와 연결
+    # house = relationship("House", back_populates="house_item")
+    # item = relationship("Item", back_populates="house_item")
     
     
 # 집들이 색상
@@ -83,8 +87,8 @@ class HouseColor(Base):
     color_11 = Column(BINARY, nullable=False, default=0) # 파란색
     color_12 = Column(BINARY, nullable=False, default=0) # 남색
     
-    # Foreign Key인 house_id를 house Table의 Primary Key인 house_id와 연결
-    house = relationship("House", back_populates="house_color")
+    # # Foreign Key인 house_id를 house Table의 Primary Key인 house_id와 연결
+    # house = relationship("House", back_populates="house_color")
     
     
 # 회원정보
@@ -94,8 +98,8 @@ class Member(Base):
     house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
     member_email = Column(String(255), nullable=False) # 회원 email
     
-    # Foreign Key인 house_id를 house Table의 Primary Key인 house_id와 연결
-    house = relationship("House", back_populates="member")
+    # # Foreign Key인 house_id를 house Table의 Primary Key인 house_id와 연결
+    # house = relationship("House", back_populates="member")
     
     
 # 카드
@@ -106,19 +110,21 @@ class Card(Base):
     img_src = Column(String(255), nullable=True) # 사진 주소
     img_space = Column(String(100), nullable=True) # 공간
     
-    # Primary Key인 card_id를 house_card Table의 Foreign Key인 card_id와 연결
-    house_card = relationship("HouseCard", back_populates="card")
+    # # Primary Key인 card_id를 house_card Table의 Foreign Key인 card_id와 연결
+    # house_card = relationship("HouseCard", back_populates="card")
     
     
 # 집들이_카드
 class HouseCard(Base):
     
     __tablename__ = "house_card"
-    house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
-    card_id = Column(Integer, ForeignKey("card.card_id")) # 카드 id: FK
+    # house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
+    # card_id = Column(Integer, ForeignKey("card.card_id")) # 카드 id: FK
+    house_id = Column(Integer, nullable=False, primary_key=True) # 집들이 id: PK
+    card_id = Column(Integer, nullable=False, primary_key=True) # 카드 id: PK
     
-    # Foreign Key인 house_id와 card_id를
-    # house Table의 Primary Key인 house_id와
-    # card Table의 Primary Key인 card_id와 연결
-    house = relationship("House", back_populates="house_card")
-    card = relationship("Card", back_populates="house_card")
+    # # Foreign Key인 house_id와 card_id를
+    # # house Table의 Primary Key인 house_id와
+    # # card Table의 Primary Key인 card_id와 연결
+    # house = relationship("House", back_populates="house_card")
+    # card = relationship("Card", back_populates="house_card")
