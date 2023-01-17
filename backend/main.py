@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 import json
 from service.item import get_item
-from service.user import get_user_info, insert_user
+from service.user import get_existing_user, insert_user
 
 app = FastAPI()
 
@@ -33,7 +33,7 @@ app.add_middleware(
 ################ Backend ################
 import pandas as pd
 
-df = pd.read_csv('item_v1.csv')
+df = pd.read_csv('data/item_v1.csv')
 
 fake_users = {
     "Boostcamp" : {
@@ -56,15 +56,10 @@ fake_users = {
         "image_url" : f"{df.image[12:18].tolist()}"},
 }
 
-# 200 -> 성공
-# 400 -> 실패
-SUCCESS_CODE = 200
-FAIL_CODE = 400
-
 def type_to_json(df):
     import random
-    num = random.randint(0,len(df)-6)
-    topk = df.loc[num:num+6]
+    num = random.sample(range(0,len(df)),6)
+    topk = df.loc[num]
     topk = topk[['item','title','seller','price','image']]
     topk_json = topk.to_json(orient="records")
     topk_json = json.loads(topk_json)
@@ -79,7 +74,7 @@ async def initial_main_page(): #item_id, 가구명, 가구파는 곳, 가격, �
 
 
 # 로그인 했을 때 메인 페이지
-@app.get('/{user_id}') #가구명, 가구파는 곳, 가격, 이미지 url, item_id
+@app.post('/{user_id}') #가구명, 가구파는 곳, 가격, 이미지 url, item_id
 async def main_page_with_user(
     user_id: str, # index -> user_id
 ):
@@ -92,13 +87,13 @@ async def main_page_with_user(
 
 # 존재하는 아이디 확인 후 정보 return
 @app.get('/login/{user_id}')
-async def user_data(user_id: str): #가구명, 가구파는 곳, 가격, 이미지 url, item_id
-    return get_user_info(user_id)
-
+async def user_data(user_id: int): #가구명, 가구파는 곳, 가격, 이미지 url, item_id
+    return get_existing_user(user_id)
 
 # db update
 class UpdateDBIn(BaseModel):
     user_id: str
+    house_id : int
     selected_img_arr: str
     item_id : int
     seller : str
@@ -106,7 +101,7 @@ class UpdateDBIn(BaseModel):
     price : float
     img_url : str
 
-@app.post('/register/{user_id}')
+@app.get('/register/{user_id}')
 async def update_db(update_db_in: UpdateDBIn) -> str:
     # 회원가입할 때 선택한 집들이 이미지 list를 받을텐데 DB에 list
     '''
@@ -127,3 +122,10 @@ async def update_db(update_db_in: UpdateDBIn) -> str:
 #     #item.image_url = f"/main/furniture_image/{item.item_id}.png" 
 #     return item
 
+
+
+'''
+1. 디테일 페이지에서 보여줄 내용? -> 가격, 이미지링크, 이름, 판매처
+2. 회원가입할때 집들이 이미지 5개씩 (스타일별로)
+3. 회원가입때 이메일 받아옴
+'''
