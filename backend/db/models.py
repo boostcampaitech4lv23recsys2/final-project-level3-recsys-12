@@ -92,7 +92,7 @@ class Member(Base):
     
     __tablename__ = "member" # MySQL DB Table 이름
     house_id = Column(Integer, ForeignKey("house.house_id")) # 집들이 id: FK
-    member_id = Column(String(255), nullable=False) # 회원 id
+    member_email = Column(String(255), nullable=False) # 회원 email
     
     # Foreign Key인 house_id를 house Table의 Primary Key인 house_id와 연결
     house = relationship("House", back_populates="member")
