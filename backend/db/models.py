@@ -21,11 +21,11 @@ class House(Base):
     style = Column(String(100), nullable=True) # 스타일
     duration = Column(String(100), nullable=True) # 기간
     budget = Column(String(100), nullable=True) # 예산
-    detail = Column(String(100), nullable=True) # 세부공사
+    detail = Column(String(255), nullable=True) # 세부공사
     prefer = Column(Integer, nullable=True) # 선호
     scrab = Column(Integer, nullable=True) # 스크랩
     comment = Column(Integer, nullable=True) # 코멘트
-    views = Column(String(100), nullable=True) # 뷰
+    views = Column(Integer, nullable=True) # 조회수
     card_url = Column(String(255), nullable=True) # 카드주소
 
 
