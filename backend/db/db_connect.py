@@ -1,8 +1,10 @@
 import os
-import json
+import yaml
 
-SERECT_FILE = os.path.join('data/secrets.json')
-serects = json.loads(open(SERECT_FILE).read())
+SERECT_FILE = os.path.join('data/secrets.yaml')
+with open(SERECT_FILE) as fp:
+    serects = yaml.load(fp, yaml.FullLoader)
+
 DB = serects["DB"]
 
 DB_URL = f"mysql+pymysql://{DB['user']}:{DB['password']}@{DB['host']}/{DB['database']}"
