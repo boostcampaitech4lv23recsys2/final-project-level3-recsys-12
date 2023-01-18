@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 from fastapi.middleware.cors import CORSMiddleware
 import json
-from service.item import get_item
+from service.item import get_item, get_signup_info, get_random_card
 from service.user import get_existing_user, insert_user
 
 app = FastAPI()
@@ -33,7 +33,7 @@ app.add_middleware(
 ################ Backend ################
 import pandas as pd
 
-df = pd.read_csv('data/item_v1.csv')
+df = pd.read_csv('data/item.csv')
 
 fake_users = {
     "Boostcamp" : {
@@ -109,7 +109,18 @@ async def update_db(update_db_in: UpdateDBIn) -> str:
     2. 그냥 배열 형태의 데이터를 통째로 String으로 변환 후 DB에 저장하고 꺼내올 때는 String을 파싱하여 List에 담아서 보내는 것이다. -> lst = '[1,2,3,4]'
     '''
     return insert_user(update_db_in.user_id, update_db_in.selected_img_arr)
-        
+
+
+@app.get('/signup')
+async def get_card_image():
+    '''
+    1. house 테이블에서 스타일별로 5개씩 추출
+    2. json 형태로 리턴
+    '''
+    signup_info = get_signup_info()
+    return get_random_card(signup_info)
+
+    
 # # 개인 페이지
 # @app.get('/users/{user_id}')
 # def get_user_item(user_id):
