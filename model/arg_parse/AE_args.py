@@ -23,7 +23,7 @@ def get_args():
     
     parser.add_argument("--topk", type=int, default=10)
     parser.add_argument("--csv", type=int, default=0)
-    parser.add_argument("--model_path", type=str, default="/opt/ml/input/model/saved_model/best_model.pt")
+    parser.add_argument("--model_path", type=str, default="/opt/ml/input/final/model/saved_model/best_model.pt")
     
     args = parser.parse_args()
 

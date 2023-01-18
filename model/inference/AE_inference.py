@@ -34,7 +34,7 @@ def main(args: object):
     model = get_model(args, item_decoder)
     
     inference_result = inference(args, model, dummy_data, item_decoder)
-    print(inference_result)
+    print(f"Recommended items: {inference_result}")
 
 if __name__ == "__main__":
     args = get_args()
