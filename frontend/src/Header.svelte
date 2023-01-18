@@ -1,11 +1,30 @@
 <script>
     import { link } from 'svelte-spa-router'
+    const logo = document.querySelector("#logo")
+    function onLogoHover(e){
+        console.log(1)
+        if (e.target.textContent == "@_@"){
+            e.target.textContent = "@..@"
+        }else{
+            e.target.textContent = "@_@"
+        }
+    }
+    // function onLogoHover(e){
+    //     console.log(1)
+    //     if (e.target.textContent == "@_@"){
+    //         e.target.textContent = "@*@"
+    //     }else{
+    //         e.target.textContent = "@_@"
+    //     }
+    // }
+    
+    // logo.addEventListener("mouseover",onLogoHover)
 </script>
 
 <header class="header">
     <nav class="navbar navbar-expand-lg navbar-light navbar-bg">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" href="/">@_@</a>
+            <a class="navbar-brand" id="logo" on:mouseover={onLogoHover} on:mouseleave={onLogoHover} href="/">@_@</a>
             <a use:link href="/login">
                 <button class="login-button" type="button">로그인</button>
             </a>
@@ -14,7 +33,6 @@
 </header>
 
 <style>
-
     /* navbar 배경 색상 */
     .navbar-bg {
         --bs-bg-opacity: 1;
@@ -24,6 +42,10 @@
     /* 페이지 로고(RAYN) 크기 조절 */
     .navbar-brand {
         font-size: 55px;
+    }
+    .navbar-brand:hover {
+        font-size: 55px;
+        text-decoration: none;
     }
 
     /* 로그인 버튼 */
@@ -44,6 +66,4 @@
     .login-button:hover {
         box-shadow: 0 0 0 3px black;
     }
-
-
 </style>

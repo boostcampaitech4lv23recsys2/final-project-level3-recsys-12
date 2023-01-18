@@ -1,7 +1,9 @@
 <script>
 
 	import { link } from 'svelte-spa-router'
-
+    import ImageBlock from './SignUpElement/ImageBlock.svelte';
+    import SignUpForm from './SignUpElement/SignUpForm.svelte';
+    import {getContext, setContext} from "svelte"
 	// let house_list = []
 
 	// async function get_items() {
@@ -30,41 +32,47 @@
         {"item_id": 133732, "image": "https://image.ohou.se/i/bucketplace-v2-development/uploads/cards/projects/167091171836930326.heic?w=960&h=640&c=c"},
     ]
 
-    $: checked_house = [];
-    
+	let selected_img = new Set();
+	setContext("selected_img",selected_img);
+
+    let selected_cnt = 0;
+    setContext("selected_cnt",selected_cnt);
 </script>
 
-<hr>
 
-<!-- Section-->
-{checked_house}
+<hr>
 <section class="py-3">
-	<div class="container-md px-3 px-lg-3 mt-3">
-		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-			<!-- 
-				row-cols-n : 축소 화면에서 n개 보여줌
-				row-cols-xl-n : 최대 화면에서 n개 보여줌
-			-->
-			<!-- house_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
-			{#each house_list as item}
-            
-                <div class="col mb-3">
-                    <div class="card h-100">
-                        <label>
-                            <!-- Product image-->
-                            <input class="check" type="checkbox" value="{item.item_id}" bind:group="{checked_house}">
-                            <img class="each-image card-img-top" src={item.image} alt="..." />
-                            <!-- Product details-->
-                        </label>
-                    </div>
-                </div>
-            {/each}
-		</div>
+<!-- <section> -->
+    <SignUpForm/>
+    <div class="container_title">
+        <br>
+        <h4 style="text-align: center; margin:0;">마음에 드는 이미지를 선택해 주세요.</h4>
+        <br>
+        <p style="text-align: center;">많이 선택할수록 개선된 결과가 표시됩니다.</p>
+    </div>
+	<div class="container_wrapper">
+		<!-- 
+			row-cols-n : 축소 화면에서 n개 보여줌
+			row-cols-xl-n : 최대 화면에서 n개 보여줌
+		-->
+		<!-- house_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
+		{#each house_list as item}
+        <ImageBlock {item}/>
+        {/each}
 	</div>
+    <button class="prevent_btn" disabled id="nextbtn">
+        <div id="selectbtn_wrapper">
+            <span>최소 5개 선택해 주세요.</span>
+            <span></span>
+            <span id="selected_num">Next!({selected_cnt}/5)</span>
+        </div>
+    </button>
 </section>
 
 <style>
-
-    
-
+#selectbtn_wrapper{
+    display:flex;
+    justify-content: space-evenly;
+    opacity: 1;
+}
 </style>
