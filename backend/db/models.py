@@ -4,7 +4,7 @@
 # 2. api 서버 동작할 때 테이블 생성
 
 from db.db_connect import Base
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, BINARY
 
 
 # 집들이
@@ -51,13 +51,59 @@ class Item(Base):
 class Member(Base):
     
     __tablename__ = "member" # MySQL DB Table 이름
-    member_email = Column(String(255), nullable=False, primary_key=True) # 회원 email: PK
-    house_id = Column(Integer, nullable=True) # 집들이 id
-
-
-# house, item interaction
+    member_email = Column(String(255), nullable=False) # 회원 email
+    house_id = Column(Integer, nullable=False) # 집들이 id
+    
+    
+# 집들이_가구 interaction
 class HouseItem(Base):
     
     __tablename__ = "house_item" # MySQL DB Table 이름
-    house_id = Column(Integer, nullable=False, primary_key=True) # 회원 email: PK
-    item_id = Column(Integer, nullable=True) # 집들이 id
+    house_id = Column(Integer, nullable=False) # 집들이 id
+    item_id = Column(Integer, nullable=False) # 가구 id
+    
+    
+# 집들이 색상
+class HouseColor(Base):
+    
+    __tablename__ = "house_color" # MySQL DB Table 이름
+    house_id = Column(Integer, nullable=False, primary_key=True) # 집들이 id: PK
+    main_0 = Column(BINARY, nullable=False, default=0) # 전체_검은색
+    main_1 = Column(BINARY, nullable=False, default=0) # 전체_하얀색
+    main_2 = Column(BINARY, nullable=False, default=0) # 전체_회색
+    main_3 = Column(BINARY, nullable=False, default=0) # 전체_베이지색
+    main_4 = Column(BINARY, nullable=False, default=0) # 전체_황토색
+    main_5 = Column(BINARY, nullable=False, default=0) # 전체_갈색
+    main_6 = Column(BINARY, nullable=False, default=0) # 전체_빨간색
+    main_7 = Column(BINARY, nullable=False, default=0) # 전체_분홍색
+    main_8 = Column(BINARY, nullable=False, default=0) # 전체_노란색
+    main_9 = Column(BINARY, nullable=False, default=0) # 전체_연두색
+    main_10 = Column(BINARY, nullable=False, default=0) # 전체_하늘색
+    main_11 = Column(BINARY, nullable=False, default=0) # 전체_파란색
+    main_12 = Column(BINARY, nullable=False, default=0) # 전체_남색
+    wall_0 = Column(BINARY, nullable=False, default=0) # 벽_검은색
+    wall_1 = Column(BINARY, nullable=False, default=0) # 벽_하얀색
+    wall_2 = Column(BINARY, nullable=False, default=0) # 벽_회색
+    wall_3 = Column(BINARY, nullable=False, default=0) # 벽_베이지색
+    wall_4 = Column(BINARY, nullable=False, default=0) # 벽_황토색
+    wall_5 = Column(BINARY, nullable=False, default=0) # 벽_갈색
+    wall_6 = Column(BINARY, nullable=False, default=0) # 벽_빨간색
+    wall_7 = Column(BINARY, nullable=False, default=0) # 벽_분홍색
+    wall_8 = Column(BINARY, nullable=False, default=0) # 벽_노란색
+    wall_9 = Column(BINARY, nullable=False, default=0) # 벽_연두색
+    wall_10 = Column(BINARY, nullable=False, default=0) # 벽_하늘색
+    wall_11 = Column(BINARY, nullable=False, default=0) # 벽_파란색
+    wall_12 = Column(BINARY, nullable=False, default=0) # 벽_남색
+    floor_0 = Column(BINARY, nullable=False, default=0) # 바닥_검은색
+    floor_1 = Column(BINARY, nullable=False, default=0) # 바닥_하얀색
+    floor_2 = Column(BINARY, nullable=False, default=0) # 바닥_회색
+    floor_3 = Column(BINARY, nullable=False, default=0) # 바닥_베이지색
+    floor_4 = Column(BINARY, nullable=False, default=0) # 바닥_황토색
+    floor_5 = Column(BINARY, nullable=False, default=0) # 바닥_길색
+    floor_6 = Column(BINARY, nullable=False, default=0) # 바닥_빨간색
+    floor_7 = Column(BINARY, nullable=False, default=0) # 바닥_분홍색
+    floor_8 = Column(BINARY, nullable=False, default=0) # 바닥_노란색
+    floor_9 = Column(BINARY, nullable=False, default=0) # 바닥_연두색
+    floor_10 = Column(BINARY, nullable=False, default=0) # 바닥_하늘색
+    floor_11 = Column(BINARY, nullable=False, default=0) # 바닥_파란색
+    floor_12 = Column(BINARY, nullable=False, default=0) # 바닥_남색
