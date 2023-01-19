@@ -125,10 +125,12 @@ async def get_card_image():
 async def signup(member_email:str, discription='회원가입 API입니다.') -> list:
     if check_existing_user(member_email):
         return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
+    else:
+        return JSONResponse(status_code=200, content=dict(msg="Success'"))
 
 
 @app.post('/signup/success')
-async def image(house_id_list:list, member_email:str):
+async def image(house_id_list:str, member_email:str):
     return create_member(house_id_list, member_email)
 
 '''

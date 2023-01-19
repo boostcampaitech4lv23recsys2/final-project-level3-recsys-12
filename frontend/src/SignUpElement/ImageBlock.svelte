@@ -6,21 +6,22 @@
 	let img_opacity = 1;
 	let selected_img = getContext("selected_img");
     let selected_cnt = getContext("selected_cnt");
-	let img = document.querySelector("#house_img");
-	
+	let min_select = 1
+
 	const onHouseSelected = (e)=>{
 		img_opacity = img_opacity == 0.5? 1:0.5;
 		let nextbtn = document.querySelector("#nextbtn");
-		// let selected_num = document.querySelector("#selected_num");
-		if (selected_img.has(item.item_id)){
-			selected_img.delete(item.item_id)
+		if (selected_img.has(item.house_id)){
+			selected_img.delete(item.house_id)
 			e.target.style.borderWidth="0px";
+			// e.target.style.height="15rem";
 		}else{
-			selected_img.add(item.item_id)
+			selected_img.add(item.house_id)
 			e.target.style.borderWidth="1px";
+			// e.target.style.height="20rem";
 		};
 
-		if (selected_img.size >= 5){
+		if (selected_img.size >= min_select){
 			nextbtn.classList.remove("prevent_btn");
 			nextbtn.disabled = false
 		}else{
@@ -29,6 +30,7 @@
 		};
 		selected_cnt = Array.from(selected_img).length
 		console.log(selected_cnt)
+		console.log(selected_img)
 		// selected_num.textContent = "({0}/5)".format();
 	}
 </script>
@@ -38,12 +40,31 @@
 		margin:0;
 		padding:0;
 		width:20rem;
-		/* height:10rem; */
+		height:15rem;
 		border-radius: 5px;
 	}
+	img {
+  		transition: all 0.2s linear;
+	}
+	img:hover{
+    	transition: transform 0.2s linear;
+    	transform-origin: 50% 50%;
+    	transform: scale(1.05);
+	  /* transform-origin: 100% 100%;
+	  transform: scale(1.05); */
+	  /* height: 20rem; */
+	}
 	img{
-		transition: opacity 0.2s;
+		transition: opacity 0.2s height 0.5s;
 		border: 0px solid black;
 	}
 </style>
-<img src={item.image} on:click={onHouseSelected} alt="images" class="house" id="house_img" value={item.item_id} style:opacity={img_opacity}>
+<img 
+	src={item.card_img_url} 
+	on:click={onHouseSelected} 
+	alt="images" 
+	class="house" 
+	id="house_img" 
+	value={item.house_id} 
+	style="opacity:{img_opacity}"
+>
