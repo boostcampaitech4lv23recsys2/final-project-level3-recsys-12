@@ -51,6 +51,7 @@ class Item(Base):
 class Member(Base):
     
     __tablename__ = "member" # MySQL DB Table 이름
+    idx = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
     member_email = Column(String(255), nullable=False) # 회원 email
     house_id = Column(Integer, nullable=False) # 집들이 id
     
@@ -59,6 +60,7 @@ class Member(Base):
 class HouseItem(Base):
     
     __tablename__ = "house_item" # MySQL DB Table 이름
+    idx = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
     house_id = Column(Integer, nullable=False) # 집들이 id
     item_id = Column(Integer, nullable=False) # 가구 id
     

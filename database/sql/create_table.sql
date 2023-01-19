@@ -40,12 +40,14 @@ CREATE TABLE IF NOT EXISTS `house` (
 
 -- create house_item interaction table
 CREATE TABLE IF NOT EXISTS `house_item`(
+	`idx` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`house_id` INT(10) NOT NULL,
 	`item_id` INT(10) NOT NULL
 );
 
 -- create member table
 CREATE TABLE IF NOT EXISTS `member` (
+	`idx` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`member_email` VARCHAR(255) NOT NULL,
 	`house_id`	INT(10)	NOT NULL
 );
