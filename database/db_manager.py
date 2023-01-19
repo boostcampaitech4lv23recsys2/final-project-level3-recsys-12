@@ -13,8 +13,8 @@ def main():
     args = parser.parse_args()
     
     # get secrets
-    SERECT_FILE = os.path.join('config/secrets.json')
-    DB = json.loads(open(SERECT_FILE).read())
+    SECRET_FILE = os.path.join('config/secrets.json')
+    DB = json.loads(open(SECRET_FILE).read())
     
     # connect to database
     conn = pymysql.connect(host=DB['host'], user=DB['user'], password=DB['password'], port=DB['port'], charset='utf8', client_flag=CLIENT.MULTI_STATEMENTS)
