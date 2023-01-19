@@ -4,8 +4,8 @@ from pydantic import BaseModel
 
 from fastapi.middleware.cors import CORSMiddleware
 import json
-from service.item import get_item, get_signup_info, get_random_card
-from service.user import get_existing_user, insert_user
+from service.item import card_house, get_item, get_house_id_with_member_email, get_signup_info, get_random_card
+from service.user import check_existing_user, save_db
 
 app = FastAPI()
 
@@ -26,35 +26,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-################ DB 연결 ################
-
-
 
 ################ Backend ################
 import pandas as pd
 
-df = pd.read_csv('data/item.csv')
+df = pd.read_csv('data/item_v1.csv')
 
-fake_users = {
-    "Boostcamp" : {
-        'item_id' : f"{df.item[0:6].tolist()}",
-        'furniture_name' : f"{df.title[0:6].tolist()}",
-        'seller' : f"{df.seller[0:6].tolist()}",
-        'price' : f"{list(map(str,df.price[0:6].tolist()))}",
-        "image_url" : f"{df.image[0:6].tolist()}"},
-    "AI" : {
-        'item_id' : f"{df.item[6:12].tolist()}",
-        'furniture_name' : f"{df.title[6:12].tolist()}",
-        'seller' : f"{df.seller[6:12].tolist()}",
-        'price' : f"{list(map(str,df.price[6:12].tolist()))}",
-        "image_url" : f"{df.image[6:12].tolist()}"},
-    "Camp" : {
-        'item_id' : f"{df.item[12:18].tolist()}",
-        'furniture_name' : f"{df.title[12:18].tolist()}",
-        'seller' : f"{df.seller[12:18].tolist()}",
-        'price' : f"{list(map(str,df.price[12:18].tolist()))}",
-        "image_url" : f"{df.image[12:18].tolist()}"},
-}
 
 def type_to_json(df):
     import random
@@ -65,16 +42,15 @@ def type_to_json(df):
     topk_json = json.loads(topk_json)
     return topk_json
 
-# 순서 -> item_id, 가구명, 가구파는 곳, 가격, 이미지 url
 @app.get('/')
-async def initial_main_page(): #item_id, 가구명, 가구파는 곳, 가격, 이미지 url
+async def initial_main_page(): 
     # 모델 결과 Top-K
     # TODO: DB로 부터 초기 페이지 값 불러오기
     return type_to_json(df)
 
 
 # 로그인 했을 때 메인 페이지
-@app.post('/{user_id}') #가구명, 가구파는 곳, 가격, 이미지 url, item_id
+@app.post('/{user_id}')
 async def main_page_with_user(
     user_id: str, # index -> user_id
 ):
@@ -86,10 +62,16 @@ async def main_page_with_user(
 
 
 # 존재하는 아이디 확인 후 정보 return
-@app.get('/login/{user_id}')
-async def user_data(user_id: int): #가구명, 가구파는 곳, 가격, 이미지 url, item_id
-    return get_existing_user(user_id)
-
+@app.get('/login/{member_email}')
+async def user_data(member_email: str):
+    if check_existing_user(member_email):
+        result =  get_house_id_with_member_email(member_email) # result = house_id
+        info = []
+        return get_item(result)
+        #     info+=[get_item(r)]
+        # return {member_email, info} # -> member_email, item들
+         
+    
 # db update
 class UpdateDBIn(BaseModel):
     user_id: str
@@ -100,40 +82,43 @@ class UpdateDBIn(BaseModel):
     furniture_name : str
     price : float
     img_url : str
-
-@app.get('/register/{user_id}')
-async def update_db(update_db_in: UpdateDBIn) -> str:
-    # 회원가입할 때 선택한 집들이 이미지 list를 받을텐데 DB에 list
-    '''
-    1. 해당 데이터에 대한 별도의 테이블을 구성하고 쿼리문의 조인을 통해 DTO를 구성하는 방법이다.
-    2. 그냥 배열 형태의 데이터를 통째로 String으로 변환 후 DB에 저장하고 꺼내올 때는 String을 파싱하여 List에 담아서 보내는 것이다. -> lst = '[1,2,3,4]'
-    '''
-    return insert_user(update_db_in.user_id, update_db_in.selected_img_arr)
-
-
-@app.get('/signup')
-async def get_card_image():
-    '''
-    1. house 테이블에서 스타일별로 5개씩 추출
-    2. json 형태로 리턴
-    '''
-    signup_info = get_signup_info()
-    return get_random_card(signup_info)
-
     
-# # 개인 페이지
-# @app.get('/users/{user_id}')
-# def get_user_item(user_id):
-#     return user_id, fake_users[user_id]
+    class Config:
+        orm_mode = True
+        
+        
+# @app.get('/signup')
+# async def get_card_image():
+#     '''
+#     1. house 테이블에서 스타일별로 5개씩 추출
+#     2. json 형태로 리턴
+#     '''
+#     signup_info = get_signup_info()
+#     return get_random_card(signup_info)   
 
-# @app.get('/users/{product}/')
-# def product_image(user_id : str):
-#     #item = db.query(models.items).filter(models.items.item_id == item_id)
-#     item = fake_users[user_id]
-#     #item.image_url = f"/main/furniture_image/{item.item_id}.png" 
-#     return item
+@app.get('/signup/{member_email}')
+async def signup(member_email:str) -> list:
+    if check_existing_user(member_email):
+        return "User already exists."
+    else:
+        '''
+        1. house 테이블에서 스타일별로 5개씩 추출
+        2. json 형태로 저장
+        3. card img url 형태로 리턴
+        '''
+        signup_info = get_signup_info()
+        house_list = get_random_card(signup_info)
+        return [url.get('card_img_url') for url in house_list]
 
 
+async def update_db(selected_house_list:list, member_email:str):
+    
+    card_info = {}
+    for c in selected_house_list: # c : card_img_url
+        card_info[member_email]=card_house(c)  # member_email : house_id
+    
+    # TODO : 정보 DB저장하기
+    return save_db(member_email, card_info)
 
 '''
 1. 디테일 페이지에서 보여줄 내용? -> 가격, 이미지링크, 이름, 판매처

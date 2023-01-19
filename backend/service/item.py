@@ -1,25 +1,44 @@
-from db.models import Item
-from db.models import House
+from db.models import Item,  House, Member, HouseItem
 from db.db_connect import Database
 from sqlalchemy import select
 from inference.predict import inference
-
 import random
 import pandas as pd
 
 database = Database()
 
-def get_item(item_ids):
+
+# def get_items(item_ids):
+#     # Read data
+#     item_infos = {}
+#     for item_id in item_ids:
+#         with database.session_maker() as session:
+#             stmt = select(House).where(House.item_id == item_id) # Statement -> DB Query를 의미
+#             item_info = session.execute(stmt).fetchall()
+#             item_infos[item_id] = item_info
+#     return item_ids, item_infos
+
+def card_house(card_url : int) -> list:
+    with database.session_maker() as session:
+        stmt = select(House).where(House.card_url==card_url)
+        data = session.execute(stmt).fetchall()
+        return [col[0] for col in data][0].house_id
+
+def get_item(house_id : int) -> list:
+    with database.session_maker() as session:
+        stmt = select(HouseItem).where(HouseItem.house_id==house_id)
+        data = session.execute(stmt).fetchall()
+        try:
+            return [col[0] for col in data][0].item_id
+        except:
+            return "No exist item"
     
-    # Read data
-    item_infos = {}
-    for item_id in item_ids:
-        with database.session_maker() as session:
-            stmt = select(Item).where(Item.item_id == item_id) # Statement -> DB Query를 의미
-            item_info = session.execute(stmt)
-            item_infos[item_id] = item_info
-            
-    return item_ids, item_infos
+def get_house_id_with_member_email(member_email:str) -> str:
+    with database.session_maker() as session:
+        stmt = select(Member).where(Member.member_email==member_email)
+        data = session.execute(stmt).fetchall()
+        return [col[0] for col in data][0].house_id
+
 
 def get_signup_info():
     with database.session_maker() as session:
@@ -31,7 +50,7 @@ def get_signup_info():
 def get_random_card(signup_info):
     import json
     SAMPLE_NUM = 5
-    signup_info_df = pd.DataFrame(signup_info)
+    signup_info_df = pd.DataFrame(signup_info, columns=["house_id", "style", "card_img_url"])
     cats = set()
     for sets in signup_info_df["style"].apply(lambda x: set(x.split(", "))):
         cats = cats.union(sets)

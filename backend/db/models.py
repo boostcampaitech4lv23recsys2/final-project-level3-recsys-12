@@ -53,3 +53,11 @@ class Member(Base):
     __tablename__ = "member" # MySQL DB Table 이름
     member_email = Column(String(255), nullable=False, primary_key=True) # 회원 email: PK
     house_id = Column(Integer, nullable=True) # 집들이 id
+
+
+# house, item interaction
+class HouseItem(Base):
+    
+    __tablename__ = "house_item" # MySQL DB Table 이름
+    house_id = Column(Integer, nullable=False, primary_key=True) # 회원 email: PK
+    item_id = Column(Integer, nullable=True) # 집들이 id
