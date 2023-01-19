@@ -26,7 +26,7 @@ class House(Base):
     scrab = Column(Integer, nullable=True) # 스크랩
     comment = Column(Integer, nullable=True) # 코멘트
     views = Column(Integer, nullable=True) # 조회수
-    card_space = Column(String(20), nullable=True) # 카드 공간
+    card_space = Column(String(100), nullable=True) # 카드 공간
     card_img_url = Column(String(255), nullable=True) # 카드주소
 
 
