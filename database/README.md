@@ -1,21 +1,47 @@
-# db manager »ç¿ë¹ı
+# db manager
 
-¿ì¼±Àº °£´ÜÇÏ°Ô¸¸ Àû°í ÃßÈÄ ¸®µå¹Ì ¾÷µ¥ÀÌÆ® ¹× ³ë¼Ç ±â·Ï ÇÏ°Ú½À´Ï´Ù.   
+## database í´ë” êµ¬ì¡°
 
-database/config Æú´õ »ı¼º ÈÄ, ±× ¾È¿¡ secrets.json ÆÄÀÏÀ» »ı¼ºÇÕ´Ï´Ù.  
-json ÆÄÀÏÀº ´ÙÀ½ Çü½ÄÀ» µû¶ó¾ß ÇÕ´Ï´Ù.  
+database ë””ë ‰í† ë¦¬ì˜ êµ¬ì¡°ëŠ” ë‹¤ìŒê³¼ ê°™ìŠµë‹ˆë‹¤.
 
+```
+database
+|- config
+|   |- secrets.json
+|- data
+|   |- *.csv
+|- sql
+|   |- *.sql
+|- db_manager.py
+|- README.md
+|- requirements.txt
+```
+
+configì—ëŠ” DB ì ‘ì†ì— í•„ìš”í•œ ì •ë³´ê°€ ë“¤ì–´ìˆìŠµë‹ˆë‹¤.  
+dataì—ëŠ” DBì— ë„£ì„ csv íŒŒì¼ê³¼ DBì—ì„œ ë‚˜ì˜¨ csv íŒŒì¼ì´ ìˆìŠµë‹ˆë‹¤.  
+sqlì—ëŠ” ë¯¸ë¦¬ ì§€ì •ëœ sql ëª…ë ¹ì–´ íŒŒì¼ë“¤ì´ ë“¤ì–´ìˆìŠµë‹ˆë‹¤.  
+db_manager.pyëŠ” ë©”ì¸ ì‹¤í–‰ íŒŒì¼ì…ë‹ˆë‹¤.  
+
+## db manager ì‚¬ìš© ë°©ë²•
+
+1. requirements.txtë¥¼ ì„¤ì¹˜í•©ë‹ˆë‹¤.  
+2. config í´ë”ì— secrets.json íŒŒì¼ì„ ìƒì„±í•©ë‹ˆë‹¤. í•´ë‹¹ íŒŒì¼ì˜ í˜•ì‹ì€ ë‹¤ìŒì„ ë”°ë¦…ë‹ˆë‹¤.
+```
 {  
-    "host": <ins>database ip</ins>,  
+    "host": [database ip],  
     "user": "root",  
-    "password": <ins>database password</ins>,  
+    "password": [database password],  
     "port": 3306  
-}  
+} 
+```
+3. ```python db_manager.py --command [create | delete]``` ëª…ë ¹ì–´ë¥¼ ì‹¤í–‰í•©ë‹ˆë‹¤.  
 
-¸í·É¾î´Â ÇöÀç ´ÙÀ½ µÎ°¡Áö°¡ ÀÖÀ¸¸ç, ÃßÈÄ ¾÷µ¥ÀÌÆ® ¿¹Á¤ÀÔ´Ï´Ù.  
+## ì§€ì •ëœ sql ëª…ë ¹ì–´ ëª¨ìŒ 
 
-1. µ¥ÀÌÅÍº£ÀÌ½º ¹× Å×ÀÌºí »ı¼º  
-python db_manager.py --command create  
+ëª…ë ¹ì–´ëŠ” í˜„ì¬ ë‹¤ìŒ ë‘ê°€ì§€ê°€ ìˆìœ¼ë©°, ì¶”í›„ ì—…ë°ì´íŠ¸ ì˜ˆì •ì…ë‹ˆë‹¤.  
+
+1. ë°ì´í„°ë² ì´ìŠ¤ ë° í…Œì´ë¸” ìƒì„±  
+```python db_manager.py --command create```  
   
-2. Å×ÀÌºí »èÁ¦  
-python db_manager.py --command delete  
+2. í…Œì´ë¸” ì‚­ì œ  
+```python db_manager.py --command delete```  
