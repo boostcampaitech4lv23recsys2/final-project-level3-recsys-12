@@ -30,7 +30,7 @@ app.add_middleware(
 ################ Backend ################
 import pandas as pd
 
-df = pd.read_csv('data/item_v1.csv')
+df = pd.read_csv('data/item.csv')
 
 
 def type_to_json(df):
