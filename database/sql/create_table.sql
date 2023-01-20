@@ -52,8 +52,15 @@ CREATE TABLE IF NOT EXISTS `member` (
 	`house_id`	INT(10)	NOT NULL
 );
 
+-- create member_prefer table
+CREATE TABLE IF NOT EXISTS `member_prefer` (
+	`idx` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`member_email` VARCHAR(255) NOT NULL,
+	`item_id` INT(10) NOT NULL
+);
+
 -- create house_color table
-CREATE TABLE `house_color` (
+CREATE TABLE IF NOT EXISTS `house_color` (
 	`house_id`	INT(10)	NOT NULL PRIMARY KEY,
 	`main_0`	BINARY(1)	NOT NULL	DEFAULT 0,
 	`main_1`	BINARY(1)	NOT NULL	DEFAULT 0,

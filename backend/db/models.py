@@ -55,6 +55,15 @@ class Member(Base):
     member_email = Column(String(255), nullable=False) # 회원 email
     house_id = Column(Integer, nullable=False) # 집들이 id
     
+
+# 회원선호
+class MemberPrefer(Base):
+    
+    __tablename__ = "member_prefer" # MySQL DB Table 이름
+    idx = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
+    member_email = Column(String(255), nullable=False) # 회원 email
+    item_id = Column(Integer, nullable=False) # 가구 id
+    
     
 # 집들이_가구 interaction
 class HouseItem(Base):
