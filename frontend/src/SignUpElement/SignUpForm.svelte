@@ -1,5 +1,6 @@
 <script>
     import {setContext} from "svelte"
+    import { null_to_empty } from "svelte/internal";
 
     const dupcheckbtn = document.querySelector("#dupcheck")
 
@@ -7,10 +8,11 @@
     let is_success
 
     async function isEmailDup(e){
+        e.preventDefault()
         if (email == null){
             alert("써라.")
         }else{
-            console.log(email)
+            // console.log(email)
             let url = "http://localhost:8000/signup/"+email
             await fetch(url).then((response) => {
 		    	response.json().then((json) => {
@@ -23,7 +25,6 @@
                     }
 		    	})
 		    })
-
         }
     }
     

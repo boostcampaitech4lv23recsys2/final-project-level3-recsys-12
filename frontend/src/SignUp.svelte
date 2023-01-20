@@ -3,7 +3,7 @@
     import ImageBlock from './SignUpElement/ImageBlock.svelte';
     import SignUpForm from './SignUpElement/SignUpForm.svelte';
     import {getContext, setContext} from "svelte"
-	
+	// import { email } from './SignUpElement/SignUpForm.svelte'
     let house_list = []
     let email = getContext("email")
 
@@ -19,22 +19,22 @@
 
     async function post_member(e){
         e.preventDefault()
-        let url = "http://localhost:8000/member/success"
+        let url = "http://localhost:8000/member/"+email+"/"+JSON.stringify(Array.from(selected_img))
         let params = {
             "member_email" : email,
-            "selected_house_id" : Array.from(selected_img)
+            "selected_house_id" : JSON.stringify(Array.from(selected_img))
         }
-        let options = {
-            method: "post",
-            headers: {
-                "Content-Type": 'application/json'
-            },
-            body: JSON.stringify(params)
-        }
-        console.log(options.body)
+        // let options = {
+        //     method: "post",
+        //     headers: {
+        //         "Content-Type": 'application/json'
+        //     },
+        //     body: JSON.stringify(params)
+        // }
+        // console.log(options.body)
         // console.log(typeof(options.body))
         
-        await fetch(url,options).then((response)=>{
+        await fetch(url).then((response)=>{
             if(response.status >= 200 && response.status < 300){
                 push("/login")
             }else{
@@ -42,6 +42,14 @@
                 push("/signup")
             }
         })
+        // await fetch(url,options).then((response)=>{
+        //     if(response.status >= 200 && response.status < 300){
+        //         push("/login")
+        //     }else{
+        //         alert("회원가입에 실패하였습니다.")
+        //         push("/signup")
+        //     }
+        // })
     }
 
 	get_items()
