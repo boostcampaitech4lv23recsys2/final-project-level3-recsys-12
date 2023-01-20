@@ -1,7 +1,7 @@
 import os
 import yaml
 
-SERECT_FILE = os.path.join('data/secrets.yaml')
+SERECT_FILE = os.path.join('../secrets.yaml')
 with open(SERECT_FILE) as fp:
     serects = yaml.load(fp, yaml.FullLoader)
 DB = serects["DB"]
