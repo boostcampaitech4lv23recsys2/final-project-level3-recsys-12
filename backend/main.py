@@ -80,8 +80,6 @@ async def main_page_with_user(
 ):
     # id -> 개인별 추천상품
     user_prefered_item = get_inference_input(member_email)  # 모델에 넣을 input list(item_id_list)
-    print(user_prefered_item)
-    # user_prefered_item = [1201336, 1213929]
     model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
     
     item_list = []
