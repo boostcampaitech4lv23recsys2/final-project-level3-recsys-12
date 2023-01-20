@@ -175,6 +175,7 @@ def update(manager):
     manager.update_house()
     manager.update_item()
     manager.update_card()
+    save_color(manager)
 
 @logging_time
 def save_color(manager):
@@ -191,4 +192,4 @@ if __name__ == "__main__":
         update(manager)
     else:
         process(manager)
-    # save_color(manager)
+    
