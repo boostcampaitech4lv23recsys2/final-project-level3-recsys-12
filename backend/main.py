@@ -106,7 +106,7 @@ async def signup(member_email:str, discription='회원가입 API입니다.') -> 
         return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
 
 
-@app.post('/image_url_save/')
+@app.post('/signup/success')
 async def image(house_id_list:list, member_email:str):
     return create_member(house_id_list, member_email)
 
@@ -121,7 +121,12 @@ get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
 post : dict(json)를 받을 수 있음. {}로만 움직임.
 '''
 
-@app.get('detail/{item_id}')
+@app.get('item/{item_id}')
+async def detail():
+    ...
+    # item 다 주기
+    
+@app.get('/{member_email}/mypage')
 async def detail():
     ...
     # item 다 주기
