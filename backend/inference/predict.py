@@ -20,6 +20,7 @@ class Model:
         self.device = device
         self.house_encoder, self.house_decoder = generate_encoder_decoder(df, "house")
         self.item_encoder, self.item_decoder = generate_encoder_decoder(df, "item")
+        self.dummy_input = torch.zeros((df.item.nunique()), dtype=torch.int64)
 
     def predict(self, data):
         return self.forward(data)
@@ -27,13 +28,13 @@ class Model:
     # item_id, 가구명, 가구파는 곳, 가격, 이미지 url
     def forward(self, user_selected_data):
         self.model.eval()
-        print(user_selected_data)
-        print(type(user_selected_data))
-        user_selected_data = torch.tensor(user_selected_data).apply_(lambda x: self.item_encoder[x]).unsqueeze(dim=0)
-        print(user_selected_data)
-        print(type(user_selected_data))
-        print(user_selected_data.shape)
-        print(user_selected_data.type(torch.FloatTensor).to(self.device))
+        user_selected_data = torch.tensor(user_selected_data).apply_(lambda x: self.item_encoder[x])
+        tmp = user_selected_data[:]
+        user_selected_data = self.dummy_input[:]
+        user_selected_data[tmp] = 1
+        user_selected_data = user_selected_data.unsqueeze(dim=0)
+
+        # print(user_selected_data)
         with torch.no_grad():
             prediction = []
             model_output = self.model(user_selected_data.type(torch.FloatTensor).to(self.device))

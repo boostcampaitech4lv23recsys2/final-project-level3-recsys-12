@@ -8,12 +8,9 @@ from datetime import timedelta, datetime
 
 from jose import jwt
 import secrets
-
-from fastapi.middleware.cors import CORSMiddleware
-import json
-from service.item import card_house, get_item, get_item_info, get_signup_info, get_random_card
-from service.item import get_house_id_with_member_email, get_item_list_by_house_id, get_inference_input
-from service.user import check_existing_user, save_db
+from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
+from service.user import check_existing_user, create_member
+from service.item import get_item_info, get_item_list_by_house_id, get_inference_input
 
 from inference.predict import Model
 import yaml
@@ -63,6 +60,7 @@ async def main_page_with_user(
     # id -> 개인별 추천상품
     user_prefered_item = get_inference_input(member_email)  # 모델에 넣을 input list(item_id_list)
     print(user_prefered_item)
+    # user_prefered_item = [1201336, 1213929]
     model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
     
     item_list = []
