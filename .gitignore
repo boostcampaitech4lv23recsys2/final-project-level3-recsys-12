@@ -25,6 +25,7 @@ wandb/
 # secrets
 *.json
 *.yaml
+!configs.yaml
 
 # front-end
 frontend/node_modules/

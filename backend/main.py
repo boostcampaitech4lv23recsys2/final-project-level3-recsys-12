@@ -8,6 +8,10 @@ from datetime import timedelta, datetime
 
 from jose import jwt
 import secrets
+import requests
+import os
+import yaml
+
 from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
 from service.user import check_existing_user, create_member
 from service.item import get_item_info, get_item_list_by_house_id, get_inference_input
@@ -22,6 +26,21 @@ app = FastAPI()
 # TODO : 로그인 구현, 상품 구현
 # TODO : 로그인(login) = Request
 # TODO : 상품(product) = 가구 추천 결과
+
+################ Slack 연결 ################
+SECRET_FILE = os.path.join('../secrets.yaml')
+with open(SECRET_FILE) as fp:
+    serects = yaml.load(fp, yaml.FullLoader)
+SLACK = serects["SLACK"]
+
+# send slack message
+def post_slack_message(text):
+    response = requests.post("https://slack.com/api/chat.postMessage",
+                            headers={"Authorization": "Bearer " + SLACK["token"]},
+                            data={"channel": "#serverlog", "text": text}
+                            )
+    print(response)
+
 
 ################ Front 연결 ################
 origins = [
@@ -45,15 +64,17 @@ with open("/opt/ml/input/final/backend/inference/model.yaml") as f:
 
 MODEL = Model(model_info, df_for_model)
 
-@app.get('/')
+@app.get('/home')
 async def initial_main_page(description='비로그인 초기 페이지에 랜덤으로 아이템을 출력하는 부분입니다.'):
     """
-    views 높은 순 100개 랜덤으로
+    rating 높은 순 100개 랜덤으로
     """
-    return random_item()
+    items = random_item()
+    item_list = [col.Item for col in items]
+    return item_list
     
 # 로그인 했을 때 메인 페이지
-@app.get('/{member_email}')
+@app.get('/home/{member_email}')
 async def main_page_with_user(
     member_email: str
 ):
@@ -111,7 +132,6 @@ async def get_card_image():
     '''
     signup_info = get_signup_info()
     return get_random_card(signup_info)   
-    
 
 
 @app.get('/signup/{member_email}')
@@ -120,7 +140,7 @@ async def signup(member_email:str, discription='회원가입 API입니다.') -> 
         return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
 
 
-@app.post('/image_url_save/')
+@app.post('/signup/success')
 async def image(house_id_list:list, member_email:str):
     return create_member(house_id_list, member_email)
 
@@ -135,7 +155,12 @@ get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
 post : dict(json)를 받을 수 있음. {}로만 움직임.
 '''
 
-@app.get('detail/{item_id}')
+@app.get('item/{item_id}')
+async def detail():
+    ...
+    # item 다 주기
+    
+@app.get('/{member_email}/mypage')
 async def detail():
     ...
     # item 다 주기

@@ -8,10 +8,9 @@ database = Database()
 
 def random_item():
     with database.session_maker() as session:
-        stmt = select(Item).order_by()
+        stmt = select(Item).order_by(Item.rating.desc())
         return session.execute(stmt).fetchmany(10)
-        
-
+    
 def get_item(item_ids):
     # Read data
     item_infos = {}
