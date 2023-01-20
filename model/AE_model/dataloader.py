@@ -11,8 +11,7 @@ warnings.filterwarnings(action="ignore")
 torch.set_printoptions(sci_mode=True)
 
 import sys
-sys.path.append("../")
-from utils.Multi_AE_utils import *
+from utils import *
 
 
 class MakeMatrixDataSet:

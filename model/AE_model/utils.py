@@ -7,7 +7,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from tqdm import tqdm
 import warnings
-from data_loader.AE_dataloader import *
+from dataloader import *
 
 warnings.filterwarnings(action='ignore')
 torch.set_printoptions(sci_mode=True)
