@@ -8,15 +8,30 @@ from datetime import timedelta, datetime
 
 from jose import jwt
 import secrets
-from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
-from service.user import check_existing_user, create_member
-from service.item import get_item_info, get_item_list_by_house_id, get_inference_input
+import requests
+import os
+import yaml
 
 app = FastAPI()
 
 # TODO : 로그인 구현, 상품 구현
 # TODO : 로그인(login) = Request
 # TODO : 상품(product) = 가구 추천 결과
+
+################ Slack 연결 ################
+SECRET_FILE = os.path.join('../secrets.yaml')
+with open(SECRET_FILE) as fp:
+    serects = yaml.load(fp, yaml.FullLoader)
+SLACK = serects["SLACK"]
+
+# send slack message
+def post_slack_message(text):
+    response = requests.post("https://slack.com/api/chat.postMessage",
+                            headers={"Authorization": "Bearer " + SLACK["token"]},
+                            data={"channel": "#serverlog", "text": text}
+                            )
+    print(response)
+
 
 ################ Front 연결 ################
 origins = [
