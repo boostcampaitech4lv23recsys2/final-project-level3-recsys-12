@@ -8,8 +8,8 @@ database = Database()
 
 def random_item():
     with database.session_maker() as session:
-        stmt = select(Item)
-        return session.execute(stmt).fetchall()
+        stmt = select(Item).order_by()
+        return session.execute(stmt).fetchmany(10)
         
 
 def get_item(item_ids):
