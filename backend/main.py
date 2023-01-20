@@ -12,6 +12,10 @@ import requests
 import os
 import yaml
 
+from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
+from service.user import check_existing_user, create_member
+from service.item import get_item_info, get_item_list_by_house_id, get_inference_input
+
 app = FastAPI()
 
 # TODO : 로그인 구현, 상품 구현
