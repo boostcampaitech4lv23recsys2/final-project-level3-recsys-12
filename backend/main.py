@@ -12,6 +12,10 @@ from service.item import card_house, get_item, get_item_info, get_signup_info, g
 from service.item import get_house_id_with_member_email, get_item_list_by_house_id, get_inference_input
 from service.user import check_existing_user, save_db
 
+from inference.predict import Model
+import yaml
+import os
+
 app = FastAPI()
 
 # TODO : 로그인 구현, 상품 구현
@@ -36,6 +40,12 @@ app.add_middleware(
 import pandas as pd
 
 df = pd.read_csv('data/item.csv')
+df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
+
+with open("/opt/ml/input/final/backend/inference/model.yaml") as f:
+    model_info = yaml.load(f, Loader=yaml.FullLoader)
+
+MODEL = Model(model_info, df_for_model)
 
 
 def type_to_json(df):
@@ -61,7 +71,8 @@ async def main_page_with_user(
 ):
     # id -> 개인별 추천상품
     user_prefered_item = get_inference_input(member_email)  # 모델에 넣을 input list(item_id_list)
-    model_result = inference(user_prefered_item)    # 모델 인퍼런스
+    print(user_prefered_item)
+    model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
     
     item_list = []
     for item_id in model_result:

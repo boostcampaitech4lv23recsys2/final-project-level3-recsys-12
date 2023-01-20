@@ -110,7 +110,6 @@ class AEDataSet(Dataset):
         user = self.users[idx]
         return torch.LongTensor([user])
 
-@ logging_time
 def get_inference_data(args: object, generate_encoder_decoder: object):
     df = pd.read_csv(os.path.join(args.data_path, "train_v2.csv")).groupby("house").filter(lambda x: len(x) >= 15)
     house_encoder, house_decoder = generate_encoder_decoder(df, "house")
