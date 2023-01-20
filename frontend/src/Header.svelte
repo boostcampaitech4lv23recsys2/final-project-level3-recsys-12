@@ -1,5 +1,6 @@
 <script>
     import { link } from 'svelte-spa-router'
+    import { access_token, member_email, is_login } from './store'
     const logo = document.querySelector("#logo")
     function onLogoHover(e){
         console.log(1)
@@ -8,6 +9,12 @@
         }else{
             e.target.textContent = "@_@"
         }
+    }
+
+    function logout() {
+        $access_token = ''
+        $member_email = ''
+        $is_login = false
     }
     // function onLogoHover(e){
     //     console.log(1)
@@ -25,9 +32,15 @@
     <nav class="navbar navbar-expand-lg navbar-light navbar-bg">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" id="logo" on:mouseover={onLogoHover} on:mouseleave={onLogoHover} href="/">@_@</a>
+            {#if ($is_login)}
+            <a use:link href="/login" on:click={logout}>
+                <button class="login-button" type="button">로그아웃</button>
+            </a>
+            {:else}
             <a use:link href="/login">
                 <button class="login-button" type="button">로그인</button>
             </a>
+            {/if}
         </div>
     </nav>
 </header>

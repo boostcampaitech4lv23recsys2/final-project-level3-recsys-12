@@ -1,5 +1,39 @@
 <script>
-	import { link } from 'svelte-spa-router'
+	import { link, push } from 'svelte-spa-router'
+    import { access_token, member_email, is_login } from './store'
+
+    let email = ""
+    async function login(event) {
+        event.preventDefault()
+        let url = "http://localhost:8000/login/" + email
+
+        await fetch(url)
+            .then((response) => {
+                response.json().then(json => {
+                    if (response.status >= 200 && response.status < 300) {  // 200 ~ 299
+                        $access_token = json.access_token
+                        $member_email = json.member_email
+                        $is_login = true
+                        push('/')
+                    } else if (response.status === 401) { // token time out
+                        access_token.set('')
+                        member_email.set('')
+                        is_login.set('')
+                        alert("로그인이 필요합니다.")
+                        push('/login')
+                    }
+                    else {
+                        alert("존재하지 않는 이메일입니다.")
+                        push('/login')
+                    }
+                })
+                .catch(error => {
+                    console.log("error")
+                    alert(JSON.stringify(error))
+                })
+            }
+        )}
+        
 </script>
 
 <hr>
@@ -12,16 +46,15 @@
             <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
 
             <div class="form-outline mb-4">
-                <label class="form-label" for="form2Example18">회원가입 시 사용한 닉네임을 입력해주세요</label>
-                <input type="email" id="form2Example18" class="form-control form-control-lg" placeholder="닉네임"/>
+                <label class="form-label" for="form2Example18">회원가입 시 사용한 이메일을 입력해주세요</label>
+                <input type="email" id="form2Example18" bind:value={email} class="form-control form-control-lg" placeholder="이메일"/>
             </div>
 
             <div class=" pt-1 mb-4">
-                <button class="login-button btn btn-info btn-lg btn-block" type="button">Login</button>
+                <button on:click="{login}" class="login-button btn btn-info btn-lg btn-block" type="button">Login</button>
             </div>
 
             <p class="bottom-link small mb-5 pb-lg-2">
-                <a class="each-link" href="#!">닉네임 재설정</a>&nbsp;&nbsp;&nbsp;
                 <a use:link class="each-link" href="/signup">회원가입</a>
             </p>
         </form>
