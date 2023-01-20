@@ -1,18 +1,28 @@
 <script>
 
-	import { link } from 'svelte-spa-router'
+	import { link } from 'svelte-spa-router'    
+	import { access_token, member_email, is_login } from './store'
 
 	let item_list = []
 
 	async function get_items() {
-		await fetch("http://localhost:8000/").then((response) => {
+		let url
+		if ($is_login) {
+			url = "http://localhost:8000/" + $member_email
+		}
+		else {
+			url = "http://localhost:8000/"
+		}
+		await fetch(url).then((response) => {
 			response.json().then((json) => {
 				item_list = json
+				console.log(item_list)
 			})
 		})
 		.catch((error) => console.log(error))
 	}
 	get_items()
+
 
 </script>
 
@@ -30,7 +40,7 @@
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
 			{#each item_list as item}
 				<div class="col mb-3">
-					<a use:link href="/detail/{item.item}" class="link-detail">
+					<a use:link href="/detail/{item.item_id}" class="link-detail">
 						<div class="card h-100">
 							<!-- Product image-->
 							<img class="card-img-top" src={item.image} alt="..." />

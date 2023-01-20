@@ -1,10 +1,15 @@
 from fastapi import FastAPI, Form, Request, HTTPException
+from fastapi.responses import JSONResponse
 from inference.predict import inference
 from pydantic import BaseModel
+from datetime import timedelta, datetime
+from jose import jwt
+import secrets
 
 from fastapi.middleware.cors import CORSMiddleware
 import json
-from service.item import card_house, get_item, get_house_id_with_member_email, get_signup_info, get_random_card
+from service.item import card_house, get_item, get_item_info, get_signup_info, get_random_card
+from service.item import get_house_id_with_member_email, get_item_list_by_house_id, get_inference_input
 from service.user import check_existing_user, save_db
 
 app = FastAPI()
@@ -50,27 +55,42 @@ async def initial_main_page():
 
 
 # 로그인 했을 때 메인 페이지
-@app.post('/{user_id}')
+@app.get('/{member_email}')
 async def main_page_with_user(
-    user_id: str, # index -> user_id
+    member_email: str
 ):
-   # id -> 개인별 추천상품
-    model_result = inference(user_id) 
-    item_infos = get_item(model_result)
+    # id -> 개인별 추천상품
+    user_prefered_item = get_inference_input(member_email)  # 모델에 넣을 input list(item_id_list)
+    model_result = inference(user_prefered_item)    # 모델 인퍼런스
     
-    return user_id, item_infos
+    item_list = []
+    for item_id in model_result:
+        item_list.append(get_item_info(item_id))   # item
+    item_list = sum(item_list, [])
+    return item_list
 
+
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+SECRET_KEY = secrets.token_hex(32)
+ALGORITHM = "HS256"
 
 # 존재하는 아이디 확인 후 정보 return
 @app.get('/login/{member_email}')
-async def user_data(member_email: str):
-    if check_existing_user(member_email):
-        result =  get_house_id_with_member_email(member_email) # result = house_id
-        info = []
-        return get_item(result)
-        #     info+=[get_item(r)]
-        # return {member_email, info} # -> member_email, item들
-         
+async def login(member_email: str):
+    # 로그인 시 해당 이메일이 회원인지 확인
+    if not check_existing_user(member_email):
+        return JSONResponse(status_code=400, content=dict(msg="Email doesn\'t exist'"))
+    data = {
+        "sub": member_email,
+        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    }
+    access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    return {
+        "access_token": access_token,
+        "token_type": "bearer",
+        "member_email": member_email
+    }
+
     
 # db update
 class UpdateDBIn(BaseModel):
