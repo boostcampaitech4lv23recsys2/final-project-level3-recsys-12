@@ -5,6 +5,9 @@ from pydantic import BaseModel
 from datetime import timedelta, datetime
 from jose import jwt
 import secrets
+import requests
+import os
+import yaml
 
 from fastapi.middleware.cors import CORSMiddleware
 import json
@@ -17,6 +20,21 @@ app = FastAPI()
 # TODO : 로그인 구현, 상품 구현
 # TODO : 로그인(login) = Request
 # TODO : 상품(product) = 가구 추천 결과
+
+################ Slack 연결 ################
+SECRET_FILE = os.path.join('../secrets.yaml')
+with open(SECRET_FILE) as fp:
+    serects = yaml.load(fp, yaml.FullLoader)
+SLACK = serects["SLACK"]
+
+# send slack message
+def post_slack_message(text):
+    response = requests.post("https://slack.com/api/chat.postMessage",
+                            headers={"Authorization": "Bearer " + SLACK["token"]},
+                            data={"channel": "#serverlog", "text": text}
+                            )
+    print(response)
+
 
 ################ Front 연결 ################
 origins = [
