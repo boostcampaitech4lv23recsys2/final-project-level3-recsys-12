@@ -53,15 +53,17 @@ app.add_middleware(
 
 ################ Backend ################
 
-@app.get('/')
+@app.get('/home')
 async def initial_main_page(description='비로그인 초기 페이지에 랜덤으로 아이템을 출력하는 부분입니다.'):
     """
-    views 높은 순 100개 랜덤으로
+    rating 높은 순 100개 랜덤으로
     """
-    return random_item()
+    items = random_item()
+    item_list = [col.Item for col in items]
+    return item_list
     
 # 로그인 했을 때 메인 페이지
-@app.get('/{member_email}')
+@app.get('/home/{member_email}')
 async def main_page_with_user(
     member_email: str
 ):
@@ -117,7 +119,6 @@ async def get_card_image():
     '''
     signup_info = get_signup_info()
     return get_random_card(signup_info)   
-    
 
 
 @app.get('/signup/{member_email}')
@@ -126,7 +127,7 @@ async def signup(member_email:str, discription='회원가입 API입니다.') -> 
         return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
 
 
-@app.post('/image_url_save/')
+@app.post('/signup/success')
 async def image(house_id_list:list, member_email:str):
     return create_member(house_id_list, member_email)
 
@@ -141,7 +142,12 @@ get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
 post : dict(json)를 받을 수 있음. {}로만 움직임.
 '''
 
-@app.get('detail/{item_id}')
+@app.get('item/{item_id}')
+async def detail():
+    ...
+    # item 다 주기
+    
+@app.get('/{member_email}/mypage')
 async def detail():
     ...
     # item 다 주기
