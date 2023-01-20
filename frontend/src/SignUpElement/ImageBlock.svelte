@@ -39,7 +39,7 @@
 	.house{
 		margin:0;
 		padding:0;
-		width:20rem;
+		/* width:20rem; */
 		height:15rem;
 		border-radius: 5px;
 	}

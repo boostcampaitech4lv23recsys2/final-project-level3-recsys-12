@@ -70,7 +70,8 @@
             <p style="text-align: center;">많이 선택할수록 개선된 결과가 표시됩니다.</p>
             <br>
         </div>
-		<div class="container_wrapper row gx-3 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+		<!-- <div class="container_wrapper row gx-3 gx-lg-3 row-cols-3 row-cols-md-3 row-cols-xl-4 justify-content-center"> -->
+        <div class="container_wrapper justify-content-center">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
 				row-cols-xl-n : 최대 화면에서 n개 보여줌
