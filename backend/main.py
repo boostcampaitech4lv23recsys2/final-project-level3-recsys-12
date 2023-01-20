@@ -34,15 +34,15 @@ app.add_middleware(
 
 ################ Backend ################
 
-@app.get('/')
+@app.get('/home')
 async def initial_main_page(description='비로그인 초기 페이지에 랜덤으로 아이템을 출력하는 부분입니다.'):
     """
-    views 높은 순 100개 랜덤으로
+    rating 높은 순 100개 랜덤으로
     """
     return random_item()
     
 # 로그인 했을 때 메인 페이지
-@app.get('/{member_email}')
+@app.get('/home/{member_email}')
 async def main_page_with_user(
     member_email: str
 ):
@@ -98,7 +98,6 @@ async def get_card_image():
     '''
     signup_info = get_signup_info()
     return get_random_card(signup_info)   
-    
 
 
 @app.get('/signup/{member_email}')
