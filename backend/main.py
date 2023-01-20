@@ -1,8 +1,11 @@
 from fastapi import FastAPI, Form, Request, HTTPException
-from fastapi.responses import JSONResponse
 from inference.predict import inference
 from pydantic import BaseModel
+from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
+import json
 from datetime import timedelta, datetime
+
 from jose import jwt
 import secrets
 
@@ -15,6 +18,7 @@ from service.user import check_existing_user, save_db
 from inference.predict import Model
 import yaml
 import os
+import pandas as pd
 
 app = FastAPI()
 
@@ -37,9 +41,6 @@ app.add_middleware(
 
 
 ################ Backend ################
-import pandas as pd
-
-df = pd.read_csv('data/item.csv')
 df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
 
 with open("/opt/ml/input/final/backend/inference/model.yaml") as f:
@@ -47,23 +48,13 @@ with open("/opt/ml/input/final/backend/inference/model.yaml") as f:
 
 MODEL = Model(model_info, df_for_model)
 
-
-def type_to_json(df):
-    import random
-    num = random.sample(range(0,len(df)),6)
-    topk = df.loc[num]
-    topk = topk[['item','title','seller','price','image']]
-    topk_json = topk.to_json(orient="records")
-    topk_json = json.loads(topk_json)
-    return topk_json
-
 @app.get('/')
-async def initial_main_page(): 
-    # 모델 결과 Top-K
-    # TODO: DB로 부터 초기 페이지 값 불러오기
-    return type_to_json(df)
-
-
+async def initial_main_page(description='비로그인 초기 페이지에 랜덤으로 아이템을 출력하는 부분입니다.'):
+    """
+    views 높은 순 100개 랜덤으로
+    """
+    return random_item()
+    
 # 로그인 했을 때 메인 페이지
 @app.get('/{member_email}')
 async def main_page_with_user(
@@ -101,7 +92,7 @@ async def login(member_email: str):
         "token_type": "bearer",
         "member_email": member_email
     }
-
+         
     
 # db update
 class UpdateDBIn(BaseModel):
@@ -113,46 +104,40 @@ class UpdateDBIn(BaseModel):
     furniture_name : str
     price : float
     img_url : str
+
+@app.get('/signup')
+async def get_card_image():
+    '''
+    1. house 테이블에서 스타일별로 5개씩 추출
+    2. json 형태로 리턴
+    '''
+    signup_info = get_signup_info()
+    return get_random_card(signup_info)   
     
-    class Config:
-        orm_mode = True
-        
-        
-# @app.get('/signup')
-# async def get_card_image():
-#     '''
-#     1. house 테이블에서 스타일별로 5개씩 추출
-#     2. json 형태로 리턴
-#     '''
-#     signup_info = get_signup_info()
-#     return get_random_card(signup_info)   
+
 
 @app.get('/signup/{member_email}')
-async def signup(member_email:str) -> list:
+async def signup(member_email:str, discription='회원가입 API입니다.') -> list:
     if check_existing_user(member_email):
-        return "User already exists."
-    else:
-        '''
-        1. house 테이블에서 스타일별로 5개씩 추출
-        2. json 형태로 저장
-        3. card img url 형태로 리턴
-        '''
-        signup_info = get_signup_info()
-        house_list = get_random_card(signup_info)
-        return [url.get('card_img_url') for url in house_list]
+        return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
 
 
-async def update_db(selected_house_list:list, member_email:str):
-    
-    card_info = {}
-    for c in selected_house_list: # c : card_img_url
-        card_info[member_email]=card_house(c)  # member_email : house_id
-    
-    # TODO : 정보 DB저장하기
-    return save_db(member_email, card_info)
+@app.post('/image_url_save/')
+async def image(house_id_list:list, member_email:str):
+    return create_member(house_id_list, member_email)
 
 '''
 1. 디테일 페이지에서 보여줄 내용? -> 가격, 이미지링크, 이름, 판매처
 2. 회원가입할때 집들이 이미지 5개씩 (스타일별로)
 3. 회원가입때 이메일 받아옴
 '''
+
+'''
+get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
+post : dict(json)를 받을 수 있음. {}로만 움직임.
+'''
+
+@app.get('detail/{item_id}')
+async def detail():
+    ...
+    # item 다 주기
