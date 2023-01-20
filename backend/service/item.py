@@ -32,13 +32,39 @@ def get_item(house_id : int) -> list:
             return [col[0] for col in data][0].item_id
         except:
             return "No exist item"
+
+def get_item_info(item_id : int):
+    with database.session_maker() as session:
+        stmt = select(Item.item_id, Item.title, Item.price, Item.image, Item.seller).where(Item.item_id==item_id)
+        data = session.execute(stmt).fetchall()
+        return data
     
 def get_house_id_with_member_email(member_email:str) -> str:
     with database.session_maker() as session:
         stmt = select(Member).where(Member.member_email==member_email)
         data = session.execute(stmt).fetchall()
-        return [col[0] for col in data][0].house_id
+        house_id_list = []
+        for user_info in data:
+            house_id_list.append(user_info[0].house_id)
+        return house_id_list    # 유저가 선호한 house_id 리스트
+        # return [col[0] for col in data].house_id
 
+def get_item_list_by_house_id(house_id):
+    with database.session_maker() as session:
+        stmt = select(HouseItem.item_id).where(HouseItem.house_id==house_id)
+        data = session.execute(stmt).fetchall()
+        return data
+    
+def get_inference_input(member_email):
+    user_prefered_house = get_house_id_with_member_email(member_email)
+    user_prefered_item_json = []
+    for house_id in user_prefered_house:
+        user_prefered_item_json.append(get_item_list_by_house_id(house_id))
+    user_prefered_item_json = sum(user_prefered_item_json, [])  # 2차원 배열 -> 1차원
+    user_prefered_item = [] # 모델에 들어갈 input item_id로 이루어진 1차원 list
+    for item_id in user_prefered_item_json:
+        user_prefered_item.append(item_id[0])
+    return user_prefered_item
 
 def get_signup_info():
     with database.session_maker() as session:
