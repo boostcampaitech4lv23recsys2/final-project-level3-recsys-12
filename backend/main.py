@@ -39,7 +39,7 @@ async def initial_main_page(description='비로그인 초기 페이지에 랜덤
     """
     views 높은 순 100개 랜덤으로
     """
-    # return random_item()
+    return random_item()
     
 # 로그인 했을 때 메인 페이지
 @app.get('/{member_email}')
@@ -125,3 +125,4 @@ post : dict(json)를 받을 수 있음. {}로만 움직임.
 @app.get('detail/{item_id}')
 async def detail():
     ...
+    # item 다 주기
