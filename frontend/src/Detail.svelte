@@ -1,3 +1,7 @@
+<script>
+	import { link } from 'svelte-spa-router'
+</script>
+
 <hr>
 <script>
 	import { link } from 'svelte-spa-router'
