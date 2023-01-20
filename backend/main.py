@@ -39,7 +39,9 @@ async def initial_main_page(description='비로그인 초기 페이지에 랜덤
     """
     rating 높은 순 100개 랜덤으로
     """
-    return random_item()
+    items = random_item()
+    item_list = [col.Item for col in items]
+    return item_list
     
 # 로그인 했을 때 메인 페이지
 @app.get('/home/{member_email}')

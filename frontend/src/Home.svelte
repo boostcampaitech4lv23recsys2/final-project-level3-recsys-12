@@ -8,10 +8,10 @@
 	async function get_items() {
 		let url
 		if ($is_login) {
-			url = "http://localhost:8000/" + $member_email
+			url = "http://localhost:8000/home/" + $member_email
 		}
 		else {
-			url = "http://localhost:8000/"
+			url = "http://localhost:8000/home/"
 		}
 		await fetch(url).then((response) => {
 			response.json().then((json) => {
@@ -22,7 +22,6 @@
 		.catch((error) => console.log(error))
 	}
 	get_items()
-
 
 </script>
 

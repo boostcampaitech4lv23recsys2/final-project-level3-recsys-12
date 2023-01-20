@@ -7,13 +7,9 @@ import pandas as pd
 database = Database()
 
 def random_item():
-    import time
-    start = time.time()
     with database.session_maker() as session:
         stmt = select(Item).order_by(Item.rating.desc())
-        return random.sample(session.execute(stmt).fetchmany(100),10)
-        # stmt = select(Item)
-        # return session.execute(stmt).fetchmany(10)
+        return session.execute(stmt).fetchmany(10)
     
 def get_item(item_ids):
     # Read data
