@@ -2,7 +2,7 @@ import yaml
 import sys
 import torch
 
-sys.path.append("/opt/ml/input/final/model/AE_model/")
+sys.path.append("../model/AE_model/")
 from Multi_DAE import *
 from utils import *
 

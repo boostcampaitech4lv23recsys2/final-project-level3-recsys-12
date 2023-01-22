@@ -59,7 +59,7 @@ app.add_middleware(
 ################ Backend ################
 df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
 
-with open("/opt/ml/input/final/backend/inference/model.yaml") as f:
+with open("inference/model.yaml") as f:
     model_info = yaml.load(f, Loader=yaml.FullLoader)
 
 MODEL = Model(model_info, df_for_model)
