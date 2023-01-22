@@ -17,8 +17,6 @@ from service.user import check_existing_user, create_member
 from service.item import get_item_info, get_item_list_by_house_id, get_inference_input
 
 from inference.predict import Model
-import yaml
-import os
 import pandas as pd
 
 app = FastAPI()
