@@ -28,15 +28,6 @@
         img_url = "heart_not_fill.png"
     }
 
-	async function change_like_icon() {
-        // 이미지 좋아요 클릭한 순간에 아이콘 바뀌는 것 처리 필요.
-		// if (img_url == "heart_fill.png") {
-        //     img_url = "heart_not_fill.png"
-        // } else {
-        //     img_url = "heart_fill.png"
-        // }
-	}
-
     async function change_like_status(item_id) {
         let url
         if ($is_login) {
@@ -87,8 +78,6 @@
 </script>
 
 <button on:click={() => change_like_status(item_id)}
-    on:mouseenter={change_like_icon}
-    on:mouseleave={change_like_icon}
     class="like-wrapper">
     <img class="like-icon" src={img_url} alt="...">
 </button>
