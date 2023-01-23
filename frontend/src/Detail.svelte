@@ -1,34 +1,42 @@
 <script>
-	import { link } from 'svelte-spa-router'
-    
-    // let item = {}
-	// async function get_item(item_id) {
-	// 	// str로
-	// 	await fetch("http://localhost:8000"+item_id).then((response) => {
-	// 		response.json().then((json) => {
-	// 			item = json
-	// 		})
-	// 	})
-	// 	.catch((error) => console.log(error))
-	// }
-	// get_item()
+	import { link } from 'svelte-spa-router';
 
-    let item = {
-        "item":57772,
-        "category":"생활용품,수건·타월,세면타월",
-        "rating":"별점 4.6점",
-        "review":"(225)개 리뷰",
-        "price":"61,300원",
-        "title":"40수 200g 네이쳐 호텔수건 10매",
-        "seller":"송월타올 ",
-        "discount_rate":"10%",
-        "image":"https://image.ohou.se/i/bucketplace-v2-development/uploads/openapi/1883336/1666575368641.jpg?gif=1&w=480&h=480&c=c",
-        "available_product":null,
-        "predict_price":null
-    }
-    let price = Number(item.price.replace(/[^0-9]/g, ""))
-    let rate = Number(item.discount_rate.replace(/[^0-9]/g, "")/100)
+    let item_id = window.location.href.split('/').slice(-1)[0]
+    let item = {}
+    let price, rate, discount_price
+	async function get_item() {
+		// str로
+		await fetch("http://localhost:8000/item/"+parseInt(item_id)).then((response) => {
+			response.json().then((json) => {
+				item = json
+                price = item.price ? Number(item.price.replace(/[^0-9]/g, "")) : 0
+                rate = item.discount_rate ? Number(item.discount_rate.replace(/[^0-9]/g, "")/100) : 0
+                discount_price = price*(1-rate) ? parseInt(price*(1-rate))+"원" : "미입점"
+                price = price? price : ""
+			})
+		})
+		.catch((error) => console.log(error))
+	}
+    get_item()
 </script>
+
+<hr>
+<div id="detail_wrapper">
+    <div class="product-card">
+        <div class="product-tumb">
+            <img src={item.image} alt="">
+        </div>
+        <div class="product-details">
+            <span class="product-catagory">{item.category}</span>
+            <h4><a href="https://ohou.se/productions/{item.item_id}/selling">{item.title}</a></h4>
+            <p>{item.rating}|{item.review}|{item.seller}</p>
+            <div class="product-bottom-details">
+                <div class="product-price"><small>{price}</small>{discount_price}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <style>
 @import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
@@ -38,9 +46,7 @@
     margin: 0;
     padding: 0;
 }
-body{
-    font-family: 'Roboto', sans-serif;
-}
+
 a{
     text-decoration: none;
 }
@@ -50,18 +56,6 @@ a{
     box-shadow: 0 2px 7px #dfdfdf;
     margin: 50px auto;
     background: #fafafa;
-}
-
-.badge {
-    position: absolute;
-    left: 0;
-    top: 20px;
-    text-transform: uppercase;
-    font-size: 13px;
-    font-weight: 700;
-    background: red;
-    color: #fff;
-    padding: 3px 10px;
 }
 
 .product-tumb {
@@ -137,57 +131,10 @@ a{
     margin-right: 5px;
 }
 
-.product-links {
-    text-align: right;
-}
-
-.product-links a {
-    display: inline-block;
-    margin-left: 5px;
-    color: #e1e1e1;
-    transition: 0.3s;
-    font-size: 17px;
-}
-
-.product-links a:hover {
-    color: #fbb72c;
-}
 #detail_wrapper{
     display:flex;
     flex-flow: row nowrap;
     justify-content: center;
 }
-.product_detail_sidebar{    
-    width: 200px;
-    position: relative;
-    box-shadow: 0 2px 7px #dfdfdf;
-    margin: 50px auto;
-    background: #fafafa;
-}
-.test{
-    background-color: gray;
-}
+
 </style>
-<hr>
-<div id="detail_wrapper">
-    <div class="product-card">
-        <div class="product-tumb">
-            <img src={item.image} alt="">
-        </div>
-        <div class="product-details">
-            <span class="product-catagory">{item.category}</span>
-            <h4><a href="https://ohou.se/productions/{item.item}/selling">{item.title}</a></h4>
-            <p>{item.rating}|{item.review}|{item.seller}</p>
-            <div class="product-bottom-details">
-                <div class="product-price"><small>{item.price}</small>{price*(1-rate)}원</div>
-                <div class="product-links">
-                    <a href=""><i class="fa fa-heart"></i></a>
-                    <a href=""><i class="fa fa-shopping-cart"></i></a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- <div class="product_detail_sidebar test">
-        <dd>seller</dd>
-    </div> -->
-</div>
