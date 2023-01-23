@@ -125,11 +125,13 @@ async def get_card_image():
 async def signup(member_email:str, discription='회원가입 API입니다.') -> list:
     if check_existing_user(member_email):
         return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
+    else:
+        return JSONResponse(status_code=200, content=dict(msg="Success'"))
 
 
-@app.post('/signup/success')
-async def image(house_id_list:list, member_email:str):
-    return create_member(house_id_list, member_email)
+@app.get('/member/{member_email}/{selected_house_id}')
+async def image(member_email: str, selected_house_id: str):
+    return create_member(member_email, selected_house_id)
 
 '''
 1. 디테일 페이지에서 보여줄 내용? -> 가격, 이미지링크, 이름, 판매처

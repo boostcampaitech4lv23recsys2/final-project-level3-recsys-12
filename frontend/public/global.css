@@ -67,15 +67,15 @@ body{
 	padding:0;
 }
 .container_wrapper{
-	width: 100%;
+	/* width: 100%; */
 	padding: 10px 10px;
 	display: flex;
 	flex-flow: row wrap;
 	justify-content: center;
 	align-items: center;
 	gap: 10px;
-	border: 1px solid gray;
-	border-radius: 30px;
+	/* border: 1px solid gray;
+	border-radius: 30px; */
 }
 .prevent_btn{
 	opacity: 0.8;

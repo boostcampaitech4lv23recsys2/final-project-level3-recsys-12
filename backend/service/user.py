@@ -24,7 +24,7 @@ def check_existing_user(member_email: str) -> bool:
         return True if session.execute(stmt).fetchall() else False
     
     
-def create_member(member_email:str, house_id_list:list):
+def create_member(member_email:str, house_id_list_str:str):
     """_summary_
 
     Args:
@@ -33,7 +33,11 @@ def create_member(member_email:str, house_id_list:list):
 
     Returns:
         _type_: message
-    """    
+    """
+    house_id_list = house_id_list_str[1:-1]
+    house_id_list = house_id_list.split(",")
+    house_id_list = list(map(int, house_id_list))
+    
     with database.session_maker() as session:
         for i in house_id_list:
             stmt = Member(member_email=member_email, house_id=i)
