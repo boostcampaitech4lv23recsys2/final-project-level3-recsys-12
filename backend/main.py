@@ -14,6 +14,7 @@ import yaml
 
 from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
 from service.user import check_existing_user, create_member
+from service.item import check_is_prefer, insert_member_prefer, delete_member_prefer
 from service.item import get_item_info, get_item_info_all, get_item_list_by_house_id, get_inference_input
 
 app = FastAPI()
@@ -155,3 +156,23 @@ async def detail(item_id:int):
 async def detail():
     ...
     # item 다 주기
+
+@app.get('/prefer/{member_email}/{item_id}')
+async def is_prefer_item(member_email: str, item_id: int):
+    """유저가 item에 좋아요를 눌렀는지 확인
+
+    Args:
+        member_email (str): 유저의 이메일
+        item_id (int): 아이템 id
+    """
+    if len(check_is_prefer(member_email, item_id)) == 0:
+        return False
+    return True
+
+@app.get('/insert-prefer/{member_email}/{item_id}')
+async def insert_prefer_data(member_email: str, item_id: int):
+    return insert_member_prefer(member_email, item_id)
+
+@app.delete('/delete-prefer/{member_email}/{item_id}')
+async def delete_prefer_data(member_email: str, item_id: int):
+    return delete_member_prefer(member_email, item_id)

@@ -1,12 +1,12 @@
 <script>
+
     import { link } from 'svelte-spa-router'
     import { access_token, member_email, is_login } from './store'
     const logo = document.querySelector("#logo")
     function onLogoHover(e){
-        console.log(1)
-        if (e.target.textContent == "@_@"){
+        if (e.target.textContent == "@_@") {
             e.target.textContent = "@..@"
-        }else{
+        } else {
             e.target.textContent = "@_@"
         }
     }
@@ -16,16 +16,7 @@
         $member_email = ''
         $is_login = false
     }
-    // function onLogoHover(e){
-    //     console.log(1)
-    //     if (e.target.textContent == "@_@"){
-    //         e.target.textContent = "@*@"
-    //     }else{
-    //         e.target.textContent = "@_@"
-    //     }
-    // }
-    
-    // logo.addEventListener("mouseover",onLogoHover)
+
 </script>
 
 <header class="header">

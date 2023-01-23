@@ -1,4 +1,4 @@
-from db.models import Item,  House, Member, HouseItem
+from db.models import Item, House, Member, HouseItem, MemberPrefer
 from db.db_connect import Database
 from sqlalchemy import select
 import random
@@ -42,7 +42,7 @@ def card_house(card_img_url : str) -> list:
 
 def get_item_info(item_id : int):
     with database.session_maker() as session:
-        stmt = select(Item.item_id, Item.title, Item.price, Item.image, Item.seller).where(Item.item_id==item_id)
+        stmt = select(Item.item_id, Item.title, Item.price, Item.image, Item.seller, Item.predict_price).where(Item.item_id==item_id)
         data = session.execute(stmt).fetchall()
         return data
 
@@ -116,3 +116,26 @@ def get_random_card(signup_info):
     return_signup_info = json.loads(return_signup_info)
 
     return return_signup_info
+
+def check_is_prefer(member_email, item_id):
+    with database.session_maker() as session:
+        stmt = f"select * from member_prefer where member_email='{member_email}' and item_id='{item_id}'"
+        # stmt = select(MemberPrefer).where(member_email==member_email and item_id==item_id)
+        is_prefer = session.execute(stmt).fetchall()
+        return is_prefer
+
+def insert_member_prefer(member_email, item_id):
+    with database.session_maker() as session:
+        stmt = MemberPrefer(member_email=member_email, item_id=item_id)
+        session.add(stmt)
+        session.commit()
+        return "success"
+
+def delete_member_prefer(member_email, item_id):
+    with database.session_maker() as session:
+        stmt = f"delete from member_prefer where member_email='{member_email}' and item_id='{item_id}'"
+        if not stmt:
+            return "failure"
+        session.execute(stmt)
+        session.commit()
+        return "success"
