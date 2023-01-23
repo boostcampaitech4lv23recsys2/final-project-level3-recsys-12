@@ -45,6 +45,12 @@ def get_item_info(item_id : int):
         stmt = select(Item.item_id, Item.title, Item.price, Item.image, Item.seller).where(Item.item_id==item_id)
         data = session.execute(stmt).fetchall()
         return data
+
+def get_item_info_all(item_id : int):
+    with database.session_maker() as session:
+        stmt = select(Item).where(Item.item_id==item_id)
+        data = session.execute(stmt).fetchall()
+        return data
     
 def get_house_id_with_member_email(member_email:str) -> str:
     with database.session_maker() as session:
