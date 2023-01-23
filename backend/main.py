@@ -14,8 +14,8 @@ import yaml
 
 from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
 from service.user import check_existing_user, create_member
-from service.item import get_item_info, get_item_list_by_house_id, get_inference_input
 from service.item import check_is_prefer, insert_member_prefer, delete_member_prefer
+from service.item import get_item_info, get_item_info_all, get_item_list_by_house_id, get_inference_input
 
 app = FastAPI()
 
@@ -145,8 +145,10 @@ get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
 post : dict(json)를 받을 수 있음. {}로만 움직임.
 '''
 
-@app.get('item/{item_id}')
-async def detail():
+@app.get('/item/{item_id}')
+async def detail(item_id:int):
+    item_info = get_item_info_all(item_id)
+    return item_info[0].Item
     ...
     # item 다 주기
     
