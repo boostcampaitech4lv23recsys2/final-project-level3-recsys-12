@@ -2,6 +2,7 @@
 
 	import { link } from 'svelte-spa-router'    
 	import { access_token, member_email, is_login } from './store'
+	import Like from './HomeElement/Like.svelte';
 
 	let item_list = []
 
@@ -16,12 +17,19 @@
 		await fetch(url).then((response) => {
 			response.json().then((json) => {
 				item_list = json
-				console.log(item_list)
 			})
 		})
 		.catch((error) => console.log(error))
 	}
 	get_items()
+
+	function reg_exp_predict_price(predict_price) {
+		if (predict_price == '') {
+			return "정보없음"
+		}
+		const re = /.+(?=사)/
+		return predict_price.match(re)[0].slice(3)
+	}
 
 </script>
 
@@ -39,6 +47,7 @@
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
 			{#each item_list as item}
 				<div class="col mb-3">
+					<Like item_id={item.item_id} />
 					<a use:link href="/detail/{item.item_id}" class="link-detail">
 						<div class="card h-100">
 							<!-- Product image-->
@@ -56,8 +65,8 @@
 								<div class="text-center">
 									<div class="item-price">
 										<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
-										{#if item.price == null}
-										<h6 class="price">미입점</h6>
+										{#if item.price == ""}
+										<h6 class="price">예상가 {reg_exp_predict_price(item.predict_price)}</h6>
 										{:else}
 										<h6 class="price">{item.price}</h6>
 										{/if}
