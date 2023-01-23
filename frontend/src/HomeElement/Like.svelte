@@ -103,4 +103,43 @@
         height: 20px;
     }
 
+    .like-icon:hover{
+        animation-name: shake;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+        animation-delay: 0.5s;
+    	transition: transform 0.2s linear;
+    	transform-origin: 50% 50%;
+        transform: scale(1.0)
+    }
+
+    @keyframes shake{
+        0%{
+          transform: rotate(0deg) scale(1.0);
+        }
+        10%{
+          transform: rotate(45deg) scale(1.2);
+        }
+        20%{
+          transform: rotate(-45deg) scale(1.4);
+        }
+        30%{
+          transform: rotate(30deg) scale(1.6);
+        }
+        40%{
+          transform: rotate(-30deg) scale(28);
+        }
+        50%{
+          transform: rotate(10deg) scale(1.6);
+        }
+        60%{
+          transform: rotate(-10deg) scale(1.4);
+        }
+        70%{
+          transform: rotate(0deg) scale(1.2);
+        }
+        100%{
+          transform: rotate(0deg) scale(1.0);
+        }
+    }
 </style>

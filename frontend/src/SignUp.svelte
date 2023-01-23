@@ -22,16 +22,21 @@
                     if (response.status == 400){
                         is_success = false
                         alert("중복된 이메일입니다.")
-                        next_btn.classList.add("activate")
-                        next_btn_disable.classList.remove("activate")
+                        next_btn.classList.add("deactivate")
+                        next_btn.classList.remove("activate")
+                        next_btn_disable.classList.add("activate")
+                        next_btn_disable.classList.remove("deactivate")
                     }else{
                         is_success = true
                         alert("사용할 수 있는 이메일입니다.")
-                        next_btn.classList.remove("activate")
-                        next_btn_disable.classList.add("activate")
+                        next_btn.classList.add("activate")
+                        next_btn.classList.remove("deactivate")
+                        next_btn_disable.classList.add("deactivate")
+                        next_btn_disable.classList.remove("activate")
                     }
                 })
             })
+            console.log(selected_cnt)
         }
     }
 
@@ -130,14 +135,14 @@
             <ImageBlock {item}/>
             {/each}
 		</div>
-        <button id="next_button" class="prevent_btn nextbtn activate" disabled on:click={post_member}>
+        <button id="next_button" class="prevent_btn nextbtn deactivate" disabled on:click={post_member}>
             <div id="selectbtn_wrapper">
                 <span>최소 5개 선택해 주세요.</span>
                 <span></span>
                 <span id="selected_num">Next!({selected_cnt}/5)</span>
             </div>
         </button>
-        <div id="next_button_disable" class="prevent_btn nextbtn">중복확인 먼저 진행해 주세요.</div>
+        <div id="next_button_disable" class="prevent_btn nextbtn activate">중복확인 먼저 진행해 주세요.</div>
 	</div>
 </section>
 
@@ -196,8 +201,12 @@ p{
 #dupcheck{
     scroll-behavior: smooth;
 }
+.deactivate{
+    visibility: hidden;
+    z-index: -1;
+}
 .activate{
-    display:none;
+    z-index: 1;
 }
 #next_button_disable{
     display: flex;
