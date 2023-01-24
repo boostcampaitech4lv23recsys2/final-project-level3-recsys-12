@@ -1,5 +1,6 @@
 <script>
 	import { link } from 'svelte-spa-router';
+    import Like from './HomeElement/Like.svelte';
 
     let item_id = window.location.href.split('/').slice(-1)[0]
     let item = {}
@@ -23,6 +24,7 @@
 <hr>
 <div id="detail_wrapper">
     <div class="product-card">
+        <Like item_id={item.item_id} />
         <div class="product-tumb">
             <img src={item.image} alt="">
         </div>

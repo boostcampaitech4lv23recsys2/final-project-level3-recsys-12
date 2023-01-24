@@ -12,16 +12,12 @@ import requests
 import os
 import yaml
 
-from service.item import get_house_id_with_member_email, get_random_card, get_signup_info, random_item, get_item
 from service.user import check_existing_user, create_member
-from service.item import check_is_prefer, insert_member_prefer, delete_member_prefer
-from service.item import get_item_info, get_item_info_all, get_item_list_by_house_id, get_inference_input
+from service.item import get_random_card, get_signup_info, random_item, get_item_info, get_item_info_all, get_inference_input
+from service.item import check_is_prefer, insert_member_prefer, delete_member_prefer, get_item_info, get_item_info_all, get_inference_input
 
 app = FastAPI()
 
-# TODO : 로그인 구현, 상품 구현
-# TODO : 로그인(login) = Request
-# TODO : 상품(product) = 가구 추천 결과
 
 ################ Slack 연결 ################
 SECRET_FILE = os.path.join('../secrets.yaml')
@@ -84,35 +80,27 @@ SECRET_KEY = secrets.token_hex(32)
 ALGORITHM = "HS256"
 
 # 존재하는 아이디 확인 후 정보 return
-@app.get('/login/{member_email}')
-async def login(member_email: str):
+
+class Login(BaseModel):
+    member_email : str
+@app.post('/login')
+async def login(DB_login : Login):
     # 로그인 시 해당 이메일이 회원인지 확인
-    if not check_existing_user(member_email):
-        return JSONResponse(status_code=400, content=dict(msg="Email doesn\'t exist'"))
+    if not check_existing_user(DB_login.member_email):
+        return JSONResponse(status_code=400, content=dict(msg="Email doesn't exist'"))
     data = {
-        "sub": member_email,
+        "sub": DB_login.member_email,
         "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     }
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
     return {
         "access_token": access_token,
         "token_type": "bearer",
-        "member_email": member_email
+        "member_email": DB_login.member_email
     }
-         
-    
-# db update
-class UpdateDBIn(BaseModel):
-    user_id: str
-    house_id : int
-    selected_img_arr: str
-    item_id : int
-    seller : str
-    furniture_name : str
-    price : float
-    img_url : str
+            
 
-@app.get('/signup')
+@app.get('/card')
 async def get_card_image():
     '''
     1. house 테이블에서 스타일별로 5개씩 추출
@@ -122,23 +110,26 @@ async def get_card_image():
     return get_random_card(signup_info)   
 
 
-@app.get('/signup/{member_email}')
-async def signup(member_email:str, discription='회원가입 API입니다.') -> list:
-    if check_existing_user(member_email):
+class Signup(BaseModel):
+    member_email : str
+
+@app.post('/signup')
+async def signup(db_signup:Signup, discription='회원가입 API입니다.') -> list:
+    if check_existing_user(db_signup.member_email):
         return JSONResponse(status_code=400, content=dict(msg="Email already exist'"))
     else:
         return JSONResponse(status_code=200, content=dict(msg="Success'"))
 
 
-@app.get('/member/{member_email}/{selected_house_id}')
-async def image(member_email: str, selected_house_id: str):
-    return create_member(member_email, selected_house_id)
 
-'''
-1. 디테일 페이지에서 보여줄 내용? -> 가격, 이미지링크, 이름, 판매처
-2. 회원가입할때 집들이 이미지 5개씩 (스타일별로)
-3. 회원가입때 이메일 받아옴
-'''
+########## 추가 부분 ############
+class Image(BaseModel):
+    member_email :str
+    selected_house_id : str
+@app.post('/member')
+async def image(item:Image):
+    print("hererere")
+    return (create_member(item.member_email, item.selected_house_id))
 
 '''
 get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
@@ -149,13 +140,16 @@ post : dict(json)를 받을 수 있음. {}로만 움직임.
 async def detail(item_id:int):
     item_info = get_item_info_all(item_id)
     return item_info[0].Item
-    ...
-    # item 다 주기
-    
-@app.get('/{member_email}/mypage')
-async def detail():
-    ...
-    # item 다 주기
+
+
+class Mypage(BaseModel):
+    member_email : str
+
+@app.post('/mypage')
+async def detail(mypage : Mypage):
+    from service.item import get_item_prefer, get_item_info_prefer
+    item_list = get_item_prefer(mypage.member_email)
+    return get_item_info_prefer(item_list)
 
 @app.get('/prefer/{member_email}/{item_id}')
 async def is_prefer_item(member_email: str, item_id: int):

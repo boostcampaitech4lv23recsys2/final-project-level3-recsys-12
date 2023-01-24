@@ -5,10 +5,8 @@
     
 	// import { email } from './SignUpElement/SignUpForm.svelte'
     let house_list = []
-
     let email
     let is_success
-
     async function isEmailDup(e){
         const next_btn = document.querySelector("#next_button")
         const next_btn_disable = document.querySelector("#next_button_disable")
@@ -16,8 +14,21 @@
         if (email == null){
             alert("이메일을 입력해주세요.")
         }else{
-            let url = "http://localhost:8000/signup/"+email
-            await fetch(url).then((response) => {
+            let url = "http://localhost:8000/signup"
+            let params = {
+            "member_email" : email,
+            }
+            let options = {
+                method: "post",
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(params)
+            }
+            console.log(options.body)
+            console.log(typeof(options.body))
+
+            await fetch(url,options).then((response) => {
                 response.json().then((json) => {
                     if (response.status == 400){
                         is_success = false
@@ -47,7 +58,7 @@
     }
 
 	async function get_items() {
-		await fetch("http://localhost:8000/signup").then((response) => {
+		await fetch("http://localhost:8000/card").then((response) => {
 			response.json().then((json) => {
 				house_list = json
 			})
@@ -57,37 +68,28 @@
 
     async function post_member(e){
         e.preventDefault()
-        let url = "http://localhost:8000/member/"+email+"/"+JSON.stringify(Array.from(selected_img))
+        let url = "http://localhost:8000/member/"
         let params = {
             "member_email" : email,
             "selected_house_id" : JSON.stringify(Array.from(selected_img))
         }
-        // let options = {
-        //     method: "post",
-        //     headers: {
-        //         "Content-Type": 'application/json'
-        //     },
-        //     body: JSON.stringify(params)
-        // }
-        // console.log(options.body)
-        // console.log(typeof(options.body))
-        
-        await fetch(url).then((response)=>{
+        let options = {
+            method: "post",
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(params)
+        }
+
+        await fetch(url,options).then((response)=>{
             if(response.status >= 200 && response.status < 300){
                 push("/login")
+                alert("회원가입에 성공하였습니다.")
             }else{
                 alert("회원가입에 실패하였습니다.")
                 push("/signup")
             }
         })
-        // await fetch(url,options).then((response)=>{
-        //     if(response.status >= 200 && response.status < 300){
-        //         push("/login")
-        //     }else{
-        //         alert("회원가입에 실패하였습니다.")
-        //         push("/signup")
-        //     }
-        // })
     }
 
 	get_items()

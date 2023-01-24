@@ -15,7 +15,6 @@ database = Database()
 def check_existing_house(house_id: int):
     with database.session_maker() as session:
         stmt = select(House).where(House.house_id == house_id)
-        # data를 어떤 형태(dict, list, ...)로 처리할까..
         return session.execute(stmt).first()
 
 def check_existing_user(member_email: str) -> bool:

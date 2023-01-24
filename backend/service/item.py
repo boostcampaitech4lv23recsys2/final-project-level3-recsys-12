@@ -15,7 +15,6 @@ def get_item(item_ids):
     # Read data
     item_infos = {}
     for item in item_ids:
-        print('item',item)
         with database.session_maker() as session:
             stmt = select(HouseItem).where(HouseItem.item_id == item)
             item_info = session.execute(stmt).fetchall()
@@ -139,3 +138,22 @@ def delete_member_prefer(member_email, item_id):
         session.execute(stmt)
         session.commit()
         return "success"
+    
+
+def get_item_prefer(member_email : str):
+    with database.session_maker() as session:
+        stmt = select(MemberPrefer).where(MemberPrefer.member_email==member_email)
+        data = session.execute(stmt).fetchall()
+        return [col[0].item_id for col in data]
+    
+def get_item_info_prefer(item_ids : list):
+    item_infos = {}
+    print (item_ids)
+    for item in item_ids:
+        print(item)
+        with database.session_maker() as session:
+            stmt = select(Item).where(Item.item_id == item)
+            item_info = session.execute(stmt).fetchall()
+            item_infos[item] = item_info
+
+    return item_infos
