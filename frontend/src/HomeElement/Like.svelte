@@ -1,8 +1,7 @@
 <script>
+
     import { push } from 'svelte-spa-router';
-
-
-	import { access_token, member_email, is_login } from '../store'
+	import { access_token, member_email, is_login, click_like_item_id } from '../store'
 
     export let item_id
     let img_url
@@ -70,11 +69,11 @@
             let response = confirm("로그인이 필요합니다. 로그인 하시겠습니까?")
             if (response) {
                 push('/login')
+                $click_like_item_id = item_id
             }
-            // 이 경우 비로그인 상태에서 누른 좋아요를 좋아요 리스트에 추가 필요
         }
-        
-}
+    }
+
 </script>
 
 <button on:click={() => change_like_status(item_id)}
