@@ -26,6 +26,7 @@ wandb/
 *.json
 *.yaml
 !configs.yaml
+!model.yaml
 
 # front-end
 frontend/node_modules/

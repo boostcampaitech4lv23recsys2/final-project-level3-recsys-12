@@ -1,15 +1,14 @@
 import sys
 
-sys.path.append("../")
 
 import pandas as pd
 from torch.utils.data import DataLoader
 
-from arg_parse.AE_args import get_args
-from data_loader.AE_dataloader import *
-from models.Multi_DAE import *
-from models.Multi_VAE import *
-from utils.Multi_AE_utils import *
+from args import get_args
+from dataloader import *
+from Multi_DAE import *
+from Multi_VAE import *
+from utils import *
 
 
 def main(args):

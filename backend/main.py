@@ -17,6 +17,9 @@ from service.user import check_existing_user, create_member
 from service.item import check_is_prefer, insert_member_prefer, delete_member_prefer
 from service.item import get_item_info, get_item_info_all, get_item_list_by_house_id, get_inference_input
 
+from inference.predict import Model
+import pandas as pd
+
 app = FastAPI()
 
 # TODO : 로그인 구현, 상품 구현
@@ -53,6 +56,12 @@ app.add_middleware(
 
 
 ################ Backend ################
+df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
+
+with open("inference/model.yaml") as f:
+    model_info = yaml.load(f, Loader=yaml.FullLoader)
+
+MODEL = Model(model_info, df_for_model)
 
 @app.get('/home')
 async def initial_main_page(description='비로그인 초기 페이지에 랜덤으로 아이템을 출력하는 부분입니다.'):
@@ -70,7 +79,8 @@ async def main_page_with_user(
 ):
     # id -> 개인별 추천상품
     user_prefered_item = get_inference_input(member_email)  # 모델에 넣을 input list(item_id_list)
-    model_result = inference(user_prefered_item)    # 모델 인퍼런스
+    # print(user_prefered_item)
+    model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
     
     item_list = []
     for item_id in model_result:
