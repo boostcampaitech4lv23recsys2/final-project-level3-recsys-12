@@ -22,31 +22,36 @@ class Model:
         self.house_encoder, self.house_decoder = generate_encoder_decoder(df, "house")
         self.item_encoder, self.item_decoder = generate_encoder_decoder(df, "item")
         self.dummy_input = torch.zeros((df.item.nunique()), dtype=torch.int64)
+        
 
     def predict(self, data):
         return self.forward(data)
 
-    # item_id, 가구명, 가구파는 곳, 가격, 이미지 url
+    # user_selected_data: label encoding되지 않은 item_id list
     def forward(self, user_selected_data):
         self.model.eval()
-        
-        # 원래는 아래 코드가 잘 동작해야 합니다
-        # user_selected_data = torch.tensor(user_selected_data).apply_(lambda x: self.item_encoder[x])
-        
-        # 하지만, DB에서 저장된 item_id와 csv 파일에서의 item_id 간의 차이가 있어서인지
-        # csv 파일에서의 item_id로 만들어진 self.item_encoder가, DB에서 불러온 item_id 간 차이로 key error 발생합니다
         tmp = []
         for item_id in user_selected_data:
             try:
                 tmp.append(self.item_encoder[item_id])
             except:
                 pass
-        # 만약 tmp가 빈 리스트라면, tmp는 item_encoder에 key값으로 포함된 item들
+        # tmp: tmp는 item_encoder에 key값으로 포함된 item들임. 
+        # 만약 tmp가 빈 리스트라면, 일단 랜덤으로 채움. (아마 데이터 전처리하고 DB랑 item.csv 간의 차이가 없으면 거의 발생 안할 일로 보임)
         if not tmp: tmp = random.sample(list(self.item_decoder.keys()), k=50)
+        # tmp: 실제로 모델이 inference할 수 있는 label encoding된 item들
         user_selected_data = torch.tensor(tmp)
         tmp = user_selected_data[:]
+        # self.dummy_input: torch.zeros((df.item.nunique()), dtype=torch.int64): [0 0 0 0 0 0 0 ... 0 0 0 0]
         user_selected_data = self.dummy_input[:]
         user_selected_data[tmp] = 1
+        # encoding된 tmp는 encoding된 item_id임. 이 encoding은 결국 item 전체의 index임. 이에 해당하는 index부분을 1로 바꿔줌
+        # [0 0 0 0 0 0 0 ... 0 0 0 0] -> [1 0 0 1 00 0 0 ... 0 0 0 1]
+        # [[1 0 0 1 00 0 0 ... 0 0 0 1],
+        #  [1 0 0 1 00 0 0 ... 0 0 0 1],
+        #  [1 0 0 1 00 0 0 ... 0 0 0 1],
+        #  [1 0 0 1 00 0 0 ... 0 0 0 1]] -> user by item -> 1 by item
+        # user_selected_data.unsqueeze(dim=0): [] -> [[]]: 2차원으로 넣어야함. 왜냐면 학습할 때 user by item이라는 2차원 행렬로 학습하기 때문.
         user_selected_data = user_selected_data.unsqueeze(dim=0)
 
         with torch.no_grad():
