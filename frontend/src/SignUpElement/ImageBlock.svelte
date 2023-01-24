@@ -9,7 +9,7 @@
 	let min_select = 5
 	const onHouseSelected = (e)=>{
 		img_opacity = img_opacity == 0.5? 1:0.5;
-		let nextbtn = document.querySelector("#nextbtn");
+		let nextbtn = document.querySelector(".nextbtn");
 		if (selected_img.has(item.house_id)){
 			selected_img.delete(item.house_id)
 			e.target.style.borderWidth="0px";
