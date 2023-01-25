@@ -154,3 +154,9 @@ def get_item_info_prefer(item_ids : list):
             item_info = session.execute(stmt).fetchall()
             item_infos[item] = item_info[0].Item
     return [(v, k)[0] for k, v in item_infos.items()]
+
+def get_inference_result(member_email):
+    with database.session_maker() as session:
+        stmt = f"select item_id from inference_result where member_email='{member_email}'"
+        # stmt = f"select member_email, group_concat(item_id) from inference_result group by member_email where member_email='{member_email}"
+        return session.execute(stmt).fetchall()
