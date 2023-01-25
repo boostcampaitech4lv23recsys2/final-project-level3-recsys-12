@@ -11,6 +11,12 @@ python = "^3.8"
 fastapi = "^0.89.1"
 uvicorn = "^0.20.0"
 pandas = "^1.5.2"
+torch = "^1.13.1"
+tqdm = "^4.64.1"
+python-jose = "^3.3.0"
+pyyaml = "^6.0"
+sqlalchemy = "^1.4.46"
+pymysql = "^1.0.2"
 
 
 [build-system]
