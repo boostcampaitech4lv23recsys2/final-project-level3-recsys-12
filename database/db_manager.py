@@ -2,6 +2,7 @@ import argparse
 import os
 import json
 import pymysql
+import yaml
 from pymysql.constants import CLIENT
 
 
@@ -13,8 +14,10 @@ def main():
     args = parser.parse_args()
     
     # get secrets
-    SECRET_FILE = os.path.join('config/secrets.json')
-    DB = json.loads(open(SECRET_FILE).read())
+    SECRET_FILE = os.path.join('../secrets.yaml')
+    with open(SECRET_FILE) as fp:
+        secrets = yaml.load(fp, yaml.FullLoader)
+    DB = secrets["DB"]
     
     # connect to database
     conn = pymysql.connect(host=DB['host'], user=DB['user'], password=DB['password'], port=DB['port'], charset='utf8', client_flag=CLIENT.MULTI_STATEMENTS)

@@ -5,10 +5,22 @@
     let email = ""
     async function login(event) {
         event.preventDefault()
-        let url = "http://127.0.0.1:8000/login/" + email
 
-        await fetch(url)
-            .then((response) => {
+        let url = "http://127.0.0.1:8000/login"
+        let params = {
+            "member_email" : email,
+        }
+        let options = {
+            method: "post",
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(params)
+        }
+        console.log(options.body)
+        console.log(typeof(options.body))
+
+        await fetch(url,options).then((response)=>{
                 response.json().then(json => {
                     if (response.status >= 200 && response.status < 300) {  // 200 ~ 299
                         $access_token = json.access_token
@@ -43,7 +55,7 @@
     
         <form style="width: 23rem;">
 
-            <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
+            <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Login</h3>
 
             <div class="form-outline mb-4">
                 <label class="form-label" for="form2Example18">회원가입 시 사용한 이메일을 입력해주세요</label>
