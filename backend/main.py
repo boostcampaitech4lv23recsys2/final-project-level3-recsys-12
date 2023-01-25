@@ -29,8 +29,8 @@ app = FastAPI()
 ################ Slack 연결 ################
 SECRET_FILE = os.path.join('../secrets.yaml')
 with open(SECRET_FILE) as fp:
-    serects = yaml.load(fp, yaml.FullLoader)
-SLACK = serects["SLACK"]
+    secrets = yaml.load(fp, yaml.FullLoader)
+SLACK = secrets["SLACK"]
 
 # send slack message
 def post_slack_message(text):
