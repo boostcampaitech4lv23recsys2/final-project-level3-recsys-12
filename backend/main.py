@@ -29,6 +29,8 @@ SECRET_FILE = os.path.join('../secrets.yaml')
 with open(SECRET_FILE) as fp:
     secret_file = yaml.load(fp, yaml.FullLoader)
 SLACK = secret_file["SLACK"]
+
+
 # send slack message
 def post_slack_message(text):
     response = requests.post("https://slack.com/api/chat.postMessage",

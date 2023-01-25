@@ -5,7 +5,8 @@
     let email = ""
     async function login(event) {
         event.preventDefault()
-        let url = "http://localhost:8000/login"
+
+        let url = "http://127.0.0.1:8000/login"
         let params = {
             "member_email" : email,
         }
@@ -31,11 +32,11 @@
                         member_email.set('')
                         is_login.set('')
                         alert("로그인이 필요합니다.")
-                        push('/login')
+                        push('/login-user')
                     }
                     else {
                         alert("존재하지 않는 이메일입니다.")
-                        push('/login')
+                        push('/login-user')
                     }
                 })
                 .catch(error => {

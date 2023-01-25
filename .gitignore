@@ -2,7 +2,6 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=linux,visualstudiocode,svelte,database,jupyternotebooks,python
 
 ### Custom gitignores ###
-
 # wandb
 wandb/
 
@@ -32,6 +31,7 @@ wandb/
 frontend/node_modules/
 frontend/public/build/
 .DS_Store
+frontend/dist
 
 ### Database ###
 *.accdb

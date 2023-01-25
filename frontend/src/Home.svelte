@@ -5,12 +5,11 @@
 	import Like from './HomeElement/Like.svelte';
 
 	let item_list = []
-
 	async function get_items() {
 		let url
 		if ($is_login) {
-			if ($click_like_item_id != []) {
-				url = "http://localhost:8000/insert-prefer/"+$member_email+"/"+$click_like_item_id
+			if ($click_like_item_id != "") {
+				url = "http://127.0.0.1:8000/insert-prefer/"+$member_email+"/"+$click_like_item_id
                 await fetch(url).then((response) => {
                     response.json().then((json) => {
                         if (json == "failure") {
@@ -20,14 +19,15 @@
                 })
 				$click_like_item_id = ""
 			}
-			url = "http://localhost:8000/home/" + $member_email
+			url = "http://127.0.0.1:8000/home/" + $member_email
 		}
 		else {
-			url = "http://localhost:8000/home/"
+			url = "http://127.0.0.1:8000/home/"
 		}
 		await fetch(url).then((response) => {
 			response.json().then((json) => {
 				item_list = json
+				console.log(item_list)
 			})
 		})
 		.catch((error) => console.log(error))
@@ -45,7 +45,6 @@
 </script>
 
 <hr>
-
 <!-- Section-->
 <section class="py-3">
 	<div class="container-md px-3 px-lg-3 mt-3">
@@ -56,7 +55,7 @@
 			-->
 
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
-			{#each item_list as item}
+			{#each item_list as item, idx}
 				<div class="col mb-3">
 					<Like item_id={item.item_id} />
 					<a use:link href="/detail/{item.item_id}" class="link-detail">
@@ -76,7 +75,7 @@
 								<div class="text-center">
 									<div class="item-price">
 										<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
-										{#if item.price == ""}
+										{#if JSON.stringify(item.price) == ""}
 										<h6 class="price">예상가 {reg_exp_predict_price(item.predict_price)}</h6>
 										{:else}
 										<h6 class="price">{item.price}</h6>
@@ -90,7 +89,6 @@
 		</div>
 	</div>
 </section>
-
 <style>
 
 	 /* a 태그의 파란색 글씨, 밑줄이 그어지는 것 제거 */
