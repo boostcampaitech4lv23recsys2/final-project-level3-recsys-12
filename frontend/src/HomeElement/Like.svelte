@@ -6,25 +6,27 @@
     export let item_id
     let img_url
     let like_item
+    const heart_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589054.png"
+    const heart_not_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589197.png"
 
     if ($is_login) {
         // 이미 좋아요를 누른 경우 처리
-        let url = "http://localhost:8000/prefer/"+$member_email+"/"+item_id
+        let url = "http://127.0.0.1:8000/prefer/"+$member_email+"/"+item_id
         fetch(url).then((response) => {
             response.json().then((json) => {
                 if (json == true) {
-                    img_url = "heart_fill.png"
+                    img_url = heart_fill
                     like_item = true
                 }
                 else {
-                    img_url = "heart_not_fill.png"
+                    img_url = heart_not_fill
                     like_item = false
                 }
 			})
         })
     }
     else {
-        img_url = "heart_not_fill.png"
+        img_url = heart_not_fill
     }
 
     async function change_like_status(item_id) {
@@ -43,7 +45,7 @@
                     body: JSON.stringify(params)
                 }
                 
-                url = "http://localhost:8000/delete-prefer/"+$member_email+"/"+item_id
+                url = "http://127.0.0.1:8000/delete-prefer/"+$member_email+"/"+item_id
                 fetch(url, options).then((response) => {
                     response.json().then((json) => {
                         like_item = false
@@ -51,7 +53,7 @@
                 })
             }
             else {
-                url = "http://localhost:8000/insert-prefer/"+$member_email+"/"+item_id
+                url = "http://127.0.0.1:8000/insert-prefer/"+$member_email+"/"+item_id
                 fetch(url).then((response) => {
                     response.json().then((json) => {
                         like_item = true
@@ -59,10 +61,10 @@
                 })
             }
             
-            if (img_url == "heart_fill.png") {
-                img_url = "heart_not_fill.png"
+            if (img_url == heart_fill) {
+                img_url = heart_not_fill
             } else {
-                img_url = "heart_fill.png"
+                img_url = heart_fill
             }
         }
         else {
