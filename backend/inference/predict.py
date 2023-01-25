@@ -17,7 +17,7 @@ class Model:
         self.model = MultiDAE(
                 p_dims=self.p_dims + [df.item.nunique()],
             ).to(device)
-        self.model.load_state_dict(torch.load(self.model_path))
+        self.model.load_state_dict(torch.load(self.model_path, map_location=device))
         self.device = device
         self.house_encoder, self.house_decoder = generate_encoder_decoder(df, "house")
         self.item_encoder, self.item_decoder = generate_encoder_decoder(df, "item")
