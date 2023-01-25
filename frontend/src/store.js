@@ -12,3 +12,4 @@ const persist_storage = (key, initValue) => {
 export const access_token = persist_storage("access_token", "")
 export const member_email = persist_storage("member_email", "")
 export const is_login = persist_storage("is_login", false)
+export const click_like_item_id = persist_storage("click_like_item_id", "")

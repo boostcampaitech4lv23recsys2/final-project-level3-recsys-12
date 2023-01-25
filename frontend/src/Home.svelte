@@ -1,7 +1,7 @@
 <script>
 
 	import { link } from 'svelte-spa-router'    
-	import { access_token, member_email, is_login } from './store'
+	import { access_token, member_email, is_login, click_like_item_id } from './store'
 	import Like from './HomeElement/Like.svelte';
 
 	let item_list = []
@@ -9,6 +9,17 @@
 	async function get_items() {
 		let url
 		if ($is_login) {
+			if ($click_like_item_id != []) {
+				url = "http://localhost:8000/insert-prefer/"+$member_email+"/"+$click_like_item_id
+                await fetch(url).then((response) => {
+                    response.json().then((json) => {
+                        if (json == "failure") {
+							console.log("이미 좋아요를 누른 아이템입니다.")
+						} 
+                    })
+                })
+				$click_like_item_id = ""
+			}
 			url = "http://localhost:8000/home/" + $member_email
 		}
 		else {
