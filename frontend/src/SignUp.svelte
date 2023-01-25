@@ -16,7 +16,7 @@
         if (email == null){
             alert("이메일을 입력해주세요.")
         }else{
-            let url = "http://localhost:8000/signup/"+email
+            let url = "http://127.0.0.1:8000/signup/"+email
             await fetch(url).then((response) => {
                 response.json().then((json) => {
                     if (response.status == 400){
@@ -47,7 +47,7 @@
     }
 
 	async function get_items() {
-		await fetch("http://localhost:8000/signup").then((response) => {
+		await fetch("http://127.0.0.1:8000/signup").then((response) => {
 			response.json().then((json) => {
 				house_list = json
 			})
@@ -55,9 +55,8 @@
 		.catch((error) => console.log(error))
 	}
 
-    async function post_member(e){
-        e.preventDefault()
-        let url = "http://localhost:8000/member/"+email+"/"+JSON.stringify(Array.from(selected_img))
+    async function post_member(){
+        let url = "http://127.0.0.1:8000/member/"+email+"/"+JSON.stringify(Array.from(selected_img))
         let params = {
             "member_email" : email,
             "selected_house_id" : JSON.stringify(Array.from(selected_img))
@@ -74,21 +73,51 @@
         
         await fetch(url).then((response)=>{
             if(response.status >= 200 && response.status < 300){
-                push("/login")
+                push("/login-user")
+                console.log("회원가입 성공!")
             }else{
                 alert("회원가입에 실패하였습니다.")
-                push("/signup")
+                push("/signup-user")
             }
         })
         // await fetch(url,options).then((response)=>{
         //     if(response.status >= 200 && response.status < 300){
-        //         push("/login")
+        //         push("/login-user")
         //     }else{
         //         alert("회원가입에 실패하였습니다.")
-        //         push("/signup")
+        //         push("/signup-user")
         //     }
         // })
     }
+
+    async function post_inference_result() {
+        let url = "http://127.0.0.1:8000/insert-inference-result"
+        let params = {
+            "member_email" : email
+        }
+        let options = {
+            method: "post",
+            headers: {
+                "Content-Type": 'application/json'
+            },
+            body: JSON.stringify(params)
+        }
+        await fetch(url, options).then((response) => {
+            response.json().then((json) => {
+                if(json == "success") {
+                    console.log("저장 완료!")
+                } else {
+                    console.log("저장 실패")
+                }
+            })
+        })
+    }
+
+    function next_btn_click() {
+        post_member()
+        post_inference_result()
+    }
+
 
 	get_items()
 
@@ -135,7 +164,7 @@
             <ImageBlock {item}/>
             {/each}
 		</div>
-        <button id="next_button" class="prevent_btn nextbtn deactivate" disabled on:click={post_member}>
+        <button id="next_button" class="prevent_btn nextbtn deactivate" disabled on:click={next_btn_click}>
             <div id="selectbtn_wrapper">
                 <span>최소 5개 선택해 주세요.</span>
                 <span></span>

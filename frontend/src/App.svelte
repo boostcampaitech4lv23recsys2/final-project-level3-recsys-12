@@ -1,5 +1,5 @@
 <script>
-	
+
 	import Router from 'svelte-spa-router'
 	import Home from './Home.svelte'
 	import Detail from './Detail.svelte'
@@ -11,10 +11,9 @@
 	const routes = {
 		'/': Home,
 		'/detail/:id': Detail,
-		'/login': Login,
-		'/signup': SignUp,
+		'/login-user': Login,
+		'/signup-user': SignUp,
 	}
-	
 </script>
 
 <Header />
