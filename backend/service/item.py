@@ -148,12 +148,9 @@ def get_item_prefer(member_email : str):
     
 def get_item_info_prefer(item_ids : list):
     item_infos = {}
-    print (item_ids)
     for item in item_ids:
-        print(item)
         with database.session_maker() as session:
             stmt = select(Item).where(Item.item_id == item)
             item_info = session.execute(stmt).fetchall()
-            item_infos[item] = item_info
-
-    return item_infos
+            item_infos[item] = item_info[0].Item
+    return [(v, k)[0] for k, v in item_infos.items()]

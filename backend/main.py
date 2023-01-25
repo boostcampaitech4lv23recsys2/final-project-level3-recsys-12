@@ -12,9 +12,8 @@ import requests
 import os
 import yaml
 
-from service.user import check_existing_user, create_member
-from service.item import get_random_card, get_signup_info, random_item, get_item_info, get_item_info_all, get_inference_input
-from service.item import check_is_prefer, insert_member_prefer, delete_member_prefer, get_item_info, get_item_info_all, get_inference_input
+from service.user import *
+from service.item import *
 
 app = FastAPI()
 
@@ -83,6 +82,7 @@ ALGORITHM = "HS256"
 
 class Login(BaseModel):
     member_email : str
+    
 @app.post('/login')
 async def login(DB_login : Login):
     # 로그인 시 해당 이메일이 회원인지 확인
@@ -121,14 +121,12 @@ async def signup(db_signup:Signup, discription='회원가입 API입니다.') -> 
         return JSONResponse(status_code=200, content=dict(msg="Success'"))
 
 
-
-########## 추가 부분 ############
 class Image(BaseModel):
     member_email :str
     selected_house_id : str
+    
 @app.post('/member')
 async def image(item:Image):
-    print("hererere")
     return (create_member(item.member_email, item.selected_house_id))
 
 '''
@@ -145,10 +143,16 @@ async def detail(item_id:int):
 class Mypage(BaseModel):
     member_email : str
 
-@app.post('/mypage')
-async def detail(mypage : Mypage):
+# @app.post('/mypage')
+# async def detail(mypage : Mypage):
+#     from service.item import get_item_prefer, get_item_info_prefer
+#     item_list = get_item_prefer(mypage.member_email)
+#     return get_item_info_prefer(item_list)
+
+@app.get('/mypage/{member_email}')
+async def detail(member_email:str):
     from service.item import get_item_prefer, get_item_info_prefer
-    item_list = get_item_prefer(mypage.member_email)
+    item_list = get_item_prefer(member_email)
     return get_item_info_prefer(item_list)
 
 @app.get('/prefer/{member_email}/{item_id}')

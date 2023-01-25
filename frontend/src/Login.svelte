@@ -54,7 +54,7 @@
     
         <form style="width: 23rem;">
 
-            <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Log in</h3>
+            <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Login</h3>
 
             <div class="form-outline mb-4">
                 <label class="form-label" for="form2Example18">회원가입 시 사용한 이메일을 입력해주세요</label>
