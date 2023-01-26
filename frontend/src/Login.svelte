@@ -66,7 +66,7 @@
             </div>
 
             <p class="bottom-link small mb-5 pb-lg-2">
-                <a use:link class="each-link" href="/signup">회원가입</a>
+                <a use:link class="each-link" href="/signup-user">회원가입</a>
             </p>
         </form>
     </div>
