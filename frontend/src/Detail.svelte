@@ -8,7 +8,7 @@
 	async function get_item() {
 		// str로
         let url = import.meta.env.VITE_SERVER_URL + "/item"
-		await fetch(url+parseInt(item_id), {
+		await fetch(url+"/"+parseInt(item_id), {
             headers: {
                 Accept: "application / json",
             },
