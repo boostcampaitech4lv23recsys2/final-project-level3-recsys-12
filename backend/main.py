@@ -2,7 +2,10 @@ from fastapi import FastAPI, Form, Request, HTTPException
 from inference.predict import inference
 from pydantic import BaseModel
 from fastapi.responses import JSONResponse
-from fastapi.middleware.cors import CORSMiddleware
+from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import FileResponse
+from starlette.staticfiles import StaticFiles
+
 import json
 from datetime import timedelta, datetime
 
@@ -27,6 +30,7 @@ with open(SECRET_FILE) as fp:
     secret_file = yaml.load(fp, yaml.FullLoader)
 SLACK = secret_file["SLACK"]
 
+
 # send slack message
 def post_slack_message(text):
     response = requests.post("https://slack.com/api/chat.postMessage",
@@ -36,9 +40,18 @@ def post_slack_message(text):
     print(response)
 
 
+############ first setting ############
+df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
+
+with open("inference/model.yaml") as f:
+    model_info = yaml.load(f, Loader=yaml.FullLoader)
+
+MODEL = Model(model_info, df_for_model)
+
+
 ################ Front 연결 ################
 origins = [
-    "http://localhost:8080"
+    "http://127.0.0.1:5173/"
 ]
 
 app.add_middleware(
@@ -48,16 +61,13 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
 
+@app.get("/")
+def index():
+    return FileResponse("../frontend/dist/index.html")
 
 ################ Backend ################
-df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
-
-with open("inference/model.yaml") as f:
-    model_info = yaml.load(f, Loader=yaml.FullLoader)
-
-MODEL = Model(model_info, df_for_model)
-
 @app.get('/home')
 async def initial_main_page(description='비로그인 초기 페이지에 랜덤으로 아이템을 출력하는 부분입니다.'):
     """
@@ -72,13 +82,12 @@ async def initial_main_page(description='비로그인 초기 페이지에 랜덤
 async def main_page_with_user(
     member_email: str
 ):
-    # id -> 개인별 추천상품
-    user_prefered_item = get_inference_input(member_email)  # 모델에 넣을 input list(item_id_list)
-    # print(user_prefered_item)
-    model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
+    import random
+    model_result = [result[0] for result in get_inference_result(member_email)]
     
+    random.shuffle(model_result)
     item_list = []
-    for item_id in model_result:
+    for item_id in model_result[:10]:
         item_list.append(get_item_info(item_id))   # item
     item_list = sum(item_list, [])
     return item_list
@@ -179,8 +188,19 @@ async def is_prefer_item(member_email: str, item_id: int):
 
 @app.get('/insert-prefer/{member_email}/{item_id}')
 async def insert_prefer_data(member_email: str, item_id: int):
+    if len(check_is_prefer(member_email, item_id)) != 0:
+        return "failure"
     return insert_member_prefer(member_email, item_id)
 
 @app.delete('/delete-prefer/{member_email}/{item_id}')
 async def delete_prefer_data(member_email: str, item_id: int):
     return delete_member_prefer(member_email, item_id)
+
+
+class InferenceResult(BaseModel):
+    member_email: str
+@app.post('/insert-inference-result')
+async def insert_inference_result(inference_result: InferenceResult):
+    user_prefered_item = get_inference_input(inference_result.member_email)  # 모델에 넣을 input list(item_id_list)
+    model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
+    return create_inference(inference_result.member_email, model_result)

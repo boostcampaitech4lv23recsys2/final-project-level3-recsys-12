@@ -1,5 +1,5 @@
 # from main import fake_users
-from db.models import Item, House, Member
+from db.models import Item, House, Member, InferenceResult
 from sqlalchemy.orm import Session
 from service.item import card_house
 
@@ -45,4 +45,17 @@ def create_member(member_email:str, house_id_list_str:str):
 
         return "Update complete"
     
+def get_users_email():
+    with database.session_maker() as session:
+        stmt = "select distinct member_email from member"
+        return session.execute(stmt).fetchall()
 
+
+def create_inference(member_email, inference_item_list):
+    with database.session_maker() as session:
+        for item_id in inference_item_list:
+            stmt = InferenceResult(member_email=member_email, item_id=item_id)
+            session.add(stmt)
+            session.commit()
+
+        return "success"

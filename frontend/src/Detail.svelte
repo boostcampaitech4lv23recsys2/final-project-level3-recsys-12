@@ -7,7 +7,7 @@
     let price, rate, discount_price
 	async function get_item() {
 		// str로
-		await fetch("http://localhost:8000/item/"+parseInt(item_id)).then((response) => {
+		await fetch("http://127.0.0.1:8000/item/"+parseInt(item_id)).then((response) => {
 			response.json().then((json) => {
 				item = json
                 price = item.price ? Number(item.price.replace(/[^0-9]/g, "")) : 0
