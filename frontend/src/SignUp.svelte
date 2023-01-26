@@ -25,8 +25,6 @@
                 },
                 body: JSON.stringify(params)
             }
-            console.log(options.body)
-            console.log(typeof(options.body))
 
             await fetch(url,options).then((response) => {
                 response.json().then((json) => {
@@ -47,7 +45,6 @@
                     }
                 })
             })
-            console.log(selected_cnt)
         }
     }
 

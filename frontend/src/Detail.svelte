@@ -1,7 +1,5 @@
 <script>
-	import { link } from 'svelte-spa-router';
     import Like from './HomeElement/Like.svelte';
-    import { access_token, member_email, is_login } from './store'
 
     let item_id = window.location.href.split('/').slice(-1)[0]
     let item = {}
@@ -31,14 +29,14 @@
 <hr>
 <div id="detail_wrapper">
     <div class="product-card">
-        <Like item_id={item.item_id} />
+        <Like item_id={item_id} />
         <div class="product-tumb">
             <img src={item.image} alt="">
         </div>
         <div class="product-details">
             <span class="product-catagory">{item.category}</span>
             <h4><a href="https://ohou.se/productions/{item.item_id}/selling">{item.title}</a></h4>
-            <p>{item.rating}|{item.review}|{item.seller}</p>
+            <p>{item.rating} | {item.review} | {item.seller}</p>
             <div class="product-bottom-details">
                 <div class="product-price"><small>{price}</small>{discount_price}</div>
             </div>
