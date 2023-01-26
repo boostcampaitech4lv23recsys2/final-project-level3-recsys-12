@@ -162,17 +162,12 @@ async def detail(item_id:int):
 class Mypage(BaseModel):
     member_email : str
 
-# @app.post('/mypage')
-# async def detail(mypage : Mypage):
-#     from service.item import get_item_prefer, get_item_info_prefer
-#     item_list = get_item_prefer(mypage.member_email)
-#     return get_item_info_prefer(item_list)
-
-@app.get('/mypage/{member_email}')
-async def detail(member_email:str):
+@app.post('/mypage')
+async def detail(mypage : Mypage):
     from service.item import get_item_prefer, get_item_info_prefer
-    item_list = get_item_prefer(member_email)
+    item_list = get_item_prefer(mypage.member_email)
     return get_item_info_prefer(item_list)
+
 
 @app.get('/prefer/{member_email}/{item_id}')
 async def is_prefer_item(member_email: str, item_id: int):
