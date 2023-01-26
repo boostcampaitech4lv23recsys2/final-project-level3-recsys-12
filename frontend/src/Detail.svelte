@@ -1,6 +1,7 @@
 <script>
 	import { link } from 'svelte-spa-router';
     import Like from './HomeElement/Like.svelte';
+    import { access_token, member_email, is_login } from './store'
 
     let item_id = window.location.href.split('/').slice(-1)[0]
     let item = {}
