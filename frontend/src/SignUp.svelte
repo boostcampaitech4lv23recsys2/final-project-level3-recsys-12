@@ -67,8 +67,7 @@
 		.catch((error) => console.log(error))
 	}
 
-    async function post_member(e){
-        e.preventDefault()
+    async function post_member(){
         let url = import.meta.env.VITE_SERVER_URL + "/member"
         let params = {
             "member_email" : email,

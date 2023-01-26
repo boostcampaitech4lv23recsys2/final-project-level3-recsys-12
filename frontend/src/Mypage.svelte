@@ -21,10 +21,10 @@
 			console.log(options.body)
 			console.log(typeof(options.body))
 		if ($is_login) {
-			url = "http://localhost:8000/mypage"
+			url = import.meta.env.VITE_SERVER_URL + "/mypage"
 		}
 		else {
-			url = "http://localhost:8000/home/"
+			url = import.meta.env.VITE_SERVER_URL + "/home"
 		}
 		await fetch(url,options).then((response) => {
 			response.json().then((json) => {
@@ -77,7 +77,7 @@
 								<div class="text-center">
 									<div class="item-price">
 										<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
-										{#if item.price == ""}
+										{#if JSON.stringify(item.price) == ""}
 										<h6 class="price">예상가 {reg_exp_predict_price(item.predict_price)}</h6>
 										{:else}
 										<h6 class="price">{item.price}</h6>
