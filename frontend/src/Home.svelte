@@ -6,11 +6,18 @@
 
 	let item_list = []
 	async function get_items() {
-		let url
+		
+		let url = import.meta.env.VITE_SERVER_URL
 		if ($is_login) {
 			if ($click_like_item_id != "") {
-				url = "http://127.0.0.1:8000/insert-prefer/"+$member_email+"/"+$click_like_item_id
-                await fetch(url).then((response) => {
+				let _url = url + "/insert-prefer/"+$member_email+"/"+$click_like_item_id
+                await fetch(_url, {
+					headers: {
+						Accept: "application/json",
+					},
+					method: "GET"
+				}
+				).then((response) => {
                     response.json().then((json) => {
                         if (json == "failure") {
 							console.log("이미 좋아요를 누른 아이템입니다.")
@@ -19,15 +26,20 @@
                 })
 				$click_like_item_id = ""
 			}
-			url = "http://127.0.0.1:8000/home/" + $member_email
+			url = url + "/home/" + $member_email
 		}
 		else {
-			url = "http://127.0.0.1:8000/home/"
+			url = url + "/home"
 		}
-		await fetch(url).then((response) => {
+		await fetch(url, {
+            headers: {
+                Accept: "application / json",
+            },
+            method: "GET"
+        }
+		).then((response) => {
 			response.json().then((json) => {
 				item_list = json
-				console.log(item_list)
 			})
 		})
 		.catch((error) => console.log(error))

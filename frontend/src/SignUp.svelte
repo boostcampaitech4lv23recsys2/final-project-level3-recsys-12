@@ -14,8 +14,7 @@
         if (email == null){
             alert("이메일을 입력해주세요.")
         }else{
-
-            let url = "http://127.0.0.1:8000/signup"
+            let url = import.meta.env.VITE_SERVER_URL + "/signup"
             let params = {
             "member_email" : email,
             }
@@ -59,7 +58,8 @@
     }
 
 	async function get_items() {
-		await fetch("http://127.0.0.1:8000/card").then((response) => {
+        let url = import.meta.env.VITE_SERVER_URL + "/card"
+		await fetch(url).then((response) => {
 			response.json().then((json) => {
 				house_list = json
 			})
@@ -69,7 +69,7 @@
 
     async function post_member(e){
         e.preventDefault()
-        let url = "http://127.0.0.1:8000/member/"
+        let url = import.meta.env.VITE_SERVER_URL + "/member"
         let params = {
             "member_email" : email,
             "selected_house_id" : JSON.stringify(Array.from(selected_img))
@@ -94,7 +94,7 @@
     }
 
     async function post_inference_result() {
-        let url = "http://127.0.0.1:8000/insert-inference-result"
+        let url = import.meta.env.VITE_SERVER_URL + "/insert-inference-result"
         let params = {
             "member_email" : email
         }

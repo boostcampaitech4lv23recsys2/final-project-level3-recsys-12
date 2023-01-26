@@ -8,7 +8,13 @@
     let price, rate, discount_price
 	async function get_item() {
 		// str로
-		await fetch("http://127.0.0.1:8000/item/"+parseInt(item_id)).then((response) => {
+        let url = import.meta.env.VITE_SERVER_URL + "/item"
+		await fetch(url+"/"+parseInt(item_id), {
+            headers: {
+                Accept: "application / json",
+            },
+            method: "GET"
+        }).then((response) => {
 			response.json().then((json) => {
 				item = json
                 price = item.price ? Number(item.price.replace(/[^0-9]/g, "")) : 0
