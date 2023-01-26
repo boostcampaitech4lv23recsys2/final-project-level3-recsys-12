@@ -51,7 +51,7 @@ MODEL = Model(model_info, df_for_model)
 
 ################ Front 연결 ################
 origins = [
-    "http://127.0.0.1:5173/"
+    "http://127.0.0.1:5173"
 ]
 
 app.add_middleware(

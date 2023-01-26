@@ -5,8 +5,7 @@
     let email = ""
     async function login(event) {
         event.preventDefault()
-
-        let url = "http://127.0.0.1:8000/login"
+        let url = import.meta.env.VITE_SERVER_URL + "/login"
         let params = {
             "member_email" : email,
         }
