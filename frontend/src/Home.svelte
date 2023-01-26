@@ -1,7 +1,7 @@
 <script>
 
 	import { link } from 'svelte-spa-router'    
-	import { access_token, member_email, is_login, click_like_item_id } from './store'
+	import { member_email, is_login, click_like_item_id } from './store'
 	import Like from './HomeElement/Like.svelte';
 
 	let item_list = []
@@ -88,6 +88,7 @@
 									<div class="item-price">
 										<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
 										{#if JSON.stringify(item.price) == ""}
+										{JSON.stringify(item.predict_price)}
 										<h6 class="price">예상가 {reg_exp_predict_price(item.predict_price)}</h6>
 										{:else}
 										<h6 class="price">{item.price}</h6>

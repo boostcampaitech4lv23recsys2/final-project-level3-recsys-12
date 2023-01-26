@@ -1,24 +1,23 @@
 <script>
 
     import { push } from 'svelte-spa-router';
-	import { access_token, member_email, is_login, click_like_item_id } from '../store'
+	import { member_email, is_login, click_like_item_id } from '../store'
 
     export let item_id
-    let img_url
-    let like_item
+    let img_url, like_item
     const heart_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589054.png"
     const heart_not_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589197.png"
 
     if ($is_login) {
         // 이미 좋아요를 누른 경우 처리
-        let url = "http://127.0.0.1:8000/prefer/"+$member_email+"/"+item_id
+        let url = import.meta.env.VITE_SERVER_URL+"/prefer/"+$member_email+"/"+item_id
+        
         fetch(url).then((response) => {
             response.json().then((json) => {
                 if (json == true) {
                     img_url = heart_fill
                     like_item = true
-                }
-                else {
+                }else {
                     img_url = heart_not_fill
                     like_item = false
                 }
@@ -29,7 +28,7 @@
         img_url = heart_not_fill
     }
 
-    async function change_like_status(item_id) {
+    async function change_like_status() {
         let url
         if ($is_login) {
             if (like_item) {
@@ -44,8 +43,7 @@
                     },
                     body: JSON.stringify(params)
                 }
-                
-                url = "http://127.0.0.1:8000/delete-prefer/"+$member_email+"/"+item_id
+                url = import.meta.env.VITE_SERVER_URL + "/delete-prefer/"+$member_email+"/"+item_id
                 fetch(url, options).then((response) => {
                     response.json().then((json) => {
                         like_item = false
@@ -53,7 +51,7 @@
                 })
             }
             else {
-                url = "http://127.0.0.1:8000/insert-prefer/"+$member_email+"/"+item_id
+                url = import.meta.env.VITE_SERVER_URL + "/insert-prefer/"+$member_email+"/"+item_id
                 fetch(url).then((response) => {
                     response.json().then((json) => {
                         like_item = true
@@ -70,7 +68,7 @@
         else {
             let response = confirm("로그인이 필요합니다. 로그인 하시겠습니까?")
             if (response) {
-                push('/login')
+                push('/login-user')
                 $click_like_item_id = item_id
             }
         }
@@ -78,7 +76,7 @@
 
 </script>
 
-<button on:click={() => change_like_status(item_id)}
+<button on:click={() => change_like_status()}
     class="like-wrapper">
     <img class="like-icon" src={img_url} alt="...">
 </button>

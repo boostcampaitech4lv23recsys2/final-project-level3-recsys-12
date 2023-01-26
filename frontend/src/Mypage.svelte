@@ -18,8 +18,6 @@
 				},
 				body: JSON.stringify(params)
 			}
-			console.log(options.body)
-			console.log(typeof(options.body))
 		if ($is_login) {
 			url = import.meta.env.VITE_SERVER_URL + "/mypage"
 		}
