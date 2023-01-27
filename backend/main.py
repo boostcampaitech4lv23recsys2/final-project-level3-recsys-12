@@ -87,7 +87,7 @@ async def main_page_with_user(
     
     # random.shuffle(model_result)
     item_list = []
-    for item_id in model_result[:20]:
+    for item_id in model_result[:]:
         item_list.append(get_item_info(item_id))   # item
     item_list = sum(item_list, [])
     return item_list
@@ -213,10 +213,13 @@ async def insert_inference_result(update_inference: UpdataInferenceResult, descr
     update_list = member_prefer+inference_result
     model_result = inference(update_list, MODEL)
     delete_inference(update_inference.member_email)
-    difference = set(inference_result) - set(model_result)
-    print(difference)
+    difference = set(model_result) - set(inference_result)
+    intersection = set(model_result) & set(inference_result)
+    create_inference(update_inference.member_email, model_result),
     if difference:
-        return {"Success":create_inference(update_inference.member_email, model_result),
-            "new_item":get_item(difference)}
+        return {
+            "new_item":get_item(difference),
+            "inter": get_item(intersection)
+        }
     else:
-        return "Already update"
+        return "Already Update"

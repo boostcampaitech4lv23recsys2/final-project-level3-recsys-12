@@ -36,6 +36,7 @@
                         next_btn_disable.classList.add("activate")
                         next_btn_disable.classList.remove("deactivate")
                     }else{
+                        let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
                         is_success = true
                         alert("사용할 수 있는 이메일입니다.")
                         next_btn.classList.add("activate")
@@ -138,10 +139,10 @@
 	<div class="container-md px-3 px-lg-3 mt-3">
         
         <div id="signup_form_wrapper">
-            <form>
-                <input type="email" id="email_form" placeholder="E-mail 주소를 입력하세요." bind:value="{email}">
-                <button id="dupcheck" on:click={isEmailDup}>중복 확인</button>
-                <button class="h" on:click={goToScroll}>Next!</button>
+            <form class="input-form">
+                <input type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}">
+                <button id="dupcheck" on:click={isEmailDup} class="signup-button btn btn-info btn-block">중복 확인</button>
+                <button class="h signup-button btn btn-info" on:click={goToScroll}>Next!</button>
             </form>
         </div>
         <div class="container_title">
@@ -176,6 +177,16 @@
 
 
 <style>
+.input-form {
+    display: flex;
+}
+.signup-button {
+    color: white;
+    font-size: 20px;
+    width: 100px;
+    height: 50px;
+    margin-top: 10px;
+}
 .container_wrapper{
 	/* width: 100%; */
 	padding: 10px 10px;
@@ -226,8 +237,13 @@ p{
     align-items: center;
     height: 100vh;
 }
+#email_form {
+    margin: 10px;
+}
 #dupcheck{
     scroll-behavior: smooth;
+    width: 40%;
+    margin: 10px;
 }
 .deactivate{
     visibility: hidden;
