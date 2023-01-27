@@ -1,4 +1,4 @@
-from db.models import Item, House, Member, HouseItem, MemberPrefer
+from db.models import Item, House, Member, HouseItem, MemberPrefer, InferenceResult
 from db.db_connect import Database
 from sqlalchemy import select
 import random
@@ -16,9 +16,9 @@ def get_item(item_ids):
     item_infos = {}
     for item in item_ids:
         with database.session_maker() as session:
-            stmt = select(HouseItem).where(HouseItem.item_id == item)
+            stmt = select(Item).where(Item.item_id == item)
             item_info = session.execute(stmt).fetchall()
-            item_infos[item] = item_info
+            item_infos[item] = [col[0] for col in item_info]
 
     return item_ids, item_infos
 
@@ -160,3 +160,12 @@ def get_inference_result(member_email):
         stmt = f"select item_id from inference_result where member_email='{member_email}'"
         # stmt = f"select member_email, group_concat(item_id) from inference_result group by member_email where member_email='{member_email}"
         return session.execute(stmt).fetchall()
+
+def delete_inference(member_email):
+    with database.session_maker() as session:
+        stmt = f"delete from inference_result where member_email='{member_email}'"
+        if not stmt:
+            return "failure"
+        session.execute(stmt)
+        session.commit()
+        return "success"
