@@ -158,7 +158,6 @@
 		</div>
 		<br>
 		{/if}
-		<div>new!!</div>
 		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
@@ -199,7 +198,6 @@
 			{/each}
 			{/if}
 		</div>
-		<div>기존</div>
 		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
