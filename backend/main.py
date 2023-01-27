@@ -61,11 +61,18 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+###################################배포/개발 환경설정###################################
+# 배포 환경에서는 해당 구역을 활성화하면 됩니다
+# 개발 환경에서는 해당 구역을 주석처리하면 됩니다
 app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
 
 @app.get("/")
 def index():
     return FileResponse("../frontend/dist/index.html")
+#########################################################################################
+
 
 ################ Backend ################
 @app.get('/home')
