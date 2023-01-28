@@ -16,8 +16,8 @@
             },
             body: JSON.stringify(params)
         }
-
-        await fetch(url,options).then((response)=>{
+        if (check_email()) {
+            await fetch(url,options).then((response) => {
                 response.json().then(json => {
                     if (response.status >= 200 && response.status < 300) {  // 200 ~ 299
                         $access_token = json.access_token
@@ -40,27 +40,41 @@
                     console.log("error")
                     alert(JSON.stringify(error))
                 })
-            }
-        )}
+            })
+        }else {
+            alert("올바른 이메일 형식을 입력해주세요.")
+        }
+    }
         
+    function check_email() {
+        let reg_exp = '[0-9a-zA-Z]{1,}@[0-9a-zA-Z]{1,}.[.]([0-9a-zA-Z]{2,}[-_.]?){1,}'
+        let regex = new RegExp(reg_exp);
+        if (regex.test(email)) {
+            return true;
+        }
+        return false;
+    }
+
+    function enter_login(e) {
+        if (window.event.keyCode == 13) {
+            login(e)
+        }
+    }
 </script>
 
 <hr>
 
-<section class="vh-100">
+<section>
     <div class="container-fluid">
     
-        <form style="width: 23rem;">
+        <form style="width: 23rem;" on:submit={login}>
 
             <h3 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;">Login</h3>
 
             <div class="form-outline mb-4">
                 <label class="form-label" for="form2Example18">회원가입 시 사용한 이메일을 입력해주세요</label>
-                <input type="email" id="form2Example18" bind:value={email} class="form-control form-control-lg" placeholder="이메일"/>
-            </div>
-
-            <div class=" pt-1 mb-4">
-                <button on:click="{login}" class="login-button btn btn-info btn-lg btn-block" type="button">Login</button>
+                <input on:keyup="{enter_login}" type="email" id="form2Example18" bind:value={email} class="form-control form-control-lg" placeholder="이메일"/>
+                <button class="login-button btn btn-info btn-lg btn-block" type="button">Login</button>
             </div>
 
             <p class="bottom-link small mb-5 pb-lg-2">
@@ -72,10 +86,10 @@
 
 <style>
 
-    .vh-100 {
+    section {
         padding-top: 50px;
+        height: 65vh;
     }
-
     .container-fluid {
         display: flex;
         justify-content: center;
