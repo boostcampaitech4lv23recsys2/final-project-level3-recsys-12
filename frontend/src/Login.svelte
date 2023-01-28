@@ -96,6 +96,7 @@
     }
 
     .login-button {
+        margin-top: 2%;
         width: 100%;
         color: white;
     }
