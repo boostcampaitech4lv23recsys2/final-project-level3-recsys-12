@@ -1,4 +1,4 @@
-from db.models import Item, House, Member, HouseItem, MemberPrefer
+from db.models import Item, House, Member, HouseItem, MemberPrefer, InferenceResult
 from db.db_connect import Database
 from sqlalchemy import select
 import random
@@ -13,14 +13,14 @@ def random_item():
     
 def get_item(item_ids):
     # Read data
-    item_infos = {}
+    item_infos = []
     for item in item_ids:
         with database.session_maker() as session:
-            stmt = select(HouseItem).where(HouseItem.item_id == item)
+            stmt = select(Item).where(Item.item_id == item)
             item_info = session.execute(stmt).fetchall()
-            item_infos[item] = item_info
-
-    return item_ids, item_infos
+            item_infos.append([col[0] for col in item_info][0])
+    
+    return item_infos
 
 def house_get_item(item_ids):
     # Read data
@@ -100,7 +100,6 @@ def get_random_card(signup_info):
         cats = cats.union(sets)
     for cat_name in filter(lambda x: x, cats):
         signup_info_df[cat_name] = signup_info_df["style"].str.contains(cat_name).astype(int)
-    # print(signup_info_df)
     house_id_list = []
     for category in filter(lambda x: x, cats):
         house_id_list.append(random.sample(list(signup_info_df[signup_info_df[category] == 1].index), SAMPLE_NUM))
@@ -158,5 +157,13 @@ def get_item_info_prefer(item_ids : list):
 def get_inference_result(member_email):
     with database.session_maker() as session:
         stmt = f"select item_id from inference_result where member_email='{member_email}'"
-        # stmt = f"select member_email, group_concat(item_id) from inference_result group by member_email where member_email='{member_email}"
         return session.execute(stmt).fetchall()
+
+def delete_inference(member_email):
+    with database.session_maker() as session:
+        stmt = f"delete from inference_result where member_email='{member_email}'"
+        if not stmt:
+            return "failure"
+        session.execute(stmt)
+        session.commit()
+        return "success"

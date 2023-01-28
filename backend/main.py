@@ -92,9 +92,9 @@ async def main_page_with_user(
     import random
     model_result = [result[0] for result in get_inference_result(member_email)]
     
-    random.shuffle(model_result)
+    # random.shuffle(model_result)
     item_list = []
-    for item_id in model_result[:10]:
+    for item_id in model_result[:]:
         item_list.append(get_item_info(item_id))   # item
     item_list = sum(item_list, [])
     return item_list
@@ -202,7 +202,31 @@ async def delete_prefer_data(member_email: str, item_id: int):
 class InferenceResult(BaseModel):
     member_email: str
 @app.post('/insert-inference-result')
-async def insert_inference_result(inference_result: InferenceResult):
+async def insert_inference_result(inference_result: InferenceResult, description="화원가입할 때 inference"):
     user_prefered_item = get_inference_input(inference_result.member_email)  # 모델에 넣을 input list(item_id_list)
+    print(user_prefered_item)
     model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
     return create_inference(inference_result.member_email, model_result)
+
+# 디비에 있는 좋아요를 꺼내와서 (아이템 아이디) inference input에 
+
+class UpdataInferenceResult(BaseModel):
+    member_email: str
+    
+@app.post('/update-inference-result')
+async def insert_inference_result(update_inference: UpdataInferenceResult, description="좋아요 반영 inference"):
+    member_prefer = get_item_prefer(update_inference.member_email) # 
+    inference_result = [result[0] for result in get_inference_result(update_inference.member_email)]
+    update_list = member_prefer+inference_result
+    model_result = inference(update_list, MODEL)
+    delete_inference(update_inference.member_email)
+    difference = set(model_result) - set(inference_result)
+    intersection = set(model_result) & set(inference_result)
+    create_inference(update_inference.member_email, model_result),
+    if difference:
+        return {
+            "new_item":get_item(difference),
+            "inter": get_item(intersection)
+        }
+    else:
+        return "Already Update"

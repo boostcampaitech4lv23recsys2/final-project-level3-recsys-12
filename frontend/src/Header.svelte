@@ -17,6 +17,8 @@
         $is_login = false
     }
 
+    let member_name = $member_email.split('@')[0]
+
 </script>
 
 <header class="header">
@@ -38,7 +40,6 @@
                 </a>
                 {/if}
             </span>
-           
         </div>
     </nav>
 </header>
