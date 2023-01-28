@@ -59,6 +59,13 @@ CREATE TABLE IF NOT EXISTS `member_prefer` (
 	`item_id` INT(10) NOT NULL
 );
 
+-- create inference_result table
+CREATE TABLE IF NOT EXISTS `inference_result` (
+	`idx`	int(10)	not null	auto_increment	primary key,
+	`member_email`	varchar(255)	not null,
+	`item_id`	int(10)	not null
+);
+
 -- create house_color table
 CREATE TABLE IF NOT EXISTS `house_color` (
 	`house_id`	INT(10)	NOT NULL PRIMARY KEY,
