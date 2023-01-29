@@ -166,7 +166,7 @@
                 {:else if is_success == 2}  <!-- 2 : 비어있는 이메일 -->
                 <div class="email-wrong">이메일을 입력해주세요.</div>
                 {:else if is_success == 3} <!-- 3 : 올바른 이메일 -->
-                <div id="email-check-done" class="email-right">이메일이 확인되었습니다. <br>이 이메일을 사용하려면 [이메일 사용] 버튼을 누른 후 <br>[Next!] 버튼을 눌러주세요!</div>
+                <div id="email-check-done" class="email-right">이메일이 확인되었습니다. <br>[Next!] 버튼을 눌러주세요!</div>
                 {:else}
                 <div class="email-wrong">이메일 중복 확인을 진행해주세요!</div>
                 {/if}
