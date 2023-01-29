@@ -81,8 +81,8 @@ async def initial_main_page(description='비로그인 초기 페이지에 랜덤
     rating 높은 순 100개 랜덤으로
     """
     items = random_item()
-    item_list = [col.Item for col in items]
-    return item_list
+    random.shuffle(items)
+    return items[:50]
     
 # 로그인 했을 때 메인 페이지
 @app.get('/home/{member_email}')
@@ -94,13 +94,12 @@ async def main_page_with_user(
     
     # random.shuffle(model_result)
     item_list = []
-    top_category = []
+
     for item_id in model_result[:]:
-        item,category = get_item_info_all(item_id)
+        item = get_item_info_all(item_id)
         item_list.append(item)   # item
-        top_category.append(category)
+
     item_list = sum(item_list, [])
-    # top_category -> 최상위 카테고리
     return item_list
 
 
