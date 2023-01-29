@@ -17,8 +17,6 @@
         $is_login = false
     }
 
-    let member_name = $member_email.split('@')[0]
-
 </script>
 
 <header class="header">
@@ -45,6 +43,10 @@
 </header>
 
 <style>
+
+    .header {
+        height: 14vh;
+    }
     /* navbar 배경 색상 */
     .navbar-bg {
         --bs-bg-opacity: 1;
