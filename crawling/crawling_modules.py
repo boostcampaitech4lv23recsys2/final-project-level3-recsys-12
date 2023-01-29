@@ -81,33 +81,31 @@ class SeleniumCrawler(TodaysHome):
     def get_page(self, url):
         "driver로 입력받은 주소에 접근합니다."
         self.driver.get(url)
+        print(url)
 
     @logging_time
     def scroll_down(self, class_name, n_iter=2**32-1)->set:
         "스크롤을 내리며 모든 상품의 href를 찾고 반홥합니다."
         delay_cnt = 0
         items = set(list(map(lambda x:x.get_attribute("href").split("/")[4], self.driver.find_elements(By.CLASS_NAME,class_name))))
-        prev_height = self.driver.execute_script("return document. body.scrollHeight")
-
+        prev_item_len = len(items)
         for _ in range(n_iter):
             self.driver.find_element(By.TAG_NAME, 'body').send_keys(Keys.PAGE_DOWN)
             time.sleep(0.1)
-            current_height = self.driver.execute_script("return document. body.scrollHeight")
-            if current_height == prev_height:
-                if delay_cnt > 3:
-                    break
-                delay_cnt += 1
-                continue
-            else:
-                delay_cnt = 0
-            prev_height = current_height
-            time.sleep(0.3)
             try:
                 new_items = set(list(map(lambda x:x.get_attribute("href").split("/")[4], self.driver.find_elements(By.CLASS_NAME,class_name))))
             except:
                 time.sleep(0.5)
                 new_items = set(list(map(lambda x:x.get_attribute("href").split("/")[4], self.driver.find_elements(By.CLASS_NAME,class_name))))
             items = items.union(new_items)
+            current_item_len = len(items)
+            if current_item_len == prev_item_len:
+                if delay_cnt > 7:
+                    break
+                delay_cnt += 1
+            else:
+                delay_cnt = 0
+            prev_item_len = current_item_len
             print(f"{class_name}>>\t\tfound {len(items)} elements!")
         return items
 
