@@ -131,7 +131,6 @@
     setContext("is_success",is_success)
 </script>
 
-<hr>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <section class="py-3">

@@ -26,7 +26,6 @@
     get_item()
 </script>
 
-<hr>
 <div id="detail_wrapper">
     <div class="product-card">
         <Like item_id={item_id} />

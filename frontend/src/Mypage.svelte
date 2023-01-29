@@ -43,7 +43,6 @@
 
 </script>
 
-<hr>
 
 <!-- Section-->
 <section class="py-3">

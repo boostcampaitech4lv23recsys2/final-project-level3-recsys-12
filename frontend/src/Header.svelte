@@ -19,7 +19,7 @@
 
 </script>
 
-<header class="header">
+<header class="sticky-top header">
     <nav class="navbar navbar-expand-lg navbar-light navbar-bg">
         <div class="container px-4 px-lg-5">
             <a class="navbar-brand" id="logo" on:mouseover={onLogoHover} on:mouseleave={onLogoHover} href="/">@_@</a>
@@ -44,8 +44,11 @@
 
 <style>
 
-    .header {
-        height: 14vh;
+    header {
+        height: 120px;
+    }
+    .navbar {
+        border-bottom: solid 1px rgb(158, 158, 158);
     }
     /* navbar 배경 색상 */
     .navbar-bg {

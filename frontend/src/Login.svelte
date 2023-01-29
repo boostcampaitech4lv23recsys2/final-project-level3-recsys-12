@@ -47,7 +47,8 @@
     }
         
     function check_email() {
-        let reg_exp = '[0-9a-zA-Z]{1,}@[0-9a-zA-Z]{1,}.[.]([0-9a-zA-Z]{2,}[-_.]?){1,}'
+        // let reg_exp = '[0-9a-zA-Z]{1,}@[0-9a-zA-Z]{1,}.[.]([0-9a-zA-Z]{2,}[-_.]?){1,}'
+        let reg_exp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
         let regex = new RegExp(reg_exp);
         if (regex.test(email)) {
             return true;
@@ -62,8 +63,6 @@
         }
     }
 </script>
-
-<hr>
 
 <section>
     <div class="container-fluid">
@@ -89,7 +88,7 @@
 
     section {
         padding-top: 50px;
-        height: 65vh;
+        height:calc(100vh - 240px); /* 전체 height - (header + footer)px*/
     }
     .container-fluid {
         display: flex;
