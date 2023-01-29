@@ -74,27 +74,30 @@
         }
         await fetch(url, options).then((response) => {
             response.json().then((json) => {
-				console.log(json)
-				if (json == "Already Update") {
-					// 사용자가 좋아요 누른 상품이 없는 경우
-					alert("더 많은 좋아요가 필요해요!")
-				}else {
-					new_item_list = json.new_item
-					item_list = json.inter
-					console.log(new_item_list)
-                    console.log("업데이트 완료!")
-					// window.location.reload()
-					alert("추천이 완료되었습니다!")
-				}
-			})
-        })
+            if (json == "Already Update") {
+              // 사용자가 좋아요 누른 상품이 없는 경우
+              alert("더 많은 좋아요가 필요해요!")
+              console.log(json)
+              // inference 결과에 변경이 없는 경우
+            }else {
+              new_item_list = json.new_item
+              item_list = json.inter
+              console.log(new_item_list)
+              console.log("업데이트 완료!")
+              // window.location.reload()
+              alert("추천이 완료되었습니다!")
+				    }
+			  })
+     })
 	}
+	
 	function nonlogin_recom() {
 		let response = confirm("로그인이 필요한 서비스입니다. 로그인 하시겠습니까?")
 		if (response) {
 			push('/login-user')
 		}
 	}
+
 	let first_img_url = heart_not_fill
 	let second_img_url = heart_not_fill
 	function change_heart_icon(num) {
@@ -257,6 +260,7 @@
 
 	.refresh-icon {
 		width: 2rem;
+		height: 2rem;
 	}
 	.refresh-button {
 		color: black;
