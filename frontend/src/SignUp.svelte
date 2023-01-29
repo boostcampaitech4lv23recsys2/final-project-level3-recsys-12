@@ -4,14 +4,15 @@
     import { setContext } from 'svelte'
     
     let house_list = []
-
-    async function isEmailDup(){
-        if (email == null){
+    let email, is_success, use_email = false
+    async function isEmailDup(e){
+        e.preventDefault()
+        if (email == null) {
             is_success = 2  // 비어있는 이메일 입력
-        }else{
+        }else {
             let url = import.meta.env.VITE_SERVER_URL + "/signup"
             let params = {
-            "member_email" : email,
+                "member_email" : email,
             }
             let options = {
                 method: "post",
@@ -25,33 +26,26 @@
                 response.json().then((json) => {
                     if (response.status == 400){
                         is_success = 0  // 중복된 이메일
+                    }else {
+                        // let reg_exp = '[0-9a-zA-Z]{1,}@[0-9a-zA-Z]{1,}.[.]([0-9a-zA-Z]{2,}[-_.]?){1,}'
+                        let reg_exp = /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*.[a-zA-Z]{2,3}$/i
+                        let regex = new RegExp(reg_exp);
+                        if (regex.test(email)) {
+                            is_success = 3
+                        }else {
+                            is_success = 1  // 형식이 맞지 않는 이메일
+                        }
                     }
                 })
             })
         }
     }
-    
-    let email
-    $: is_success = 2
-    async function check_email(e) {
+    function change_use_email(e) {
         e.preventDefault()
-        let reg_exp = '[0-9a-zA-Z]{1,}@[0-9a-zA-Z]{1,}.[.]([0-9a-zA-Z]{2,}[-_.]?){1,}'
-        let regex = new RegExp(reg_exp);
-        if (regex.test(email)) {
-            is_success = 3
+        if (use_email) {
+            use_email = false;
         }else {
-            is_success = 1  // 형식이 맞지 않는 이메일
-        }
-        isEmailDup()
-    }
-
-    let is_use_email = false
-    function use_email(e) {
-        e.preventDefault()
-        if (is_use_email) {
-            is_use_email = false
-        }else {
-            is_use_email = true
+            use_email = true;
         }
     }
 
@@ -140,7 +134,6 @@
     setContext("is_success",is_success)
 </script>
 
-
 <hr>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -149,13 +142,17 @@
         
         <div id="signup_form_wrapper">
             <form class="input-form">
-                {#if is_success == 3 && is_use_email}
-                <input on:input={check_email} type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}" disabled>
+                {#if is_success == 3 && !use_email}
+                <input type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}" disabled>
                 {:else}
-                <input on:input={check_email} type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}">
+                <input type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}">
                 {/if}
-                <button id="dupcheck" on:click={use_email} class="signup-button btn btn-info btn-block">이메일 사용</button>
-                {#if is_success == 3 && is_use_email}
+                {#if is_success == 3}                
+                <button id="dupcheck" on:click={change_use_email} class="signup-button btn btn-info btn-block">이메일 변경</button>
+                {:else}
+                <button id="dupcheck" on:click={isEmailDup} class="signup-button btn btn-info btn-block">이메일 확인</button>
+                {/if}
+                {#if is_success == 3 && !use_email}
                 <button class="next-button signup-button btn btn-info" on:click={goToScroll}>Next!</button>
                 {:else}
                 <button class="next-button signup-button btn btn-info" disabled on:click={goToScroll}>Next!</button>
@@ -175,7 +172,7 @@
                 {/if}
             </div>
         </div>
-        {#if is_success == 3}
+        {#if is_success == 3 && !use_email}
         <div class="container_title">
             <br>
             <h4 style="text-align: center; margin:0;">마음에 드는 이미지를 선택해 주세요.</h4>

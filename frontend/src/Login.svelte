@@ -56,6 +56,7 @@
     }
 
     function enter_login(e) {
+        e.preventDefault()
         if (window.event.keyCode == 13) {
             login(e)
         }
@@ -74,7 +75,7 @@
             <div class="form-outline mb-4">
                 <label class="form-label" for="form2Example18">회원가입 시 사용한 이메일을 입력해주세요</label>
                 <input on:keyup="{enter_login}" type="email" id="form2Example18" bind:value={email} class="form-control form-control-lg" placeholder="이메일"/>
-                <button class="login-button btn btn-info btn-lg btn-block" type="button">Login</button>
+                <button on:click="{login}" class="login-button btn btn-info btn-lg btn-block" type="button">Login</button>
             </div>
 
             <p class="bottom-link small mb-5 pb-lg-2">
