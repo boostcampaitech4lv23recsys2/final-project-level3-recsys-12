@@ -43,7 +43,8 @@ def card_house(card_img_url : str) -> list:
 def get_item_info_all(item_id : int):
     with database.session_maker() as session:
         # stmt = select(Item).where(Item.item_id==item_id)
-        stmt = f"select * from item where item_id={item_id} and rating!='0.0' and review>'1'"
+        # stmt = f"select * from item where item_id={item_id} and rating!='0.0' and review>'1'"
+        stmt = "select * from item where item_id='%d' and rating!='0.0' and review>'1'" % (item_id)
         data = session.execute(stmt).fetchall()
         return data
         # return [col[0] for col in data]
@@ -124,7 +125,8 @@ def check_duplicates(seq1, seq2):
 
 def check_is_prefer(member_email, item_id):
     with database.session_maker() as session:
-        stmt = f"select * from member_prefer where member_email='{member_email}' and item_id='{item_id}'"
+        # stmt = f"select * from member_prefer where member_email='{member_email}' and item_id='{item_id}'"
+        stmt = "select * from member_prefer where member_email='%s' and item_id='%d'"  % (member_email, item_id)
         # stmt = select(MemberPrefer).where(member_email==member_email and item_id==item_id)
         is_prefer = session.execute(stmt).fetchall()
         return is_prefer
@@ -138,7 +140,8 @@ def insert_member_prefer(member_email, item_id):
 
 def delete_member_prefer(member_email, item_id):
     with database.session_maker() as session:
-        stmt = f"delete from member_prefer where member_email='{member_email}' and item_id='{item_id}'"
+        # stmt = f"delete from member_prefer where member_email='{member_email}' and item_id='{item_id}'"
+        stmt = "delete from member_prefer where member_email='%s' and item_id='%d'" % (member_email, item_id)
         if not stmt:
             return "failure"
         session.execute(stmt)
@@ -163,12 +166,14 @@ def get_item_info_prefer(item_ids : list):
 
 def get_inference_result(member_email):
     with database.session_maker() as session:
-        stmt = f"select item_id from inference_result where member_email='{member_email}'"
+        # stmt = f"select item_id from inference_result where member_email='{member_email}'"
+        stmt = "select item_id from inference_result where member_email='%s'" % (member_email)
         return session.execute(stmt).fetchall()
 
 def delete_inference(member_email):
     with database.session_maker() as session:
-        stmt = f"delete from inference_result where member_email='{member_email}'"
+        # stmt = f"delete from inference_result where member_email='{member_email}'"
+        stmt = "delete from inference_result where member_email='%s'" % (member_email)
         if not stmt:
             return "failure"
         session.execute(stmt)
