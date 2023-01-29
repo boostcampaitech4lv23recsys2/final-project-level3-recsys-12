@@ -1,5 +1,13 @@
-tqdm
+ipykernel
+ipywidgets
+matplotlib
+notebook
+numpy
 pandas
-beautifulsoup4
+plotly
+requests
+seaborn
 selenium
+beautifulsoup4
 webdriver-manager
+tqdm

@@ -21,7 +21,6 @@ class CrawlingManager(TodaysHome):
         self.hc_interaction_path = os.path.join(self.args.datapath, "hc_interaction.csv")
         self.house_path = os.path.join(self.args.datapath, "house.csv")
         self.item_path = os.path.join(self.args.datapath, "item.csv")
-        self.card_path = os.path.join(self.args.datapath, "card.csv")
         
         self.main_color_path = os.path.join(self.args.datapath, "house_main_color.csv")
         self.wall_color_path = os.path.join(self.args.datapath, "house_wall_color.csv")
@@ -32,18 +31,39 @@ class CrawlingManager(TodaysHome):
         self.original_hc_interaction = pd.read_csv(self.hc_interaction_path)
         self.original_house = pd.read_csv(self.house_path)
         self.original_item = pd.read_csv(self.item_path)
-        self.original_card = pd.read_csv(self.card_path)
         
         self.pre_house_code = set(map(int, self.original_house.house.values))
         self.pre_item_code = set(map(int, self.original_item.item.values))
-        self.pre_card_code = set(map(int, self.original_card.card.values))
         
         self.new_house = set()
         self.new_item = set()
-        self.new_card = set()
 
         self.crawler = SeleniumCrawler()
         self.bs4_crawler = Bs4Crawler()
+        
+
+        if self.args.type=="all":
+            self.card_path = os.path.join(self.args.datapath, "card.csv")
+        elif self.args.type=="even":
+            self.card_path = os.path.join(self.args.datapath, "cardeven.csv")
+        elif self.args.type=="odd":
+            self.card_path = os.path.join(self.args.datapath, "cardodd.csv")
+        else:
+            pass
+        
+        self.original_card = pd.read_csv(self.card_path)
+        self.pre_card_code = set(map(int, self.original_card.card.values))
+        self.new_card = set()
+
+        self.func_dict = {
+            "housecode":self.update_house_code,
+            "hi":self.update_hi_interaction,
+            "hc":self.update_hc_interaction,
+            "house":self.update_house,
+            "item":self.update_item,
+            "card":self.update_card,
+            "color":self.get_color,
+        }
 
     @logging_time
     def update_house_code(self):
@@ -71,7 +91,12 @@ class CrawlingManager(TodaysHome):
             items = map(int, self.crawler.scroll_down(class_name=self.item_in_user_products_class))
             for item in items:
                 updated_data.append([housecode, item])
-            pd.DataFrame(updated_data, columns=["house","item"]).to_csv(file_name, index=False)
+            new_data = pd.DataFrame(updated_data, columns=["house","item"])
+            if housecode in setted:
+                origin = pd.read_csv(file_name)
+                pd.concat([origin, new_data]).drop_duplicates().sort_values("item").to_csv(file_name, index=False)
+            else:
+                new_data.drop_duplicates().sort_values("item").to_csv(file_name, index=False)                
         merge_all_in_dir(self.hi_interaction_folder).sort_values(["house","item"]).to_csv(self.hi_interaction_path, index=False)
         self.original_hi_interaction = pd.read_csv(self.hi_interaction_path)
 
@@ -136,7 +161,17 @@ class CrawlingManager(TodaysHome):
         setted = set(self.original_card.card.astype(int).values)
         founded_item = entire_card_code - setted
         new = {}
-        iterator = tqdm(founded_item,"card") if self.args.just_update else tqdm(entire_card_code,"card")
+        if not self.args.just_update:
+            tqdm(entire_card_code,"card")
+        elif self.args.type == "even":
+            iterator = tqdm(set(filter(lambda x:x%2==0, founded_item)),"card")
+        elif self.args.type == "odd":
+            iterator = tqdm(set(filter(lambda x:x%2==1, founded_item)),"card")
+        elif self.args.type == "all":
+            iterator = tqdm(founded_item, "card")
+        else:
+            pass
+        # iterator = tqdm(founded_item,"card") if self.args.just_update else tqdm(entire_card_code,"card")
         for card in iterator:
             self.bs4_crawler.get_page(self.bs4_crawler.get_card_url(card))
             data = self.bs4_crawler.get_features()
@@ -150,32 +185,10 @@ class CrawlingManager(TodaysHome):
         color_dict = defaultdict(lambda : {i:0 for i in range(13)})
         for i in range(13):
             self.crawler.get_page(self.get_color_url(type=type, color_num=i))
-            founded = self.crawler.scroll_down(class_name=self.item_in_user_products_class)
+            founded = self.crawler.scroll_down(class_name="project-feed__item__link")
             for house_code in set(map(int, founded)):
-                color_dict[house_code][color_dict] = 1
+                color_dict[house_code][i] = 1
         return color_dict
-
-@logging_time
-def process(manager):
-    manager.update_house_code()
-    manager.update_hi_interaction()
-    manager.update_hc_interaction()
-    manager.new_house = set(pd.read_csv(manager.house_code_path).house.astype(int).values)
-    manager.new_item = set(pd.read_csv(manager.hi_interaction_path).item.astype(int).values)
-    manager.new_card = set(pd.read_csv(manager.hc_interaction_path).card.astype(int).values)
-    manager.update_house()
-    manager.update_item()
-    manager.update_card()
-
-@logging_time
-def update(manager):
-    manager.update_house_code()
-    manager.update_hi_interaction()
-    manager.update_hc_interaction()
-    manager.update_house()
-    manager.update_item()
-    manager.update_card()
-    save_color(manager)
 
 @logging_time
 def save_color(manager):
@@ -184,12 +197,14 @@ def save_color(manager):
     pd.DataFrame.from_dict(manager.get_color("wall"), orient="index").reset_index().rename(columns={"index":"house"}).to_csv(manager.wall_color_path,index=False)
     pd.DataFrame.from_dict(manager.get_color("floor"), orient="index").reset_index().rename(columns={"index":"house"}).to_csv(manager.floor_color_path,index=False)
 
+@logging_time
+def process(manager):
+    for func_name in manager.args.target:
+        manager.func_dict[func_name]()
+
 
 if __name__ == "__main__":
     args = get_args()
+    print(args)
     manager = CrawlingManager(args)
-    if args.just_update:
-        update(manager)
-    else:
-        process(manager)
-    
+    process(manager)
