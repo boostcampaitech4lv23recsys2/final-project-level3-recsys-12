@@ -3,6 +3,7 @@
 	import { link, push } from 'svelte-spa-router'    
 	import { member_email, is_login, click_like_item_id } from './store'
 	import Like from './HomeElement/Like.svelte';
+    import TopButton from './GoTop.svelte'
 
 	const heart_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589054.png"
     const heart_not_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589197.png"
@@ -10,6 +11,8 @@
 	let member_name = $member_email.split('@')[0]
 
 	let item_list = []
+	let category_set = new Set()
+	let category_list = []
 	async function get_items() {
 		
 		let url = import.meta.env.VITE_SERVER_URL
@@ -45,6 +48,10 @@
 		).then((response) => {
 			response.json().then((json) => {
 				item_list = json
+				for (let item of item_list) {
+					category_set.add(item.category.split('|')[0])
+				}
+				category_list = Array.from(category_set).sort();
 			})
 		})
 		.catch((error) => console.log(error))
@@ -110,7 +117,6 @@
 				second_img_url = heart_fill
 			}
 		}
-		
 	}
 
 </script>
@@ -199,6 +205,9 @@
 			{/each}
 			{/if}
 		</div>
+		{#each category_list as category}
+		<div class="category-name">{category}</div>
+		<hr>
 		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
@@ -206,7 +215,9 @@
 			-->
 			
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
+			
 			{#each item_list as item}
+			{#if item.category.split('|')[0] == category}
 				<div class="col mb-3">
 					<Like item_id={item.item_id} />
 					<a use:link href="/detail/{item.item_id}" class="link-detail">
@@ -237,10 +248,17 @@
 							</div>
 						</a>
 					</div>
+					{/if}
 			{/each}
+			
 		</div>
+		{/each}
+	</div>
+	<div class="go-top-button">
+		<TopButton />
 	</div>
 </section>
+
 <style>
 
 	.refresh-button-wrapper {
@@ -259,7 +277,11 @@
 		height: 2rem;
 	}
 	.refresh-button {
+		/* z-index: 5;
+		position: sticky;
+        top: 0px; */
 		color: black;
+		background-color: white;
 		display: flex;
 		justify-content: center;
 		font-weight: bold;
@@ -301,6 +323,12 @@
 		padding-top: 1rem;
 	}
 
+	.category-name {
+		color: rgb(73, 72, 72);
+		font-size: 1.2rem;
+		font-weight: bold;
+		margin-top: 2rem;
+	}
 
 	 /* a 태그의 파란색 글씨, 밑줄이 그어지는 것 제거 */
 	.link-detail {
@@ -364,5 +392,11 @@
 	.item-price {
 		height: 10px;
 	}
+
+	.go-top-button {
+        position: fixed;
+        right: 5%;
+        bottom: 5%;
+    }
 
 </style>
