@@ -8,8 +8,8 @@ database = Database()
 
 def random_item():
     with database.session_maker() as session:
-        stmt = select(Item).order_by(Item.rating.desc())
-        return session.execute(stmt).fetchmany(10)
+        stmt = select(Item).order_by(Item.rating.desc()).limit(70)
+        return session.execute(stmt).fetchmany(30)
     
 def get_item(item_ids):
     # Read data
@@ -39,17 +39,13 @@ def card_house(card_img_url : str) -> list:
         data = session.execute(stmt).fetchall()
         return [col[0] for col in data][0].house_id
 
-def get_item_info(item_id : int):
-    with database.session_maker() as session:
-        stmt = select(Item.item_id, Item.title, Item.price, Item.image, Item.seller, Item.predict_price).where(Item.item_id==item_id)
-        data = session.execute(stmt).fetchall()
-        return data
-
 def get_item_info_all(item_id : int):
     with database.session_maker() as session:
         stmt = select(Item).where(Item.item_id==item_id)
         data = session.execute(stmt).fetchall()
-        return data
+        category = [col[0] for col in data][0].category
+        top_category = category.split('|')[0]
+        return [col[0] for col in data], top_category
     
 def get_house_id_with_member_email(member_email:str) -> str:
     with database.session_maker() as session:
@@ -102,18 +98,28 @@ def get_random_card(signup_info):
         signup_info_df[cat_name] = signup_info_df["style"].str.contains(cat_name).astype(int)
     house_id_list = []
     for category in filter(lambda x: x, cats):
-        house_id_list.append(random.sample(list(signup_info_df[signup_info_df[category] == 1].index), SAMPLE_NUM))
-    
-    house_id_list = sum(house_id_list, [])    # 2차원 배열 1차원으로 펴줌
+        category_list = random.sample(list(signup_info_df[signup_info_df[category] == 1].index), SAMPLE_NUM)
+        house_id_list+=category_list
+        cnt = check_duplicates(house_id_list, category) # 중복체크하기
+        if cnt%5!=0:
+            while (cnt%5)>0: # 다시 추천해 준 것에서 다시 중복이 발생할 경우
+                add = (random.sample(list(signup_info_df[signup_info_df[category] == 1].index), 5-cnt%5))
+                house_id_list+=add
+                cnt = check_duplicates(house_id_list, category)
 
+    house_id_list = list(set(house_id_list))
     return_signup_info = signup_info_df.iloc[house_id_list]
     
     return_signup_info = return_signup_info[["house_id", "card_img_url", "style"]]
     return_signup_info = return_signup_info.sample(frac=1)
     return_signup_info = return_signup_info.to_json(orient="records")
     return_signup_info = json.loads(return_signup_info)
-
+    
     return return_signup_info
+
+def check_duplicates(seq1, seq2):
+    duplicates = [x for i, x in enumerate(seq1) if i != seq1.index(x)]  # 중복된 아이템 확인
+    return len(set(seq1) - set((seq2)))
 
 def check_is_prefer(member_email, item_id):
     with database.session_maker() as session:

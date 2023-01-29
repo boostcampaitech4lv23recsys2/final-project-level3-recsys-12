@@ -94,9 +94,13 @@ async def main_page_with_user(
     
     # random.shuffle(model_result)
     item_list = []
+    top_category = []
     for item_id in model_result[:]:
-        item_list.append(get_item_info(item_id))   # item
+        item,category = get_item_info_all(item_id)
+        item_list.append(item)   # item
+        top_category.append(category)
     item_list = sum(item_list, [])
+    # top_category -> 최상위 카테고리
     return item_list
 
 
@@ -162,8 +166,7 @@ post : dict(json)를 받을 수 있음. {}로만 움직임.
 
 @app.get('/item/{item_id}')
 async def detail(item_id:int):
-    item_info = get_item_info_all(item_id)
-    return item_info[0].Item
+    return get_item_info_all(item_id)[0]
 
 
 class Mypage(BaseModel):
@@ -204,7 +207,6 @@ class InferenceResult(BaseModel):
 @app.post('/insert-inference-result')
 async def insert_inference_result(inference_result: InferenceResult, description="화원가입할 때 inference"):
     user_prefered_item = get_inference_input(inference_result.member_email)  # 모델에 넣을 input list(item_id_list)
-    print(user_prefered_item)
     model_result = inference(user_prefered_item, MODEL)    # 모델 인퍼런스
     return create_inference(inference_result.member_email, model_result)
 
