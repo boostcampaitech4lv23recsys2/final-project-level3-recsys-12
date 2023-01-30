@@ -83,6 +83,15 @@ class InferenceResult(Base):
     item_id = Column(Integer, nullable=False) # 가구 id
     
     
+# 클러스터_가구 match
+class ClusterItem(Base):
+    
+    __tablename__ = "cluster_item" # MySQL DB Table 이름
+    idx = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
+    cluster_id = Column(Integer, nullable=False) # 클러스터 id
+    item_id = Column(Integer, nullable=False) # 가구 id
+    
+    
 # 집들이 색상
 class HouseColor(Base):
     
