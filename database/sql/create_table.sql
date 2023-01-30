@@ -61,9 +61,16 @@ CREATE TABLE IF NOT EXISTS `member_prefer` (
 
 -- create inference_result table
 CREATE TABLE IF NOT EXISTS `inference_result` (
-	`idx`	int(10)	not null	auto_increment	primary key,
-	`member_email`	varchar(255)	not null,
-	`item_id`	int(10)	not null
+	`idx`	INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`member_email`	VARCHAR(255) NOT NULL,
+	`item_id`	INT(10) NOT NULL
+);
+
+-- create cluster_item_math table
+CREATE TABLE IF NOT EXISTS `cluster_item` (
+	`idx`	INT(10)	NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`cluster_id`	INT(10)	NOT NULL,
+	`item_id`	INT(10)	NOT NULL
 );
 
 -- create house_color table
