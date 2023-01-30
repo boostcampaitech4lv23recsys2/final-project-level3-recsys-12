@@ -6,3 +6,9 @@
 		</p>
 	</div>
 </footer>
+
+<style>
+	footer {
+		height: 120px;
+	}
+</style>

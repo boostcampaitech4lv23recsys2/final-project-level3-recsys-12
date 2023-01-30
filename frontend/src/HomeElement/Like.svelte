@@ -87,8 +87,8 @@
 	.like-wrapper {
 		z-index: 2;
 		position: absolute;
-		width: 30px;
-		height: 30px;
+		width: 32px;
+		height: 32px;
 		background-color: white;
 		border-radius: 50%;
         display: flex;
@@ -98,8 +98,8 @@
 	}
 
     .like-icon {
-        width: 20px;
-        height: 20px;
+        width: 22px;
+        height: 22px;
     }
 
     .like-icon:hover{

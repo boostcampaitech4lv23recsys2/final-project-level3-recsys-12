@@ -2,6 +2,7 @@
 	import { push } from 'svelte-spa-router'
     import ImageBlock from './SignUpElement/ImageBlock.svelte';
     import { setContext } from 'svelte'
+    import TopButton from './GoTop.svelte'
     
     let house_list = []
     let email, is_success, use_email = false
@@ -53,10 +54,6 @@
         e.preventDefault()
         var location = document.querySelector(".container_title").offsetTop;
         window.scrollTo({top: location, behavior: 'smooth'});
-    }
-    function goToTop(e) {
-        e.preventDefault()
-        window.scrollTo(0, 0)
     }
 
 	async function get_items() {
@@ -134,7 +131,6 @@
     setContext("is_success",is_success)
 </script>
 
-<hr>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <section class="py-3">
@@ -198,13 +194,11 @@
                 <span id="selected_num">Next!({selected_cnt}/5)</span>
             </div>
         </button>
+        
+        <div class="go-top-button">
+            <TopButton />
+        </div>
         {/if}
-    </div>
-    <div class="go-top-button">
-        <button class="btn btn-secondary" on:click="{goToTop}">
-            <img class="top-button" src="https://cdn-icons-png.flaticon.com/512/130/130906.png" alt="...">
-            <br>Top
-        </button>
     </div>
 </section>
 
@@ -214,10 +208,6 @@
         position: fixed;
         right: 5%;
         bottom: 100px;
-    }
-    .top-button {
-        width: 20px;
-        
     }
     .input-form {
         display: flex;
