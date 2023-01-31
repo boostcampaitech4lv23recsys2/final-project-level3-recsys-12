@@ -8,3 +8,4 @@ DROP TABLE IF EXISTS `house_color`;
 DROP TABLE IF EXISTS `member_prefer`;
 DROP TABLE IF EXISTS `inference_result`;
 DROP TABLE IF EXISTS `cluster_item`;
+DROP TABLE IF EXISTS `card`;

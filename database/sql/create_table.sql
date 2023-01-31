@@ -73,6 +73,15 @@ CREATE TABLE IF NOT EXISTS `cluster_item` (
 	`item_id`	INT(10)	NOT NULL
 );
 
+-- create card table
+CREATE TABLE IF NOT EXISTS `card` (
+	`card_id`	INT(10)	NOT NULL PRIMARY KEY,
+	`img_space`	VARCHAR(100)	NULL,
+	`img_url`	VARCHAR(255)	NULL,
+	`house_id`	INT(10)	NULL,
+	`is_human`	BINARY(1)	NULL
+);
+
 -- create house_color table
 CREATE TABLE IF NOT EXISTS `house_color` (
 	`house_id`	INT(10)	NOT NULL PRIMARY KEY,
