@@ -50,8 +50,8 @@ item.rename(columns={"title":"preprocessed_title"}, inplace=True)
 # In[102]:
 
 
-def df_lower(df:pd.DataFrame):
-    df.preprocessed_title = df.preprocessed_title.apply(lambda x:str.lower(x))
+def df_lower(df:pd.DataFrame, col:str="preprocessed_title"):
+    df[col] = df[col].apply(lambda x:str.lower(x))
     return df
 
 # TODO 전처리: [단종], [품목], (당일출고) 등등 -> "" -> 재정렬
