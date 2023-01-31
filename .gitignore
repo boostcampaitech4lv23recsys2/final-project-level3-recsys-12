@@ -8,8 +8,9 @@ wandb/
 # log
 *.log
 
-# csv
+# csv & tsv
 *.csv
+*.tsv
 
 # model
 *.pt
