@@ -17,6 +17,7 @@ wandb/
 
 # bash
 *.sh
+!settings.sh
 
 # nohup
 *.out
