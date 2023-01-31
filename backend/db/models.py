@@ -100,7 +100,7 @@ class Card(Base):
     img_space = Column(String(100), nullable=True) # 이미지공간
     img_url = Column(String(255), nullable=True) # 이미지주소
     house_id = Column(Integer, nullable=True) # 집들이 id
-    is_human = Column(BINARY, nullable=True) # 사람여부
+    is_human = Column(BINARY, nullable=False, default=0) # 사람여부
     
     
 # 집들이 색상

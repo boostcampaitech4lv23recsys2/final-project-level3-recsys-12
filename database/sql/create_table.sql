@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `card` (
 	`img_space`	VARCHAR(100)	NULL,
 	`img_url`	VARCHAR(255)	NULL,
 	`house_id`	INT(10)	NULL,
-	`is_human`	BINARY(1)	NULL
+	`is_human`	BINARY(1)	NOT NULL	DEFAULT 0
 );
 
 -- create house_color table
