@@ -33,9 +33,7 @@ CREATE TABLE IF NOT EXISTS `house` (
 	`prefer`	INT(10)	NULL,
 	`scrab`	INT(10)	NULL,
 	`comment`	INT(10)	NULL,
-	`views`	INT(10)	NULL,
-	`card_space` VARCHAR(100) 	NULL,
-	`card_img_url`	VARCHAR(255)	NULL
+	`views`	INT(10)	NULL
 );
 
 -- create house_item interaction table
