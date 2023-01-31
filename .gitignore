@@ -15,6 +15,9 @@ wandb/
 *.pt
 *.pth
 
+# pickle
+*.pickle
+
 # bash
 *.sh
 
