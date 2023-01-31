@@ -92,6 +92,17 @@ class ClusterItem(Base):
     item_id = Column(Integer, nullable=False) # 가구 id
     
     
+# 카드
+class Card(Base):
+    
+    __tablename__ = "card" # MySQL DB Table 이름
+    card_id = Column(Integer, nullable=False, primary_key=True) # 카드 id
+    img_space = Column(String(100), nullable=True) # 이미지공간
+    img_url = Column(String(255), nullable=True) # 이미지주소
+    house_id = Column(Integer, nullable=True) # 집들이 id
+    is_human = Column(BINARY, nullable=False, default=0) # 사람여부
+    
+    
 # 집들이 색상
 class HouseColor(Base):
     
