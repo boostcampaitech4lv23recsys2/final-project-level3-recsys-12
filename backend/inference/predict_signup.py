@@ -22,7 +22,7 @@ class Signup_Model(nn.Module):
     def forward(self, card_id, space, size, family):
         
         with database.session_maker() as session:
-            stmt = select(Card).order_by(func.random()).limit(10)
+            stmt = select(Card).where(Card.img_space =='거실' and Card.is_human==0).order_by(func.random()).limit(10)
             data = session.execute(stmt).fetchall()
         return [col.Card.card_id for col in data]
     
