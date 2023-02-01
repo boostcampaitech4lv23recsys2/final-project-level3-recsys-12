@@ -1,9 +1,10 @@
 <script>
     import Like from './HomeElement/Like.svelte';
+    import RecommendItem from './RecommendItem.svelte';
 
     let item_id = window.location.href.split('/').slice(-1)[0]
     let item = {}
-    let price, rate, discount_price
+    let price, rate, discount_price, category = []
 	async function get_item() {
 		// str로
         let url = import.meta.env.VITE_SERVER_URL + "/item"
@@ -17,130 +18,215 @@
 				item = json
                 price = item.price ? Number(item.price.replace(/[^0-9]/g, "")) : 0
                 rate = item.discount_rate ? Number(item.discount_rate.replace(/[^0-9]/g, "")/100) : 0
-                discount_price = price*(1-rate) ? parseInt(price*(1-rate))+"원" : "미입점"
-                price = price? price : ""
+                discount_price = price*(1-rate) ? Number(price*(1-rate)).toLocaleString()+"원" : "미입점"
+                price = price? price.toLocaleString()+"원" : ""
+                category = item.category.split("|")
 			})
 		})
 		.catch((error) => console.log(error))
 	}
     get_item()
+
+    let cluster_item = []
+    async function get_cluster_item() {
+        let url = import.meta.env.VITE_SERVER_URL + "/cluster/"+parseInt(item_id)
+        await fetch(url, {
+            headers: {
+                Accept: "application / json",
+            },
+            method: "GET"
+        }).then((response) => {
+			response.json().then((json) => {
+				cluster_item = json
+			})
+		})
+		.catch((error) => console.log(error))
+    }
+    get_cluster_item()
+
+    let series_item = []
+    async function get_same_series_item() {
+        let url = import.meta.env.VITE_SERVER_URL + "/series/"+parseInt(item_id)
+        await fetch(url, {
+            headers: {
+                Accept: "application / json",
+            },
+            method: "GET"
+        }).then((response) => {
+			response.json().then((json) => {
+				series_item = json
+			})
+		})
+		.catch((error) => console.log(error))
+    }
+    get_same_series_item()
+
+    let popular_item = []
+    async function get_popular_item() {
+        let url = import.meta.env.VITE_SERVER_URL + "/popular/"+parseInt(item_id)
+        await fetch(url, {
+            headers: {
+                Accept: "application / json",
+            },
+            method: "GET"
+        }).then((response) => {
+			response.json().then((json) => {
+				popular_item = json
+			})
+		})
+		.catch((error) => console.log(error))
+    }
+    get_popular_item()
+
 </script>
 
-<div id="detail_wrapper">
-    <div class="product-card">
-        <Like item_id={item_id} />
-        <div class="product-tumb">
-            <img src={item.image} alt="">
-        </div>
-        <div class="product-details">
-            <span class="product-catagory">{item.category}</span>
-            <h4><a href="https://ohou.se/productions/{item.item_id}/selling">{item.title}</a></h4>
-            <p>{item.rating} | {item.review} | {item.seller}</p>
-            <div class="product-bottom-details">
-                <div class="product-price"><small>{price}</small>{discount_price}</div>
+<section class="py-5">
+    <div class="container px-4 px-lg-5 my-5">
+        <div class="item-info">
+            <div class="item-category">
+                {#each category as cat, idx}
+                <div class="each-category">{cat}</div>
+                {#if idx != category.length - 1}
+                <div class="each-category-sep">
+                    &nbsp;>&nbsp;
+                </div>
+                {/if}
+                {/each}
+
+            </div>
+            <div class="row gx-4 gx-lg-5 align-items-center">
+                <div class="col-md-6"><Like item_id={item_id}/>
+                    <img class="card-img-top mb-5 mb-md-0" src={item.image} alt="..." />
+                </div>
+                <div class="col-md-6">
+                    <div class="item-seller mb-1">{item.seller}</div>
+                    <a href="https://ohou.se/productions/{item.item_id}/selling">
+                        <h1 class="item-title fw-bolder">{item.title}</h1>
+                    </a>
+                    <div class="fs-5 mb-5">
+                        <span class="origin-price text-decoration-line-through">{price}</span>
+                        <br>
+                        <span class="discount-rate">{item.discount_rate}</span>
+                        <span class="total-price">{discount_price}</span>
+                    </div>
+                    <div class="item-review">
+                        <img class="star-icon" src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="...">
+                    <span> 별점 {item.rating} <span style="color:gray;">|</span> {item.review}개 리뷰 </span>
+                    </div>
+                </div>
             </div>
         </div>
+    
+        <br><br><br>
+        <!-- 같은 클러스터 상품 -->
+        {#if cluster_item.length != 0}
+        <div class="recom-item">
+            이런 상품은 어때요?
+        </div>
+        <div class="item-view">
+            <RecommendItem item_id_list={cluster_item} />
+        </div>
+        {/if}
+        
+        <!-- 같은 판매자가 판매하는 같은 카테고리 상품 -->
+        {#if series_item.length != 0}
+        <div class="recom-item">
+            같은 시리즈 상품
+        </div>
+
+        <div class="item-view">
+            <RecommendItem item_id_list={series_item} />
+        </div>
+        {/if}
+
+        <!-- 같은 카테고리 내 인기 상품 -->
+        {#if popular_item.length != 0}
+        <div class="recom-item">
+            {category[category.length - 1]} 인기 상품
+        </div>
+        <div class="item-view">
+            <RecommendItem item_id_list={popular_item} />
+        </div>
+        {/if}
     </div>
-</div>
+</section>
+
 
 
 <style>
-@import url('https://fonts.googleapis.com/css?family=Roboto:400,500,700');
-*{
-    -webkit-box-sizing: border-box;
-            box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
 
-a{
-    text-decoration: none;
-}
-.product-card {
-    width: 380px;
-    position: relative;
-    box-shadow: 0 2px 7px #dfdfdf;
-    margin: 50px auto;
-    background: #fafafa;
-}
+    .item-info {
+        margin-bottom: 10%;
+    }
+    .item-category {
+        display: flex;
+        vertical-align: center;
+        margin-bottom: 1%;
+    }
+    .each-category-sep {
+        font-weight: bold;
+        color:gray;
+        font-size: 1rem;
+    }
+    .each-category {
+        font-size: 1.0rem;
+        color: gray;
+        font-weight: bold;
+    }
 
-.product-tumb {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 300px;
-    padding: 50px;
-    background: #f0f0f0;
-}
+    .card-img-top {
+        border-radius: 5%;
+    }
 
-.product-tumb img {
-    max-width: 100%;
-    max-height: 100%;
-}
 
-.product-details {
-    padding: 30px;
-}
+    .item-seller {
+        font-size: 1.05rem;
+        font-weight: 400;
+    }
+    a {
+        text-decoration: none;
+        color: black;
+    }
+    .item-title {
+        font-size: 1.6rem;
+    }
+    .origin-price {
+        color: gray;
+        font-size: 1.0rem;
+        font-weight: 500;
+    }
+    .discount-rate {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: rgb(22, 176, 223);
+    }
+    .total-price {
+        font-weight: bold;
+        font-size: 1.4rem;
+    }
 
-.product-catagory {
-    display: block;
-    font-size: 12px;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: #ccc;
-    margin-bottom: 18px;
-}
+    .item-review {
+        font-size: 1.1rem;
+        font-weight: 400;
+    }
 
-.product-details h4 a {
-    font-weight: 500;
-    display: block;
-    margin-bottom: 18px;
-    text-transform: uppercase;
-    color: #363636;
-    text-decoration: none;
-    transition: 0.3s;
-}
+    .star-icon {
+        width: 1.0rem;
+        height: 1.0rem;
+    }
 
-.product-details h4 a:hover {
-    color: #fbb72c;
-}
+    .recom-item {
+        font-size: 1.2rem;
+        font-weight: bold;
+        margin-bottom: 2%;
+    }
 
-.product-details p {
-    font-size: 15px;
-    line-height: 22px;
-    margin-bottom: 18px;
-    color: #999;
-}
-
-.product-bottom-details {
-    overflow: hidden;
-    border-top: 1px solid #eee;
-    padding-top: 20px;
-}
-
-.product-bottom-details div {
-    float: left;
-    width: 50%;
-}
-
-.product-price {
-    font-size: 18px;
-    color: #fbb72c;
-    font-weight: 600;
-}
-
-.product-price small {
-    font-size: 80%;
-    font-weight: 400;
-    text-decoration: line-through;
-    display: inline-block;
-    margin-right: 5px;
-}
-
-#detail_wrapper{
-    display:flex;
-    flex-flow: row nowrap;
-    justify-content: center;
-}
+    .recom-item {
+        display: flex;
+        justify-content: space-between;;
+    }
+    .item-view {
+        margin-bottom: 7%;
+    }
 
 </style>

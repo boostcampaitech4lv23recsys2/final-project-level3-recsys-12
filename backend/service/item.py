@@ -1,4 +1,5 @@
 from db.models import *
+
 from db.db_connect import Database
 from sqlalchemy import select
 import random
@@ -44,7 +45,8 @@ def get_item_info_all(item_id : int):
     with database.session_maker() as session:
         # stmt = select(Item).where(Item.item_id==item_id)
         # stmt = f"select * from item where item_id={item_id} and rating!='0.0' and review>'1'"
-        stmt = "select * from item where item_id='%d' and rating!='0.0' and review>'1'" % (item_id)
+        # stmt = "select * from item where item_id='%d' and rating!='0.0' and review>'1'" % (item_id)
+        stmt = "select * from item where item_id='%d'" % item_id
         data = session.execute(stmt).fetchall()
         return data
         # return [col[0] for col in data]
@@ -236,3 +238,25 @@ def delete_inference(member_email):
         session.execute(stmt)
         session.commit()
         return "success"
+
+def get_item_cluster(item_id):
+    with database.session_maker() as session:
+        stmt = select(ClusterItem.cluster_id).where(ClusterItem.item_id==item_id)
+        data = session.execute(stmt).fetchall()
+        return data
+        
+def get_clusters(cluster_id, item_id):
+    with database.session_maker() as session:
+        stmt = select(ClusterItem.item_id).where(ClusterItem.cluster_id==cluster_id).where(ClusterItem.item_id!=item_id)
+        return session.execute(stmt).fetchall()
+
+def get_same_series_item(item_id, category, seller):
+    with database.session_maker() as session:
+        stmt = select(Item.item_id).where(Item.item_id!=item_id).where(Item.category==category).where(Item.seller==seller)
+        return session.execute(stmt).fetchall()
+
+def get_popular_item(item_id, category):
+    # 현재 인기도 기준 : 별점 4.7 이상, review 수 5개 이상
+    with database.session_maker() as session:
+        stmt = select(Item.item_id).where(Item.item_id!=item_id).where(Item.category==category).where(Item.rating>=4.7).where(Item.review>=5)
+        return session.execute(stmt).fetchall()

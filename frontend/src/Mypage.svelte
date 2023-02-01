@@ -45,6 +45,17 @@
 
 
 <!-- Section-->
+<!-- 좋아요 누른 상품이 없어서 마이 페이지가 비어있는 경우 -->
+{#if item_list.length == 0}
+<section class="section py-3">
+	<div class="no-item-img">
+		<img style="width:60px;height:60px;"src="https://cdn-icons-png.flaticon.com/512/4076/4076402.png" alt="...">
+	</div>
+	<div class="no-item">
+		아직 좋아요를 누른 상품이 없어요
+	</div>
+</section>
+{:else}
 <section class="py-3">
 	<div class="container-md px-3 px-lg-3 mt-3">
 		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
@@ -88,8 +99,28 @@
 		</div>
 	</div>
 </section>
+{/if}
 
 <style>
+
+	.section {
+        padding-top: 50px;
+        height:calc(100vh - 240px); /* 전체 height - (header + footer)px*/
+    }
+	.no-item-img {
+		display: flex;
+		justify-content: center;
+		margin-top: 20vh;
+		font-size: 1.5rem;
+		font-weight: bold;
+	}
+
+	.no-item {
+		display: flex;
+		justify-content: center;
+		font-size: 1.5rem;
+		font-weight: bold;
+	}
 
 	 /* a 태그의 파란색 글씨, 밑줄이 그어지는 것 제거 */
 	.link-detail {

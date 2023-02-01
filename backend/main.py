@@ -216,7 +216,9 @@ class UpdataInferenceResult(BaseModel):
 async def insert_inference_result(update_inference: UpdataInferenceResult, description="좋아요 반영 inference"):
     member_prefer = get_item_prefer(update_inference.member_email) # 
     inference_result = [result[0] for result in get_inference_result(update_inference.member_email)]
-    update_list = member_prefer+inference_result
+    user_prefered_item = get_inference_input(update_inference.member_email)  # 모델에 넣을 input list(item_id_list)
+    
+    update_list = member_prefer + user_prefered_item
     model_result = inference(update_list, MODEL)
     delete_inference(update_inference.member_email)
     difference = set(model_result) - set(inference_result)
@@ -229,3 +231,31 @@ async def insert_inference_result(update_inference: UpdataInferenceResult, descr
         }
     else:
         return "Already Update"
+
+@app.get('/cluster/{item_id}')
+async def get_cluster(item_id: int):
+    cluster_id = [row[0] for row in get_item_cluster(item_id)]
+    print(cluster_id)
+    if len(cluster_id) != 0:
+        clusters = [cluster[0] for cluster in get_clusters(cluster_id, item_id)]
+        clusters = random.sample(clusters, k=min(8, len(clusters)))
+        return clusters
+    else: return []
+
+@app.get('/series/{item_id}')
+async def get_same_series(item_id):
+    item_info = get_item_info_all(int(item_id))
+    category = item_info[0][1]
+    seller = item_info[0][6]
+    series_items = [col[0] for col in get_same_series_item(item_id, category, seller)]
+    series_items = random.sample(series_items, k=min(8, len(series_items)))
+    return series_items
+
+@app.get('/popular/{item_id}')
+async def get_same_series(item_id):
+    item_info = get_item_info_all(int(item_id))
+    category = item_info[0][1]
+    popular_items = [col[0] for col in get_popular_item(item_id, category)]
+    popular_items = random.sample(popular_items, k=min(8, len(popular_items)))
+    return popular_items
+    

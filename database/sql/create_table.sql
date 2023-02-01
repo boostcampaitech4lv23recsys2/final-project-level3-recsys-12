@@ -33,9 +33,7 @@ CREATE TABLE IF NOT EXISTS `house` (
 	`prefer`	INT(10)	NULL,
 	`scrab`	INT(10)	NULL,
 	`comment`	INT(10)	NULL,
-	`views`	INT(10)	NULL,
-	`card_space` VARCHAR(100) 	NULL,
-	`card_img_url`	VARCHAR(255)	NULL
+	`views`	INT(10)	NULL
 );
 
 -- create house_item interaction table
@@ -71,6 +69,15 @@ CREATE TABLE IF NOT EXISTS `cluster_item` (
 	`idx`	INT(10)	NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`cluster_id`	INT(10)	NOT NULL,
 	`item_id`	INT(10)	NOT NULL
+);
+
+-- create card table
+CREATE TABLE IF NOT EXISTS `card` (
+	`card_id`	INT(10)	NOT NULL PRIMARY KEY,
+	`img_space`	VARCHAR(100)	NULL,
+	`img_url`	VARCHAR(255)	NULL,
+	`house_id`	INT(10)	NULL,
+	`is_human`	BINARY(1)	NOT NULL	DEFAULT 0
 );
 
 -- create house_color table

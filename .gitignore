@@ -8,15 +8,20 @@ wandb/
 # log
 *.log
 
-# csv
+# csv & tsv
 *.csv
+*.tsv
 
 # model
 *.pt
 *.pth
 
+# pickle
+*.pickle
+
 # bash
 *.sh
+!settings.sh
 
 # nohup
 *.out
