@@ -10,11 +10,11 @@
 	const onHouseSelected = (e)=>{
 		img_opacity = img_opacity == 0.5? 1:0.5;
 		let nextbtn = document.querySelector(".nextbtn");
-		if (selected_img.has(item.house_id)){
-			selected_img.delete(item.house_id)
+		if (selected_img.has(item.card_id)){
+			selected_img.delete(item.card_id)
 			e.target.style.borderWidth="0px";
 		}else{
-			selected_img.add(item.house_id)
+			selected_img.add(item.card_id)
 			e.target.style.borderWidth="1px";
 		}
 		if (selected_img.size >= min_select){
@@ -61,11 +61,11 @@
 </style>
 <button on:click={onHouseSelected} id="image_wrapper_button">
 	<img 
-		src={item.card_img_url} 
+		src={item.img_url} 
 		alt="images" 
 		class="house" 
 		id="house_img" 
-		value={item.house_id} 
+		value={item.card_id} 
 		style="opacity:{img_opacity}"
 	>
 </button>

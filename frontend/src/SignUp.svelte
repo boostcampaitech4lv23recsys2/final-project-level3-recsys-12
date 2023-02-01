@@ -4,7 +4,6 @@
     import { setContext } from 'svelte'
     import TopButton from './GoTop.svelte'
     
-    let house_list = []
     let email, is_success, use_email = false
     async function isEmailDup(e){
         e.preventDefault()
@@ -52,25 +51,43 @@
 
     function goToScroll(e) {
         e.preventDefault()
+	    get_items()
         var location = document.querySelector(".container_title").offsetTop;
         window.scrollTo({top: location, behavior: 'smooth'});
+        
     }
 
+    let card_id_list = []
+    
+    let space_value, family_value, house_size = 0
 	async function get_items() {
         let url = import.meta.env.VITE_SERVER_URL + "/card"
-		await fetch(url).then((response) => {
+        let params = {
+                "card_id_list": JSON.stringify(card_id_list),
+                "space": JSON.stringify(space_value),
+                "size": JSON.stringify(house_size),
+                "family": JSON.stringify(family_value)
+            }
+            let options = {
+                method: "post",
+                headers: {
+                    "Content-Type": 'application/json'
+                },
+                body: JSON.stringify(params)
+            }
+		await fetch(url, options).then((response) => {
 			response.json().then((json) => {
-				house_list = json
+				card_id_list = json
 			})
 		})
 		.catch((error) => console.log(error))
 	}
-    
+
     async function post_member(){
         let url = import.meta.env.VITE_SERVER_URL + "/member"
         let params = {
             "member_email" : email,
-            "selected_house_id" : JSON.stringify(Array.from(selected_img))
+            "selected_card_id" : JSON.stringify(Array.from(selected_img))
         }
         let options = {
             method: "post",
@@ -119,9 +136,6 @@
         post_inference_result()
     }
 
-
-	get_items()
-
 	let selected_img = new Set();
 	setContext("selected_img",selected_img);
 
@@ -129,30 +143,67 @@
     setContext("selected_cnt",selected_cnt);
 
     setContext("is_success",is_success)
+    
 </script>
 
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
 <section class="py-3">
 	<div class="container-md px-3 px-lg-3 mt-3">
-        
         <div id="signup_form_wrapper">
-            <form class="input-form">
-                {#if is_success == 3 && !use_email}
-                <input type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}" disabled>
-                {:else}
-                <input type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}">
-                {/if}
-                {#if is_success == 3}                
-                <button id="dupcheck" on:click={change_use_email} class="signup-button btn btn-info btn-block">이메일 변경</button>
-                {:else}
-                <button id="dupcheck" on:click={isEmailDup} class="signup-button btn btn-info btn-block">이메일 확인</button>
-                {/if}
-                {#if is_success == 3 && !use_email}
-                <button class="next-button signup-button btn btn-info" on:click={goToScroll}>Next!</button>
-                {:else}
-                <button class="next-button signup-button btn btn-info" disabled on:click={goToScroll}>Next!</button>
-                {/if}
+            <div class="description">추천받고 싶은 가구를 배치할 집의 형태를 입력해주세요!</div>
+            <form>
+                <div class="input-area-wrapper">
+                    <label for="place" class="col-sm-2 col-form-label input-area-label">공간</label>
+                    <select id="place" class="form-select input-area" required bind:value={space_value}>
+                        <option value=null selected>공간을 선택하세요.</option>
+                        <option value="원룸&오피스텔">원룸&오피스텔</option>
+                        <option value="아파트">아파트</option>
+                        <option value="빌라&연립">빌라&연립</option>
+                        <option value="단독주택">단독주택</option>
+                        <option value="사무공간">사무공간</option>
+                        <option value="상업공간">상업공간</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <div class="input-area-wrapper">
+                    <label for="family" class="col-sm-2 col-form-label input-area-label">가족형태</label>
+                    <select id="family" class="form-select input-area" required bind:value={family_value}>
+                        <option value=null selected>가족형태를 선택하세요.</option>
+                        <option value="싱글라이프">싱글라이프</option>
+                        <option value="신혼 부부">신혼 부부</option>
+                        <option value="아기가 있는 집">아기가 있는 집</option>
+                        <option value="취학 자녀가 있는 집">취학 자녀가 있는 집</option>
+                        <option value="부모님과 함께 사는 집">부모님과 함께 사는 집</option>
+                        <option value="기타">기타</option>
+                    </select>
+                </div>
+
+                <div class="input-area-wrapper">
+                    <label for="size" class="col-sm-2 col-form-label input-area-label">평수</label>
+                    <input type="number" id="size" class="form-control input-area" placeholder="평수를 입력하세요." required bind:value={house_size}>
+                </div>
+
+                <div class="description-login">로그인 시 사용할 이메일을 입력해주세요.</div>
+                <div class="input-form">
+                    
+                    {#if is_success == 3 && !use_email}
+                    <input type="email" id="email_form" class="form-control" placeholder="E-mail 주소를 입력하세요." bind:value="{email}" disabled>
+                    {:else}
+                    <input type="email" id="email_form" class="form-control form-control-lg" placeholder="E-mail 주소를 입력하세요." bind:value="{email}">
+                    {/if}
+                    {#if is_success == 3}                
+                    <button id="dupcheck" on:click={change_use_email} class="signup-button btn btn-info btn-block">이메일 변경</button>
+                    {:else}
+                    <button id="dupcheck" on:click={isEmailDup} class="signup-button btn btn-info btn-block">이메일 확인</button>
+                    {/if}
+                    {#if is_success == 3 && !use_email && space_value!=null && family_value!=null && house_size!=-1}
+                    <button class="next-button signup-button btn btn-info" on:click={goToScroll}>Next!</button>
+                    {:else}
+                    <button class="next-button signup-button btn btn-info" disabled on:click={goToScroll}>Next!</button>
+                    {/if}
+                </div>
             </form>
             <div>
                 {#if is_success == 0}   <!-- 0 : 중복된 이메일 -->
@@ -162,13 +213,17 @@
                 {:else if is_success == 2}  <!-- 2 : 비어있는 이메일 -->
                 <div class="email-wrong">이메일을 입력해주세요.</div>
                 {:else if is_success == 3} <!-- 3 : 올바른 이메일 -->
-                <div id="email-check-done" class="email-right">이메일이 확인되었습니다. <br>[Next!] 버튼을 눌러주세요!</div>
+                {#if space_value==null || family_value==null || house_size==0}
+                    <div class="email-wrong">모든 정보를 입력해주세요.</div>
+                    {:else}
+                    <div id="email-check-done" class="email-right">[Next!] 버튼을 눌러주세요!</div>
+                    {/if}
                 {:else}
                 <div class="email-wrong">이메일 중복 확인을 진행해주세요!</div>
                 {/if}
             </div>
         </div>
-        {#if is_success == 3 && !use_email}
+        {#if is_success == 3 && !use_email && space_value!=null && family_value!=null && house_size!=-1}
         <div class="container_title">
             <br>
             <h4 style="text-align: center; margin:0;">마음에 드는 이미지를 선택해 주세요.</h4>
@@ -183,9 +238,10 @@
 			-->
 
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
-            {#each house_list as item}
+            {#each card_id_list as item}
             <ImageBlock {item}/>
             {/each}
+            <button on:click={get_items}>선택 완료</button>
 		</div>
         <button id="next_button" class="prevent_btn nextbtn" on:click={next_btn_click}>
             <div id="selectbtn_wrapper">
@@ -204,6 +260,29 @@
 
 
 <style>
+    .description {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin: 30px;
+    }
+    .description-login {
+        font-size: 1.3rem;
+        font-weight: bold;
+        margin-top: 50px;
+        text-align: center;
+    }
+    .input-area-wrapper {
+        display: flex;
+        margin-bottom: 25px;
+    }
+    .input-area-label {
+        width: 20%;
+        font-weight: bold;
+        text-align: center;
+    }
+    .input-area {
+        width: 80%;
+    }
     .go-top-button {
         position: fixed;
         right: 5%;

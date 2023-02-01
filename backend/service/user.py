@@ -20,9 +20,13 @@ def check_existing_user(member_email: str) -> bool:
     with database.session_maker() as session:
         stmt = select(Member).where(Member.member_email == member_email)
         return True if session.execute(stmt).fetchall() else False
-    
-    
-def create_member(member_email:str, house_id_list_str:str):
+
+def get_house_from_card(card_id):
+    with database.session_maker() as session:
+        stmt = select(Card.house_id).where(Card.card_id==card_id)
+        return session.execute(stmt).fetchall()
+
+def create_member(member_email:str, house_id_list:str):
     """_summary_
 
     Args:
@@ -32,9 +36,6 @@ def create_member(member_email:str, house_id_list_str:str):
     Returns:
         _type_: message
     """
-    house_id_list = house_id_list_str[1:-1]
-    house_id_list = house_id_list.split(",")
-    house_id_list = list(map(int, house_id_list))
     
     with database.session_maker() as session:
         for i in house_id_list:

@@ -131,11 +131,16 @@ async def login(DB_login : Login):
 
 
 from inference.predict_signup import inference_signup
+class Card(BaseModel):
+    card_id_list: str
+    space: str
+    size: str
+    family: str
 
-@app.get('/card')
-async def get_card_image(card_id, space, size, family): #초기 보여주는 house
-    card_id_result = inference_signup(card_id, space, size, family)   
-    return {"card_info":get_card_info(card_id_result), "space":space,"size": size, "family": family}
+@app.post('/card')
+async def get_card_image(card: Card): #초기 보여주는 house
+    card_id_result = inference_signup(card.card_id_list, card.space, card.size, card.family)   
+    return get_card_info(card_id_result)
 
 class Signup(BaseModel):
     member_email : str
@@ -150,11 +155,17 @@ async def signup(db_signup:Signup, discription='회원가입 API입니다.') -> 
 
 class Image(BaseModel):
     member_email :str
-    selected_house_id : str
+    selected_card_id: SyntaxWarning
     
 @app.post('/member')
 async def image(item:Image):
-    return (create_member(item.member_email, item.selected_house_id))
+    # card_id -> house_id
+    card_id_list = list(map(int, item.selected_card_id[1:-1].split(',')))
+    house_id_list = []
+    for card_id in card_id_list:
+        house_id_list.append([col[0] for col in get_house_from_card(card_id)][0])
+    
+    return (create_member(item.member_email, house_id_list))
 
 '''
 get : dict(json)를 받을 수 없음, {} 있을수도 없을수도
