@@ -139,13 +139,11 @@ def get_house_style():
     Style = list(set(Style))
     house_id_list = []
     for cate_name in Style[1:]:
-        print('#######', cate_name,'########')
         with database.session_maker() as session:
             stmt = select(House.house_id, House.style).where(House.style == cate_name).limit(1)
             # stmt = select(House.house_id, House.style).where(House.style == cate_name).order_by(func.random()).limit(1)
             data = session.execute(stmt).fetchall()
             house = [col.house_id for col in data]
-            print(house)
             house_id_list+=house
     return house_id_list # 초기 11개
 '''
@@ -162,7 +160,6 @@ def get_card(house_id_list): # 카드 조건 걸기
             data = session.execute(stmt).fetchall()
             card = [col.Card.card_id for col in data]
             card_infos += card
-    print(card_infos)
 
     return card_infos
 
@@ -174,7 +171,6 @@ def get_card_info(card_id_list): # 카드 url를 가지고 house_id 찾긴
             data = session.execute(stmt).fetchall()
             house = [col.Card for col in data]
             card_infos += house
-    print(card_infos)
 
     return card_infos
 
