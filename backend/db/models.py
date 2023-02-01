@@ -88,16 +88,7 @@ class ClusterItem(Base):
     idx = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
     cluster_id = Column(Integer, nullable=False) # 클러스터 id
     item_id = Column(Integer, nullable=False) # 가구 id
-
-# 클러스터_가구 match
-class Card(Base):
     
-    __tablename__ = "card" # MySQL DB Table 이름
-    card_id = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
-    img_space = Column(String(100), nullable=True) # 카드 공간
-    img_url = Column(String(255), nullable=True) # 카드주소
-    house_id = Column(Integer, nullable=False)
-    is_human = Column(BINARY, nullable=False)
     
 # 카드
 class Card(Base):
