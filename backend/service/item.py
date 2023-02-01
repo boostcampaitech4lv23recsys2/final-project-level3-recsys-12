@@ -1,4 +1,4 @@
-from db.models import Item, House, Member, HouseItem, MemberPrefer, Card
+from db.models import *
 from db.db_connect import Database
 from sqlalchemy import select
 import random
