@@ -218,7 +218,9 @@ class UpdataInferenceResult(BaseModel):
 async def insert_inference_result(update_inference: UpdataInferenceResult, description="좋아요 반영 inference"):
     member_prefer = get_item_prefer(update_inference.member_email) # 
     inference_result = [result[0] for result in get_inference_result(update_inference.member_email)]
-    update_list = member_prefer+inference_result
+    user_prefered_item = get_inference_input(update_inference.member_email)  # 모델에 넣을 input list(item_id_list)
+    
+    update_list = member_prefer + user_prefered_item
     model_result = inference(update_list, MODEL)
     delete_inference(update_inference.member_email)
     difference = set(model_result) - set(inference_result)
