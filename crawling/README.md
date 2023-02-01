@@ -52,3 +52,21 @@ crawling</br>
 ┣ requirements.txt</br>
 ┣ utils.py</br>
 ┣ README.md</br>
+
+<br></br>
+# preprocess.py 진행 시 예상 오류
+## 1. AttributeError: 'Series' object has no attribute '_is_builtin_func'
+- 해당 문제의 경우 pandas용 tqdm을 인식하지 못해서 그렇습니다.
+- pip install tqdm==4.62.2 하시면 해결 됩니다.
+## 2. jpype._jvmfinder.JVMNotFoundException: No JVM shared library file (libjvm.so) found. Try setting up the JAVA_HOME environment variable properly.
+- 해당 문제의 경우, konlpy 토크나아지 사용 시 발생하는 에러입니다.
+- 리눅스 기준으로 다음과 같이 해결합니다.
+    - apt-get update
+    - apt-get install sudo
+    - sudo apt install default-jd
+- MacOS의 경우 아래를 확인해보세요.
+    - https://github.com/konlpy/konlpy/issues/353
+- 전 과정이 정상적으로 실행되는지 확인하기 위해 테스트 코드를 진행합니다:
+```
+python preprocess.py --data_path data/ --test 1
+```
