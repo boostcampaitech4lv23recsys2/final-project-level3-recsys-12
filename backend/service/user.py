@@ -1,7 +1,6 @@
 # from main import fake_users
-from db.models import Item, House, Member, InferenceResult
+from db.models import *
 from sqlalchemy.orm import Session
-from service.item import card_house
 
 from db.db_connect import Database
 from db.models import House

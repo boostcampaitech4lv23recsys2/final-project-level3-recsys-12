@@ -1,4 +1,5 @@
-from db.models import Item, House, Member, HouseItem, MemberPrefer, InferenceResult, ClusterItem
+from db.models import *
+
 from db.db_connect import Database
 from sqlalchemy import select
 import random
@@ -83,46 +84,103 @@ def get_house_id_with_member_email(member_email:str) -> str:
         data = session.execute(stmt).fetchall()
         return [col.Member.house_id for col in data]
 
-def get_signup_info():
+################################### 랜덤 5개씩 스타일별로 ###################################
+# def get_signup_info():
+#     with database.session_maker() as session:
+#         stmt = select(House.house_id, House.style, House.card_img_url).where(House.card_space == "거실")
+#         signup_infos = session.execute(stmt).fetchall()
+#     return signup_infos
+
+
+# def get_random_card(signup_info):
+#     import json
+#     SAMPLE_NUM = 5
+#     signup_info_df = pd.DataFrame(signup_info, columns=["house_id", "style", "card_img_url"])
+#     cats = set()
+#     for sets in signup_info_df["style"].apply(lambda x: set(x.split(", "))):
+#         cats = cats.union(sets)
+#     for cat_name in filter(lambda x: x, cats):
+#         signup_info_df[cat_name] = signup_info_df["style"].str.contains(cat_name).astype(int)
+#     house_id_list = []
+#     for Style in filter(lambda x: x, cats):
+#         Style_list = random.sample(list(signup_info_df[signup_info_df[Style] == 1].index), SAMPLE_NUM)
+#         house_id_list+=Style_list
+#         cnt = check_duplicates(house_id_list, Style_list) # 중복체크하기
+#         if cnt%5!=0:
+#             while (cnt%5)>0: # 다시 추천해 준 것에서 다시 중복이 발생할 경우
+#                 add = (random.sample(list(signup_info_df[signup_info_df[Style] == 1].index), 5-cnt%5))
+#                 house_id_list+=add
+#                 cnt = check_duplicates(house_id_list, Style_list)
+
+#     house_id_list = list(set(house_id_list))
+#     return_signup_info = signup_info_df.iloc[house_id_list]
+    
+#     return_signup_info = return_signup_info[["house_id", "card_img_url", "style"]]
+#     return_signup_info = return_signup_info.sample(frac=1)
+#     return_signup_info = return_signup_info.to_json(orient="records")
+#     return_signup_info = json.loads(return_signup_info)
+    
+#     return return_signup_info
+
+# def check_duplicates(seq1, seq2):
+#     duplicates = [x for i, x in enumerate(seq1) if i != seq1.index(x)]  # 중복된 아이템 확인
+#     return len(set(seq1) - set((seq2)))
+###############################################################################################
+
+################################### tree ###################################
+from sqlalchemy import func
+
+def get_house_style():
+    Style = []
     with database.session_maker() as session:
-        stmt = select(House.house_id, House.style, House.card_img_url).where(House.card_space == "거실")
-        signup_infos = session.execute(stmt).fetchall()
-    return signup_infos
-
-
-def get_random_card(signup_info):
-    import json
-    SAMPLE_NUM = 5
-    signup_info_df = pd.DataFrame(signup_info, columns=["house_id", "style", "card_img_url"])
-    cats = set()
-    for sets in signup_info_df["style"].apply(lambda x: set(x.split(", "))):
-        cats = cats.union(sets)
-    for cat_name in filter(lambda x: x, cats):
-        signup_info_df[cat_name] = signup_info_df["style"].str.contains(cat_name).astype(int)
+        stmt = select(House.house_id, House.style)
+        data = session.execute(stmt).fetchall()
+        data = [col for col in data]
+    
+    Style = (sum([col.style.split(", ") for col in data],[]))
+    Style = list(set(Style))
     house_id_list = []
-    for Style in filter(lambda x: x, cats):
-        Style_list = random.sample(list(signup_info_df[signup_info_df[Style] == 1].index), SAMPLE_NUM)
-        house_id_list+=Style_list
-        cnt = check_duplicates(house_id_list, Style_list) # 중복체크하기
-        if cnt%5!=0:
-            while (cnt%5)>0: # 다시 추천해 준 것에서 다시 중복이 발생할 경우
-                add = (random.sample(list(signup_info_df[signup_info_df[Style] == 1].index), 5-cnt%5))
-                house_id_list+=add
-                cnt = check_duplicates(house_id_list, Style_list)
+    for cate_name in Style[1:]:
+        with database.session_maker() as session:
+            stmt = select(House.house_id, House.style).where(House.style == cate_name).limit(1)
+            # stmt = select(House.house_id, House.style).where(House.style == cate_name).order_by(func.random()).limit(1)
+            data = session.execute(stmt).fetchall()
+            house = [col.house_id for col in data]
+            house_id_list+=house
+    return house_id_list # 초기 11개
+'''
+1. 초기 이미지 11개 보여주기
+2. 유저가 선택한 카드번호 리스트 모델에 넣기
+3. return 유저가 선택한 카드 url 리스트 
+'''
+def get_card(house_id_list): # 카드 조건 걸기
 
-    house_id_list = list(set(house_id_list))
-    return_signup_info = signup_info_df.iloc[house_id_list]
-    
-    return_signup_info = return_signup_info[["house_id", "card_img_url", "style"]]
-    return_signup_info = return_signup_info.sample(frac=1)
-    return_signup_info = return_signup_info.to_json(orient="records")
-    return_signup_info = json.loads(return_signup_info)
-    
-    return return_signup_info
+    card_infos = []
+    for house in house_id_list:
+        with database.session_maker() as session:
+            stmt = select(Card).where(Card.house_id==house).where(Card.img_space =='거실' and Card.is_human==0).order_by(func.random()).limit(1)
+            data = session.execute(stmt).fetchall()
+            card = [col.Card.card_id for col in data]
+            card_infos += card
 
-def check_duplicates(seq1, seq2):
-    duplicates = [x for i, x in enumerate(seq1) if i != seq1.index(x)]  # 중복된 아이템 확인
-    return len(set(seq1) - set((seq2)))
+    return card_infos
+
+def get_card_info(card_id_list): # 카드 url를 가지고 house_id 찾긴
+    card_infos = []
+    for card_id in card_id_list:
+        with database.session_maker() as session:
+            stmt = select(Card).where(Card.card_id==card_id)
+            data = session.execute(stmt).fetchall()
+            house = [col.Card for col in data]
+            card_infos += house
+
+    return card_infos
+
+'''
+
+'''
+###############################################################################################
+
 
 def check_is_prefer(member_email, item_id):
     with database.session_maker() as session:

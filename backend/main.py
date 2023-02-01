@@ -129,15 +129,13 @@ async def login(DB_login : Login):
     }
             
 
-@app.get('/card')
-async def get_card_image():
-    '''
-    1. house 테이블에서 스타일별로 5개씩 추출
-    2. json 형태로 리턴
-    '''
-    signup_info = get_signup_info()
-    return get_random_card(signup_info)   
 
+from inference.predict_signup import inference_signup
+
+@app.get('/card')
+async def get_card_image(card_id, space, size, family): #초기 보여주는 house
+    card_id_result = inference_signup(card_id, space, size, family)   
+    return {"card_info":get_card_info(card_id_result), "space":space,"size": size, "family": family}
 
 class Signup(BaseModel):
     member_email : str
