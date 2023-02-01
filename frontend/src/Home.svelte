@@ -13,6 +13,7 @@
 	let item_list = []
 	let category_set = new Set()
 	let category_list = []
+	let price, rate, discount_price
 	async function get_items() {
 		
 		let url = import.meta.env.VITE_SERVER_URL
@@ -57,6 +58,14 @@
 		.catch((error) => console.log(error))
 	}
 	get_items()
+
+	function get_discount_price(item) {
+		price = item.price ? Number(item.price.replace(/[^0-9]/g, "")) : 0
+		rate = item.discount_rate ? Number(item.discount_rate.replace(/[^0-9]/g, "")/100) : 0
+		discount_price = price*(1-rate) ? Number(price*(1-rate)).toLocaleString()+"원" : "미입점"
+		price = price? price : ""
+		return discount_price
+	}
 
 	let new_item_list = []
 	async function update_recom() {
@@ -158,17 +167,18 @@
 			<span class="refresh-button-text">{member_name}님이 좋아할 것 같은 상품들을 골라봤어요</span>
 		</div>
 		{/if}
+		{#if new_item_list.length != 0}
+		<div>
+			<img class="refresh-icon" src="https://cdn-icons-png.flaticon.com/512/331/331953.png" alt="...">
+			<span class="category-name">새롭게 추천된 상품들이에요.</span>
+		</div>
+		<hr>
 		<div class="row gx-3 gx-lg-3 row-cols-3 row-cols-md-4 row-cols-xl-5">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
 				row-cols-xl-n : 최대 화면에서 n개 보여줌
 			-->
-			{#if new_item_list.length != 0}
-			<div>
-				<img class="refresh-icon" src="https://cdn-icons-png.flaticon.com/512/331/331953.png" alt="...">
-				<span class="refresh-button-text">새롭게 추천된 상품들이에요.</span>
-			</div>
-			<hr>
+			
 			{#each new_item_list as item}
 			<div class="col mb-3">
 				<Like item_id={item.item_id} />
@@ -189,11 +199,10 @@
 							<div class="text-center">
 								<div class="item-price">
 									<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
-									{#if JSON.stringify(item.price) == ""}
-									{JSON.stringify(item.predict_price)}
+									{#if item.price == ""}
 									<h6 class="price">예상가 {item.predict_price}</h6>
 									{:else}
-									<h6 class="price">{item.price}</h6>
+									<h6 class="price">{get_discount_price(item)}</h6>
 									{/if}
 								</div>
 							</div>
@@ -201,8 +210,8 @@
 					</a>
 				</div>
 			{/each}
-			{/if}
 		</div>
+		{/if}
 		{#each category_list as category}
 		<div class="category-name">{category}</div>
 		<hr>
@@ -238,7 +247,7 @@
 										{#if item.price == ""}
 										<h6 class="price">예상가 {item.predict_price}</h6>
 										{:else}
-										<h6 class="price">{item.price}</h6>
+										<h6 class="price">{get_discount_price(item)}</h6>
 										{/if}
 									</div>
 								</div>
