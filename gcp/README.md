@@ -12,7 +12,7 @@
 -  python main.py
 
 ## 학습한 딥러닝 모델을 GCP로 저장오기
--  python main.py --mode 1
+-  python main.py --mode 0
 
 <br></br>
 # 기타 문제
