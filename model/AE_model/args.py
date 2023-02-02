@@ -5,8 +5,8 @@ def get_args():
     parser = argparse.ArgumentParser()
 
     parser.add_argument("--model", default="MultiDAE", type=str, help="select model [MultiDAE, MultiVAE]")
-    parser.add_argument("--save_path", default="/opt/ml/input/submission", type=str)
-    parser.add_argument("--data_path", default="/opt/ml/input/data", type=str)
+    parser.add_argument("--save_path", default="", type=str)
+    parser.add_argument("--data_path", default="../../backend/data", type=str)
     parser.add_argument("--p_dims", nargs="+", type=int, default=[200, 600], help="scheduler lr milestones")
     parser.add_argument("--valid_samples", type=int, default=10)
     parser.add_argument("--seed", type=int, default=42)
@@ -23,7 +23,8 @@ def get_args():
     
     parser.add_argument("--topk", type=int, default=10)
     parser.add_argument("--csv", type=int, default=0)
-    parser.add_argument("--model_path", type=str, default="/opt/ml/input/final/model/saved_model/best_model.pt")
+    parser.add_argument("--model_path", type=str, default="../saved_model/best_model.pt")
+    parser.add_argument("--inference_path", type=str, default="../../backend/inference/best_model.pt")
     
     args = parser.parse_args()
 

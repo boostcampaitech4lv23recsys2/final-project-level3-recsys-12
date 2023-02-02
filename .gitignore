@@ -12,6 +12,9 @@ wandb/
 *.csv
 *.tsv
 
+# zip
+*.zip
+
 # model
 *.pt
 *.pth

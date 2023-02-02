@@ -18,7 +18,7 @@ def get_model(args: object, item_encoder: dict):
         dropout_rate=args.dropout_rate,
     ).to(args.device)
     
-    PATH = args.model_path
+    PATH = args.inference_path
     model.load_state_dict(torch.load(PATH))
     
     return model

@@ -41,7 +41,7 @@ def post_slack_message(text):
 
 
 ############ first setting ############
-df_for_model = pd.read_csv("data/train.csv").groupby("house").filter(lambda x: len(x) >= 15)
+df_for_model = pd.read_csv("data/train.tsv", sep="\t").groupby("house").filter(lambda x: len(x) >= 15)
 
 with open("inference/model.yaml") as f:
     model_info = yaml.load(f, Loader=yaml.FullLoader)

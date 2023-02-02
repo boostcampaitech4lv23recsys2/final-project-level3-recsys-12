@@ -14,7 +14,10 @@ CREATE TABLE IF NOT EXISTS `item` (
 	`discount_rate`	VARCHAR(100)	NULL,
 	`image`	VARCHAR(255)	NULL,
 	`available_product`	VARCHAR(100)	NULL,
-	`predict_price`	VARCHAR(100)	NULL
+	`predict_price`	VARCHAR(100)	NULL,
+	`preprocessed_title` VARCHAR(100) NULL,
+	`similarity_list` VARCHAR(255)  NULL,
+	`cluster_id` INT(10)    NULL
 );
 
 -- create house table
@@ -68,7 +71,8 @@ CREATE TABLE IF NOT EXISTS `inference_result` (
 CREATE TABLE IF NOT EXISTS `cluster_item` (
 	`idx`	INT(10)	NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`cluster_id`	INT(10)	NOT NULL,
-	`item_id`	INT(10)	NOT NULL
+	`item_id`	INT(10)	NOT NULL,
+	`major_item` INT(10) NOT NULL
 );
 
 -- create card table
