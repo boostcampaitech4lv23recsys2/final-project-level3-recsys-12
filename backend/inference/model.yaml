@@ -2,7 +2,7 @@ model: "MultiDAE"
 path:
   save_path: "../submission"
   data_path: "../data"
-  model_path: "../model/saved_model/best_model.pt"
+  model_path: "best_model.pt"
 parameter:
   p_dims:
     - 200
