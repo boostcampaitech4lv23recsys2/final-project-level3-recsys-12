@@ -45,6 +45,8 @@
         e.preventDefault()
         if (use_email) {
             use_email = false;
+            is_success = 0;
+            isEmailDup(e);
         }else {
             use_email = true;
         }
@@ -53,7 +55,7 @@
     function goToScroll(e) {
         e.preventDefault()
         var location = document.querySelector(".container_title").offsetTop;
-        window.scrollTo({top: location, behavior: 'smooth'});
+        window.scrollTo({top: location-120, behavior: 'smooth'});
         
     }
 
@@ -132,8 +134,11 @@
     }
 
     function next_btn_click() {
-        post_member()
-        post_inference_result()
+        let response = confirm("회원가입을 완료하시겠습니까?")
+        if (response) {
+            post_member()
+            post_inference_result()
+        }
     }
 
 	let selected_img = new Set();
@@ -144,8 +149,13 @@
 
     setContext("is_success",is_success)
 
+    let next_cnt = 1
     function get_next_items() {
         get_items()
+        next_cnt += 1
+
+        var location = document.querySelector(".container_title").offsetTop;
+        window.scrollTo({top: location-120, behavior: 'smooth'});
         const house_img_list = document.getElementsByClassName("house")
         for (let house_img of house_img_list) {
             house_img.style.opacity = 1
@@ -251,7 +261,12 @@
             <ImageBlock {item}/>
             {/each}
             <br>
+            {#if next_cnt < 5}
             <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%">다음 ></button>
+            {:else}
+            <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%">다음 ></button>
+            <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%;background-color:white;color:black" disabled>하단의 [Next!]버튼을 클릭해 회원가입을 완료해주세요!</button>
+            {/if}
 		</div>
         <button id="next_button" class="prevent_btn nextbtn" on:click={next_btn_click}>
             <div id="selectbtn_wrapper">
@@ -353,7 +368,7 @@
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
-        height: calc(100vh - 240px);
+        height: calc(100vh - 120px);
     }
     #email_form {
         margin: 10px;

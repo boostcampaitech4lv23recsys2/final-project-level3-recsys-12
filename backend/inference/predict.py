@@ -58,10 +58,11 @@ class Model:
             prediction = []
             model_output = self.model(user_selected_data.type(torch.FloatTensor).to(self.device))
             recommend_res = model_output.argsort(dim=1).squeeze()
-            up = recommend_res[-self.topk:].cpu().numpy().tolist()
+            up = recommend_res[-self.topk * 3:].cpu().numpy().tolist()
             for item in up[::-1]:
                 prediction.append(self.item_decoder[item])
-        return prediction
+        random.shuffle(prediction)
+        return prediction[:self.topk]
 
 def inference(data, MODEL):
     return MODEL.predict(data)
