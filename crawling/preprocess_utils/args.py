@@ -4,7 +4,8 @@ import argparse
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument("--data_path", type=str, default="data/")
-    parser.add_argument("--run_test", type=int, default=0)
+    parser.add_argument("--output_path", type=str, default="output/")
+    parser.add_argument("--test", type=int, default=0)
     
     # for similarity
     parser.add_argument("--window_size", default=100, type=int)

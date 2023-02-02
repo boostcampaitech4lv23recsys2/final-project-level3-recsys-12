@@ -19,13 +19,13 @@ class ClusterItem():
         
         return cluster_item
 
-def merge_cluster(item, train):
+def merge_cluster(item, train, args):
     # 카테고리 필터링되면서, item에 포함되지 않은 hi_interaction item을 제거하기
     train = train[train.item.isin(item.item.unique())]
     
     item, item2cluster = convert_non_cluster(item)
     train["cluster_id"] = train.item.map(item2cluster)
-    train.to_csv("clustered_train.csv", index=False)
+    train.to_csv(args.output_path + "clustered_train.tsv", sep="\t", index=False)
     
     item = sort_by_rating_review(item)
     item.groupby("cluster_id")["item"].apply(lambda x:len(list(x)))
@@ -34,7 +34,7 @@ def merge_cluster(item, train):
     cluster_major_item_id_list = item.rename(columns={"item":"item_list"}).groupby("cluster_id")["item_list"].apply(lambda x:"|".join(list(map(str, list(set(x)))))).reset_index()
     
     cluster_major_item_id = cluster_major_item_id.merge(cluster_major_item_id_list, on="cluster_id")
-    cluster_major_item_id.to_csv("cluster_major_item.csv", index=False)
+    cluster_major_item_id.to_csv(args.output_path + "cluster_major_item.tsv", sep="\t", index=False)
     return train, cluster_major_item_id
 
 def convert_non_cluster(df:pd.DataFrame):

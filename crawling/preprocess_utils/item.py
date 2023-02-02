@@ -37,8 +37,9 @@ class Item:
         predict_price_list = []
 
         p = re.compile('.+(?=사)')
+        encoder = {idx:i for i, idx in enumerate(self.item.predict_price.index)}
         for i in self.item.predict_price.index:
-            m = p.findall(str(self.item.predict_price.iloc[i]))
+            m = p.findall(str(self.item.predict_price.iloc[encoder[i]]))
             if len(m) == 0:
                 m.append("예상가정보없음")
             predict_price_list.append(m[0][3:])
@@ -79,7 +80,7 @@ class Item:
         print(f"주의: item 15만에 토크나이저 작용하는데 약 8분 정도 소요됩니다!")
         self.item.preprocessed_title = self.item.preprocessed_title.progress_apply(lambda x:tokenize(x))
         print(f"###########################    item preprocessing: PHASE_1_basic_preprocess    ###########################")
-        self.item.to_csv(f"PHASE_1_basic_preprocess_item.csv", index=False)
+        self.item.to_csv(self.args.output_path + f"PHASE_1_basic_preprocess_item.tsv", sep="\t", index=False)
         
     def add_similarity(self):
         self.item.preprocessed_title.fillna("etc", inplace=True)
@@ -91,7 +92,7 @@ class Item:
         data, sim_list, sim_list2 = get_similarity_list(self.item, self.args)
         self.item["similarity_list"] = data
         print(f"###########################    item preprocessing: PHASE_2_add_similarity    ###########################")
-        self.item.to_csv(f"PHASE_2_add_similarity_item.csv", index=False)
+        self.item.to_csv(self.args.output_path + f"PHASE_2_add_similarity_item.tsv", sep="\t", index=False)
     
     def add_cluster(self):
         del_list = get_del_list()
@@ -110,4 +111,4 @@ class Item:
         self.item = get_cluster_by_BFS(self.item, self.args)
         self.item.drop(columns=["similar_dflist"], inplace=True)
         print(f"###########################    item preprocessing: PHASE_3_add_cluster    ###########################")
-        self.item.to_csv(f"PHASE_3_add_cluster_item.csv", index=False)
+        self.item.to_csv(self.args.output_path + f"PHASE_3_add_cluster_item.tsv", sep="\t", index=False)

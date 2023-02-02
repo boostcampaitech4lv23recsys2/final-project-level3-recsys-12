@@ -10,7 +10,7 @@ seaborn
 selenium
 beautifulsoup4
 webdriver-manager
-tqdm
+tqdm==4.62.2
 tensorflow==2.11.0
 keras==2.11.0
 konlpy==0.6.0
