@@ -45,6 +45,8 @@
         e.preventDefault()
         if (use_email) {
             use_email = false;
+            is_success = 0;
+            isEmailDup(e);
         }else {
             use_email = true;
         }
