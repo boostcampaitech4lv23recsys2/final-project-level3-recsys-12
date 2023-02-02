@@ -155,7 +155,7 @@ async def signup(db_signup:Signup, discription='회원가입 API입니다.') -> 
 
 class Image(BaseModel):
     member_email :str
-    selected_card_id: SyntaxWarning
+    selected_card_id: str
     
 @app.post('/member')
 async def image(item:Image):
