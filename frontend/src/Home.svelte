@@ -168,9 +168,9 @@
 		</div>
 		{/if}
 		{#if new_item_list.length != 0}
-		<div>
-			<img class="refresh-icon" src="https://cdn-icons-png.flaticon.com/512/331/331953.png" alt="...">
-			<span class="category-name">새롭게 추천된 상품들이에요.</span>
+		<div class="new-button" style="margin-top: 2rem;">
+			<img class="new-icon" src="https://cdn-icons-png.flaticon.com/512/331/331953.png" alt="...">
+			<span class="category-name refresh-button-text">새롭게 추천된 상품들이에요.</span>
 		</div>
 		<hr>
 		<div class="row gx-3 gx-lg-3 row-cols-3 row-cols-md-4 row-cols-xl-5">
@@ -290,6 +290,17 @@
 		justify-content: center;
 		font-weight: bold;
 	}
+	.new-icon {
+		width: 1.7rem;
+		height: 1.7rem;
+	}
+	.new-button {
+		color: black;
+		background-color: white;
+		display: flex;
+		justify-content: center;
+		font-weight: bold;
+	}
 	.refresh-button:hover {
 		background-color: white;
 	}
@@ -326,13 +337,13 @@
 		display: flex;
 		justify-content: left;
 		padding-top: 1rem;
+		padding-bottom: 1.5rem;
 	}
 
 	.category-name {
 		color: rgb(73, 72, 72);
 		font-size: 1.2rem;
 		font-weight: bold;
-		margin-top: 2rem;
 	}
 
 	 /* a 태그의 파란색 글씨, 밑줄이 그어지는 것 제거 */

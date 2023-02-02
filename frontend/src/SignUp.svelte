@@ -39,6 +39,7 @@
                 })
             })
         }
+	    get_items()
     }
     function change_use_email(e) {
         e.preventDefault()
@@ -51,7 +52,6 @@
 
     function goToScroll(e) {
         e.preventDefault()
-	    get_items()
         var location = document.querySelector(".container_title").offsetTop;
         window.scrollTo({top: location, behavior: 'smooth'});
         
@@ -143,6 +143,15 @@
     setContext("selected_cnt",selected_cnt);
 
     setContext("is_success",is_success)
+
+    function get_next_items() {
+        get_items()
+        const house_img_list = document.getElementsByClassName("house")
+        for (let house_img of house_img_list) {
+            house_img.style.opacity = 1
+            house_img.style.borderWidth = "0px"
+        }
+    }
     
 </script>
 
@@ -241,7 +250,8 @@
             {#each card_id_list as item}
             <ImageBlock {item}/>
             {/each}
-            <button on:click={get_items}>선택 완료</button>
+            <br>
+            <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%">다음 ></button>
 		</div>
         <button id="next_button" class="prevent_btn nextbtn" on:click={next_btn_click}>
             <div id="selectbtn_wrapper">
@@ -343,7 +353,7 @@
         flex-flow: column nowrap;
         justify-content: center;
         align-items: center;
-        height: 100vh;
+        height: calc(100vh - 240px);
     }
     #email_form {
         margin: 10px;

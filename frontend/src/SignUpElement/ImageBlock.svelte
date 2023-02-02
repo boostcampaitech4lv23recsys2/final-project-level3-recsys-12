@@ -3,19 +3,15 @@
 
 	export let item;
 
-	let img_opacity = 1;
 	let selected_img = getContext("selected_img");
     let selected_cnt = getContext("selected_cnt");
 	let min_select = 5
 	const onHouseSelected = (e)=>{
-		img_opacity = img_opacity == 0.5? 1:0.5;
 		let nextbtn = document.querySelector(".nextbtn");
 		if (selected_img.has(item.card_id)){
 			selected_img.delete(item.card_id)
-			e.target.style.borderWidth="0px";
 		}else{
 			selected_img.add(item.card_id)
-			e.target.style.borderWidth="1px";
 		}
 		if (selected_img.size >= min_select){
 			nextbtn.classList.remove("prevent_btn");
@@ -26,6 +22,9 @@
 		}
 		selected_cnt = Array.from(selected_img).length
 		document.querySelector("#selected_num").innerText = "Next!(" + parseInt(selected_cnt) + "/" + Math.max(5,selected_cnt) + ")"
+		
+		e.target.style.opacity = selected_img.has(item.card_id)? 0.5:1;
+		e.target.style.borderWidth = selected_img.has(item.card_id)?"1px":"0px";
 	}
 </script>
 
@@ -34,7 +33,7 @@
 		margin:0;
 		padding:0;
 		/* width:20rem; */
-		height:15rem;
+		height:12rem;
 		border-radius: 5px;
 	}
 	img {
@@ -66,6 +65,5 @@
 		class="house" 
 		id="house_img" 
 		value={item.card_id} 
-		style="opacity:{img_opacity}"
 	>
 </button>
