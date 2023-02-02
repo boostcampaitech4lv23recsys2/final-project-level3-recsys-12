@@ -21,7 +21,7 @@ class MakeMatrixDataSet:
 
     def __init__(self, args):
         self.config = args
-        self.df = pd.read_csv(os.path.join(self.config.data_path, "train_v2.csv")).groupby("house").filter(lambda x: len(x) >= 15)
+        self.df = pd.read_csv(os.path.join(self.config.data_path, "train.tsv"), sep="\t").groupby("house").filter(lambda x: len(x) >= 15)
         self.item_encoder, self.item_decoder = self.generate_encoder_decoder("item")
         self.user_encoder, self.user_decoder = self.generate_encoder_decoder("house")
         self.num_item, self.num_user = len(self.item_encoder), len(self.user_encoder)
@@ -111,7 +111,7 @@ class AEDataSet(Dataset):
         return torch.LongTensor([user])
 
 def get_inference_data(args: object, generate_encoder_decoder: object):
-    df = pd.read_csv(os.path.join(args.data_path, "train_v2.csv")).groupby("house").filter(lambda x: len(x) >= 15)
+    df = pd.read_csv(os.path.join(args.data_path, "train.tsv"), sep="\t").groupby("house").filter(lambda x: len(x) >= 15)
     house_encoder, house_decoder = generate_encoder_decoder(df, "house")
     item_encoder, item_decoder = generate_encoder_decoder(df, "item")
     dummy_data = make_single_dummy_user_input(df, item_encoder, n_interaction = 50)

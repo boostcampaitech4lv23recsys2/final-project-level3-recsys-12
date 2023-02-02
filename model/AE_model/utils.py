@@ -90,7 +90,7 @@ def train(model, criterion, optimizer, data_loader, make_matrix_data_set, config
             loss = criterion(recon_x = recon_mat, x = mat)
 
         if best_loss > loss:
-            torch.save(model.state_dict(), f"/opt/ml/input/model/saved_model/best_model.pt")
+            torch.save(model.state_dict(), config.model_path)
         
         loss_val += loss.item()
 
