@@ -43,6 +43,7 @@ class Item(Base):
     image = Column(String(255), nullable=True) # 사진
     available_product = Column(String(100), nullable=True) # 판매여부
     predict_price = Column(String(100), nullable=True) # 예상가격
+    preprocessed_title = Column(String(100), nullable=True) # 전처리제목
     similarity_list = Column(String(255), nullable=True) # 유사도목록
     cluster_id = Column(Integer, nullable=True) # 클러스터 id
     

@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `item` (
 	`image`	VARCHAR(255)	NULL,
 	`available_product`	VARCHAR(100)	NULL,
 	`predict_price`	VARCHAR(100)	NULL,
+	`preprocessed_title` VARCHAR(100) NULL,
 	`similarity_list` VARCHAR(255)  NULL,
 	`cluster_id` INT(10)    NULL
 );
