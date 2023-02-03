@@ -165,7 +165,7 @@ def get_card(house_id_list): # 카드 조건 걸기
 
     return card_infos
 
-def get_card_info(card_id_list): # 카드 url를 가지고 house_id 찾긴
+def get_card_info(card_id_list): # 카드 id를 가지고 house_id 찾긴
     card_infos = []
     for card_id in card_id_list:
         with database.session_maker() as session:

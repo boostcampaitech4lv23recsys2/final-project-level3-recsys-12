@@ -21,6 +21,9 @@ from service.item import *
 from inference.predict import Model
 import pandas as pd
 
+# signup inference
+from inference.predict_signup import CardVectorizer, Config, ImageUtil
+
 app = FastAPI()
 
 
@@ -48,10 +51,14 @@ with open("inference/model.yaml") as f:
 
 MODEL = Model(model_info, df_for_model)
 
+############ Signup Setting ############
+card_vector = CardVectorizer(Config())
+card_vector.load_data()
 
 ################ Front 연결 ################
 origins = [
     "http://127.0.0.1:5173"
+    # "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -66,11 +73,11 @@ app.add_middleware(
 ###################################배포/개발 환경설정###################################
 # 배포 환경에서는 해당 구역을 활성화하면 됩니다
 # 개발 환경에서는 해당 구역을 주석처리하면 됩니다
-app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
+# app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
 
-@app.get("/")
-def index():
-    return FileResponse("../frontend/dist/index.html")
+# @app.get("/")
+# def index():
+#     return FileResponse("../frontend/dist/index.html")
 #########################################################################################
 
 
@@ -139,7 +146,7 @@ class Card(BaseModel):
 
 @app.post('/card')
 async def get_card_image(card: Card): #초기 보여주는 house
-    card_id_result = inference_signup(card.card_id_list, card.space, card.size, card.family)   
+    card_id_result = card_vector.sampling_cards(card.card_id_list)
     return get_card_info(card_id_result)
 
 class Signup(BaseModel):
