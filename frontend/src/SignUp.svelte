@@ -1,9 +1,10 @@
 <script>
 	import { push } from 'svelte-spa-router'
     import ImageBlock from './SignUpElement/ImageBlock.svelte';
+    import Loading from './Loading.svelte'
     import { setContext } from 'svelte'
     import TopButton from './GoTop.svelte'
-    
+    let is_loading = false
     let email, is_success, use_email = false
     async function isEmailDup(e){
         e.preventDefault()
@@ -63,6 +64,7 @@
     
     let space_value, family_value, house_size = 0
 	async function get_items() {
+        is_loading = true
         let url = import.meta.env.VITE_SERVER_URL + "/card"
         let params = {
                 "card_id_list": JSON.stringify(Array.from(selected_img)),
@@ -81,6 +83,7 @@
 			response.json().then((json) => {
 				card_id_list = json
 			})
+            is_loading = false
 		})
 		.catch((error) => console.log(error))
 	}
@@ -283,6 +286,9 @@
         {/if}
     </div>
 </section>
+{#key is_loading}
+<Loading is_loading={is_loading}/>
+{/key}
 
 
 <style>

@@ -27,7 +27,6 @@
     else {
         img_url = heart_not_fill
     }
-
     async function change_like_status() {
         let url
         if ($is_login) {
