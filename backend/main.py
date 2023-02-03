@@ -240,16 +240,12 @@ async def delete_prefer_data(member_email: str, item_id: int):
 
 class InferenceResult(BaseModel):
     member_email: str
-
-
-@app.post("/insert-inference-result")
-async def insert_inference_result(
-    inference_result: InferenceResult, description="화원가입할 때 inference"
-):
-    user_prefered_item = get_inference_input(
-        inference_result.member_email
-    )  # 모델에 넣을 input list(item_id_list)
-    model_result = inference(user_prefered_item, MODEL)  # 모델 인퍼런스
+    
+@app.post('/insert-inference-result')
+async def insert_inference_result(inference_result: InferenceResult, description="화원가입할 때 inference"):
+    user_prefered_item = get_inference_input(inference_result.member_email)  # 모델에 넣을 input list(item_id_list)
+    user_index  = check_user_index(inference_result.member_email)
+    model_result = inference(user_prefered_item, MODEL, user_index)    # 모델 인퍼런스
     return create_inference(inference_result.member_email, model_result)
 
 
@@ -273,7 +269,8 @@ async def insert_inference_result(
     )  # 모델에 넣을 input list(item_id_list)
 
     update_list = member_prefer + user_prefered_item
-    model_result = inference(update_list, MODEL)
+    user_index  = check_user_index(update_inference.member_email)
+    model_result = inference(update_list, MODEL, user_index)
     delete_inference(update_inference.member_email)
     difference = set(model_result) - set(inference_result)
     intersection = set(model_result) & set(inference_result)
