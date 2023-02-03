@@ -261,18 +261,19 @@
             <ImageBlock {item}/>
             {/each}
             <br>
-            {#if next_cnt < 5}
-            <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%">다음 ></button>
-            {:else}
-            <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%">다음 ></button>
-            <button class="btn btn-secondary btn-block" on:click={get_next_items} style="width:100%;background-color:white;color:black" disabled>하단의 [Next!]버튼을 클릭해 회원가입을 완료해주세요!</button>
-            {/if}
+            
 		</div>
+        {#if next_cnt < 5}
+            <button class="btn btn-secondary btn-block nextbtn-top" on:click={get_next_items} style="width:100%">더 많은 상품 보기 ></button>
+            {:else}
+            <button class="btn btn-secondary btn-block nextbnt-top-finish" on:click={get_next_items} style="width:100%;">다음 상품들 보기 ><br>상품 선택을 완료하셨다면 아래를 클릭해 회원가입을 완료해주세요!</button>
+            <!-- <button class="btn btn-secondary btn-block nextbnt-top-finish" on:click={get_next_items} style="width:100%;background-color:white;color:black" disabled>하단의 [Next!]버튼을 클릭해 회원가입을 완료해주세요!</button> -->
+            {/if}
         <button id="next_button" class="prevent_btn nextbtn" on:click={next_btn_click}>
             <div id="selectbtn_wrapper">
                 <span>최소 5개 선택해 주세요.</span>
                 <span></span>
-                <span id="selected_num">Next!({selected_cnt}/5)</span>
+                <span id="selected_num">회원가입 완료하기!({selected_cnt}/5)</span>
             </div>
         </button>
         
@@ -334,10 +335,28 @@
     .prevent_btn{
         opacity: 0.8;
     }
+    .nextbtn-top {
+        position: fixed;
+        width: 100%;
+        height: 5vh;
+        border: 0;
+        color: white;
+        bottom: 8.01vh;
+        left: 0;
+    }
+    .nextbnt-top-finish {
+        position: fixed;
+        width: 100%;
+        height: 8vh;
+        border: 0;
+        color: white;
+        bottom: 8.01vh;
+        left: 0;
+    }
     .nextbtn{
         position: fixed;
         width: 100%;
-        height: 10vh;
+        height: 8vh;
         border: 0;
         color: white;
         bottom: 0px;
