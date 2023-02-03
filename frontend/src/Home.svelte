@@ -1,5 +1,5 @@
 <script>
-
+	import Loading from './Loading.svelte'
 	import { link, push } from 'svelte-spa-router'    
 	import { member_email, is_login, click_like_item_id } from './store'
 	import Like from './HomeElement/Like.svelte';
@@ -9,6 +9,8 @@
     const heart_not_fill = "https://cdn-icons-png.flaticon.com/512/2589/2589197.png"
 
 	let member_name = $member_email.split('@')[0]
+
+	let is_loading = false
 
 	let item_list = []
 	let category_set = new Set()
@@ -69,6 +71,7 @@
 
 	let new_item_list = []
 	async function update_recom() {
+		is_loading = true
 		let url = import.meta.env.VITE_SERVER_URL+"/update-inference-result"
 		let params = {
             "member_email" : $member_email
@@ -94,9 +97,10 @@
               console.log("업데이트 완료!")
               // window.location.reload()
               alert("추천이 완료되었습니다!")
-				    }
-			  })
-     })
+			}
+			})
+			is_loading = false
+     	})
 	}
 	
 	function nonlogin_recom() {
@@ -180,30 +184,33 @@
 			-->
 			
 			{#each new_item_list as item}
-			<div class="col mb-3">
-				<Like item_id={item.item_id} />
-				<a use:link href="/detail/{item.item_id}" class="link-detail">
-					<div class="card h-100">
-						<!-- Product image-->
-						<img class="card-img-top" src={item.image} alt="..." />
-						<!-- Product details-->
-						<div class="card-body p-4">
-							<!-- Product seller  -->
-							<div class="seller">
-								{item.seller}
-							</div>
-							<div class="item-name">
-								<!-- Product name -->
-								<h5 class="fw-bolder">{item.title}</h5>
-							</div>
-							<div class="text-center">
-								<div class="item-price">
-									<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
-									{#if item.price == ""}
-									<h6 class="price">예상가 {item.predict_price}</h6>
-									{:else}
-									<h6 class="price">{get_discount_price(item)}</h6>
-									{/if}
+				<div class="col mb-3">
+					{#key item}
+					<Like bind:item_id={item.item_id} />
+					{/key}
+					<a use:link href="/detail/{item.item_id}" class="link-detail">
+						<div class="card h-100">
+							<!-- Product image-->
+							<img class="card-img-top" src={item.image} alt="..." />
+							<!-- Product details-->
+							<div class="card-body p-4">
+								<!-- Product seller  -->
+								<div class="seller">
+									{item.seller}
+								</div>
+								<div class="item-name">
+									<!-- Product name -->
+									<h5 class="fw-bolder">{item.title}</h5>
+								</div>
+								<div class="text-center">
+									<div class="item-price">
+										<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
+										{#if item.price == ""}
+											<h6 class="price">예상가 {item.predict_price}</h6>
+										{:else}
+											<h6 class="price">{get_discount_price(item)}</h6>
+										{/if}
+									</div>
 								</div>
 							</div>
 						</div>
@@ -224,37 +231,38 @@
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
 			
 			{#each item_list as item}
-			{#if item.category.split('|')[0] == category}
-				<div class="col mb-3">
-					<Like item_id={item.item_id} />
-					<a use:link href="/detail/{item.item_id}" class="link-detail">
-						<div class="card h-100">
-							<!-- Product image-->
-							<img class="card-img-top" src={item.image} alt="..." />
-							<!-- Product details-->
-							<div class="card-body p-4">
-								<!-- Product seller  -->
-								<div class="seller">
-									{item.seller}
-								</div>
-								<div class="item-name">
-									<!-- Product name -->
-									<h5 class="fw-bolder">{item.title}</h5>
-								</div>
-								<div class="item-price">
-									<div class="text-center">
-										<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
-										{#if item.price == ""}
-										<h6 class="price">예상가 {item.predict_price}</h6>
-										{:else}
-										<h6 class="price">{get_discount_price(item)}</h6>
-										{/if}
+				{#if item.category.split('|')[0] == category}
+					<div class="col mb-3">
+						<Like item_id={item.item_id} />
+						<a use:link href="/detail/{item.item_id}" class="link-detail">
+							<div class="card h-100">
+								<!-- Product image-->
+								<img class="card-img-top" src={item.image} alt="..." />
+								<!-- Product details-->
+								<div class="card-body p-4">
+									<!-- Product seller  -->
+									<div class="seller">
+										{item.seller}
+									</div>
+									<div class="item-name">
+										<!-- Product name -->
+										<h5 class="fw-bolder">{item.title}</h5>
+									</div>
+									<div class="item-price">
+										<div class="text-center">
+											<!-- Product price. 가격 정보가 없을 경우 미입점 처리 -->
+											{#if item.price == ""}
+												<h6 class="price">예상가 {item.predict_price}</h6>
+											{:else}
+												<h6 class="price">{get_discount_price(item)}</h6>
+											{/if}
+										</div>
 									</div>
 								</div>
 							</div>
 						</a>
 					</div>
-					{/if}
+				{/if}
 			{/each}
 			
 		</div>
@@ -264,7 +272,9 @@
 		<TopButton />
 	</div>
 </section>
-
+{#key is_loading}
+<Loading is_loading={is_loading}/>
+{/key}
 <style>
 
 	.refresh-button-wrapper {
