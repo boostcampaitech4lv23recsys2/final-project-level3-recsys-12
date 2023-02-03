@@ -97,8 +97,12 @@ class Item:
     def add_cluster(self):
         del_list = get_del_list()
         self.item.category.fillna("", inplace=True)
-        with open(self.args.similarity_list_path, "rb") as pkl:
-            data = pickle.load(pkl)
+        if self.args.test:
+            with open(self.args.output_path + "similarity.pickle", "rb") as pkl:
+                data = pickle.load(pkl)
+        else:
+            with open(self.args.similarity_list_path, "rb") as pkl:
+                data = pickle.load(pkl)
         self.item["similarity_list"] = data
         self.item = self.item[(~self.item.category.str.contains("|".join(del_list))) & ~(self.item.category=="")]
         self.item.sort_values("item", inplace=True)

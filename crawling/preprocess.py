@@ -30,14 +30,19 @@ class Main:
             self.house_item = self.house_item[:10000]
             self.house_card = self.house_card[:10000]
             self.card = self.card[:10000]
+            
+            os.makedirs(self.args.output_path + "/test_result", exist_ok=True)
+            self.output_path = self.args.output_path + "/test_result/"
+            self.args.output_path = self.output_path
         
+        else:
+            os.makedirs(self.args.output_path, exist_ok=True)
+            self.output_path = os.path.join(self.args.output_path)
+            
         self.preprocessed_house = None
         self.preprocessed_item = None
         self.preprocessed_clusterd_item = None
         self.preprocessed_card = None
-        
-        os.makedirs(self.args.output_path, exist_ok=True)
-        self.output_path = os.path.join(self.args.output_path)
 
     def filter_by_item_category(self):
         del_list = get_del_list()
