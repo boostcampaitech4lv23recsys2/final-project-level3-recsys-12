@@ -165,7 +165,7 @@ async def image(item:Image):
     for card_id in card_id_list:
         house_id_list.append([col[0] for col in get_house_from_card(card_id)][0])
     
-    return (create_member(item.member_email, house_id_list))
+    return create_member(item.member_email, house_id_list)
 
 '''
 get : dict(json)를 받을 수 없음, {} 있을수도 없을수도

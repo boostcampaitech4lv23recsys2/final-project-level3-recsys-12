@@ -38,8 +38,15 @@ def create_member(member_email:str, house_id_list:str):
     """
     
     with database.session_maker() as session:
+        data = select(Member.cnt).order_by(Member.cnt.desc()).limit(1)
+        count = session.execute(data).fetchall()
+        if not count:
+            last_count = 0
+        else:
+            last_count = count[0].cnt
+        print(last_count)
         for i in house_id_list:
-            stmt = Member(member_email=member_email, house_id=i)
+            stmt = Member(member_email=member_email, house_id=i, cnt=last_count + 1)
             session.add(stmt)
             session.commit()
 
