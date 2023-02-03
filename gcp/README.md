@@ -3,7 +3,7 @@
 
 <br></br>
 # 초기 설정
-- ``` pip install --updgrade google-cloud-storage ```
+- ``` pip install --upgrade google-cloud-storage ```
 - 노션 - 환경설정 - key 다운로드해서 gcp/keys 디렉토리에 저장합니다.
 
 <br></br>
