@@ -126,7 +126,7 @@
           transform: rotate(30deg) scale(1.6);
         }
         40%{
-          transform: rotate(-30deg) scale(28);
+          transform: rotate(-30deg) scale(2);
         }
         50%{
           transform: rotate(10deg) scale(1.6);

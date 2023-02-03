@@ -181,7 +181,9 @@
 			
 			{#each new_item_list as item}
 			<div class="col mb-3">
+				{#key item}
 				<Like item_id={item.item_id} />
+				{/key}
 				<a use:link href="/detail/{item.item_id}" class="link-detail">
 					<div class="card h-100">
 						<!-- Product image-->
@@ -207,8 +209,9 @@
 								</div>
 							</div>
 						</div>
-					</a>
-				</div>
+					</div>
+				</a>
+			</div>
 			{/each}
 		</div>
 		{/if}
@@ -224,7 +227,7 @@
 			<!-- item_list 반복문으로 탐색하며 이미지, 상품명, 가격 출력 -->
 			
 			{#each item_list as item}
-			{#if item.category.split('|')[0] == category}
+				{#if item.category.split('|')[0] == category}
 				<div class="col mb-3">
 					<Like item_id={item.item_id} />
 					<a use:link href="/detail/{item.item_id}" class="link-detail">
@@ -252,11 +255,11 @@
 									</div>
 								</div>
 							</div>
-						</a>
-					</div>
-					{/if}
+						</div>
+					</a>
+				</div>
+				{/if}
 			{/each}
-			
 		</div>
 		{/each}
 	</div>
