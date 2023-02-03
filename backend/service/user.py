@@ -71,3 +71,10 @@ def create_inference(member_email, inference_item_list):
             session.commit()
 
         return "success"
+
+def check_user_index(member_email: str) -> int:
+    with database.session_maker() as session:
+        stmt = select(Member).where(Member.member_email == member_email)
+        data = session.execute(stmt).fetchall()
+    
+        return ([col[0].cnt for col in data])[0]
