@@ -65,7 +65,7 @@
 	async function get_items() {
         let url = import.meta.env.VITE_SERVER_URL + "/card"
         let params = {
-                "card_id_list": JSON.stringify(card_id_list),
+                "card_id_list": JSON.stringify(Array.from(selected_img)),
                 "space": JSON.stringify(space_value),
                 "size": JSON.stringify(house_size),
                 "family": JSON.stringify(family_value)

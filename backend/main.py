@@ -21,6 +21,9 @@ from service.item import *
 from inference.predict import Model
 import pandas as pd
 
+# signup inference
+from inference.predict_signup import CardVectorizer, Config, ImageUtil
+
 app = FastAPI()
 
 
@@ -48,10 +51,14 @@ with open("inference/model.yaml") as f:
 
 MODEL = Model(model_info, df_for_model)
 
+############ Signup Setting ############
+card_vector = CardVectorizer(Config())
+card_vector.load_data()
 
 ################ Front 연결 ################
 origins = [
     "http://127.0.0.1:5173"
+    # "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -139,7 +146,8 @@ class Card(BaseModel):
 
 @app.post('/card')
 async def get_card_image(card: Card): #초기 보여주는 house
-    card_id_result = inference_signup(card.card_id_list, card.space, card.size, card.family)   
+    card.card_id_list = list(map(int, filter(lambda x: x, card.card_id_list.strip('[]').split(','))))
+    card_id_result = card_vector.sampling_cards(card.card_id_list)
     return get_card_info(card_id_result)
 
 class Signup(BaseModel):
