@@ -129,6 +129,7 @@ async def login(DB_login : Login):
         "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     }
     access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    post_slack_message(f"{DB_login.member_email}님이 로그인하셨습니다!")
     return {
         "access_token": access_token,
         "token_type": "bearer",
