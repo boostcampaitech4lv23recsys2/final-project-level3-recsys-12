@@ -2,14 +2,6 @@
 
     import { link } from 'svelte-spa-router'
     import { access_token, member_email, is_login } from './store'
-    const logo = document.querySelector("#logo")
-    function onLogoHover(e){
-        if (e.target.textContent == "@_@") {
-            e.target.textContent = "@..@"
-        } else {
-            e.target.textContent = "@_@"
-        }
-    }
 
     function logout() {
         $access_token = ''
@@ -22,7 +14,9 @@
 <header class="sticky-top header">
     <nav class="navbar navbar-expand-lg navbar-light navbar-bg">
         <div class="container px-4 px-lg-5">
-            <a class="navbar-brand" id="logo" on:mouseover={onLogoHover} on:mouseleave={onLogoHover} href="/">@_@</a>
+            <a class="navbar-brand" id="logo" href="/">
+                <img class="logo-image" src="https://user-images.githubusercontent.com/80964004/216566569-be28e4c4-91df-406e-b51e-db0140ce54fe.png" alt="...">
+            </a>
 
             <span>
                 {#if ($is_login)}
@@ -44,6 +38,10 @@
 
 <style>
 
+    .logo-image {
+        height: 80px;
+        margin-bottom: 10px;
+    }
     header {
         height: 120px;
     }

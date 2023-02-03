@@ -4,10 +4,10 @@
 # In[46]:
 
 
-import pandas as pd
-from tqdm import tqdm
 from collections import Counter
 
+import pandas as pd
+from tqdm import tqdm
 
 # In[47]:
 
@@ -36,53 +36,53 @@ item.head(1)
 
 
 del_list = [
-"공구",
-"욕실용품",
-"유아·아동",
-"청소용품",
-"캠핑·레저",
-"반려동물",
-"생필품",
-"렌탈",
-"생활용품",
-"식품",
-"인테리어시공",
-"칼",
-"선풍기",
-"컵·잔·텀블러",
-"조리도구·도마",
-"홈갤러리",
-"전기요·온수매트",
-# "에어컨",
-"커피·티용품",
-"조명부속품",
-"센서등",
-"복합기·프린터·스캐너",
-"소파·생활커버",
-"이미용가전",
-"주방잡화",
-"그릇·홈세트",
-"후크·수납걸이",
-"데스크·디자인문구",
-"냄비·프라이팬·솥",
-"베이킹용품",
-# "세탁기·건조기",
-"거울",
-"매트리스·토퍼",
-"파티·이벤트용품",
-"해충퇴치기",
-"다이어리·플래너",
-"수세미걸이·세제통",
-"다리미·보풀제거기",
-"멀티탭·공유기정리함",
-"멀티탭·공유기정리함",
-"다리미·보풀제거기",
-"디자인문구",
-"보드게임",
-"리빙박스·바구니",
-# "가습기",
-"전기히터·온풍기",
-"전기·멀티포트"
+    "공구",
+    "욕실용품",
+    "유아·아동",
+    "청소용품",
+    "캠핑·레저",
+    "반려동물",
+    "생필품",
+    "렌탈",
+    "생활용품",
+    "식품",
+    "인테리어시공",
+    "칼",
+    "선풍기",
+    "컵·잔·텀블러",
+    "조리도구·도마",
+    "홈갤러리",
+    "전기요·온수매트",
+    # "에어컨",
+    "커피·티용품",
+    "조명부속품",
+    "센서등",
+    "복합기·프린터·스캐너",
+    "소파·생활커버",
+    "이미용가전",
+    "주방잡화",
+    "그릇·홈세트",
+    "후크·수납걸이",
+    "데스크·디자인문구",
+    "냄비·프라이팬·솥",
+    "베이킹용품",
+    # "세탁기·건조기",
+    "거울",
+    "매트리스·토퍼",
+    "파티·이벤트용품",
+    "해충퇴치기",
+    "다이어리·플래너",
+    "수세미걸이·세제통",
+    "다리미·보풀제거기",
+    "멀티탭·공유기정리함",
+    "멀티탭·공유기정리함",
+    "다리미·보풀제거기",
+    "디자인문구",
+    "보드게임",
+    "리빙박스·바구니",
+    # "가습기",
+    "전기히터·온풍기",
+    "전기·멀티포트",
 ]
 
 
@@ -96,6 +96,7 @@ item.category.fillna("|", inplace=True)
 
 
 import pickle
+
 with open("similarity_99243.pickle", "rb") as pkl:
     data = pickle.load(pkl)
 
@@ -105,7 +106,9 @@ item["similarity_list"] = data
 # In[53]:
 
 
-item_ = item[(~item.category.str.contains("|".join(del_list))) & ~(item.category=="|")]
+item_ = item[
+    (~item.category.str.contains("|".join(del_list))) & ~(item.category == "|")
+]
 
 
 # In[54]:
@@ -141,6 +144,7 @@ NON_CLUSTER_ID = -1
 lim = 5
 threshold = 0.8
 
+
 # TODO threshold 이상의 similarity 가지는 아이템을 저장하는 list 칼럼 생성
 def get_item(x, threshold):
     tmp = []
@@ -149,7 +153,10 @@ def get_item(x, threshold):
             tmp.append(a[2])
     return tmp
 
-item_["similar_item_list"] = item_.similarity_list.apply(lambda x:get_item(x, threshold))
+
+item_["similar_item_list"] = item_.similarity_list.apply(
+    lambda x: get_item(x, threshold)
+)
 
 
 # In[59]:
@@ -161,8 +168,11 @@ item_[item_.item == 356808]
 # In[60]:
 
 
-graph = {item_id:sim_items for item_id, sim_items in zip(item_.item, item_.similar_item_list)}
-visited = {item_id:NON_CLUSTER_ID for item_id in item_.item}
+graph = {
+    item_id: sim_items
+    for item_id, sim_items in zip(item_.item, item_.similar_item_list)
+}
+visited = {item_id: NON_CLUSTER_ID for item_id in item_.item}
 
 
 # In[61]:
@@ -202,17 +212,18 @@ cnt
 # In[65]:
 
 
-def BFS(item_id:int, cls_id):
+def BFS(item_id: int, cls_id):
     from collections import deque
+
     q = deque([(item_id, 0)])
     visited[item_id] = cls_id
-    while(q):
+    while q:
         node, hop = q.popleft()
         if hop > lim:
             return
         try:
             for id in graph[node]:
-                if visited[id] == -1: # 아직 클러스터링되지 않은 아이템인 경우
+                if visited[id] == -1:  # 아직 클러스터링되지 않은 아이템인 경우
                     visited[id] = cls_id
                     q.append((id, hop + 1))
         except:
@@ -249,7 +260,7 @@ item_.loc[item_.preprocessed_title.str.contains("etc|ETC"), "cls_id"] = -1
 # In[70]:
 
 
-cnt  = 0
+cnt = 0
 for k, v in Counter(visited.values()).items():
     if v == 1:
         cnt += 1
@@ -281,25 +292,25 @@ for item_id in not_clustered_item:
     CNT = Counter(group_candidates)
     if len(CNT) >= 2:
         tmp = CNT.most_common(2)
-        if tmp[0][0] == -1: # 가장 빈도 높은 클러스터가 클러스터링이 안되어있을 때 : -1
-            final_cls_id = tmp[1][0] # 나머지 모든 item을 2등 최빈 클러스터로 묶어줌
+        if tmp[0][0] == -1:  # 가장 빈도 높은 클러스터가 클러스터링이 안되어있을 때 : -1
+            final_cls_id = tmp[1][0]  # 나머지 모든 item을 2등 최빈 클러스터로 묶어줌
             for neighbor_item_id in graph[item_id] + [item_id]:
                 visited[neighbor_item_id] = final_cls_id
         else:
-            final_cls_id = tmp[0][0] # 나머지 모든 item을 1등 최빈 클러스터로 묶어줌
+            final_cls_id = tmp[0][0]  # 나머지 모든 item을 1등 최빈 클러스터로 묶어줌
             for neighbor_item_id in graph[item_id] + [item_id]:
                 visited[neighbor_item_id] = final_cls_id
     elif len(CNT) == 1:
         tmp = CNT.most_common(1)
-        if tmp[0][0] == -1: # 클러스터가 클러스터링이 안되어있을 때 : -1
-            final_cls_id = tmp[1][0] # 나머지 모든 item을 not_clustered_item의 클러스터로 묶어줌
+        if tmp[0][0] == -1:  # 클러스터가 클러스터링이 안되어있을 때 : -1
+            final_cls_id = tmp[1][0]  # 나머지 모든 item을 not_clustered_item의 클러스터로 묶어줌
             for neighbor_item_id in graph[item_id] + [item_id]:
                 visited[neighbor_item_id] = final_cls_id
         else:
-            final_cls_id = tmp[0][0] # 나머지 모든 item을 1등 최빈 클러스터로 묶어줌
+            final_cls_id = tmp[0][0]  # 나머지 모든 item을 1등 최빈 클러스터로 묶어줌
             for neighbor_item_id in graph[item_id] + [item_id]:
                 visited[neighbor_item_id] = final_cls_id
-    else: # 이웃들이 모두 잘려나간 카테고리에 포함되는 경우 -> -1로 처리
+    else:  # 이웃들이 모두 잘려나간 카테고리에 포함되는 경우 -> -1로 처리
         visited[item_id] = -1
 
 
@@ -373,7 +384,7 @@ item_.sample(10)
 # In[82]:
 
 
-type(item_[item_.cls_id!=-1].iloc[0]["similar_item_list"])
+type(item_[item_.cls_id != -1].iloc[0]["similar_item_list"])
 
 
 # In[83]:
@@ -381,13 +392,15 @@ type(item_[item_.cls_id!=-1].iloc[0]["similar_item_list"])
 
 import numpy as np
 
-item_["similar_item_list"] = item_["similar_item_list"].apply(lambda x: np.NaN if len(x) == 0 else "|".join(map(str,x)))
+item_["similar_item_list"] = item_["similar_item_list"].apply(
+    lambda x: np.NaN if len(x) == 0 else "|".join(map(str, x))
+)
 
 
 # In[84]:
 
 
-item_[item_.cls_id!=-1]
+item_[item_.cls_id != -1]
 
 
 # In[85]:
@@ -414,11 +427,4 @@ item_.to_csv(f"clustered_item_{now}.csv", index=False)
 # In[ ]:
 
 
-
-
-
 # In[ ]:
-
-
-
-

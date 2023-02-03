@@ -1,5 +1,6 @@
-import os
 import argparse
+import os
+
 from google.cloud import storage
 
 
@@ -7,7 +8,10 @@ from google.cloud import storage
 def set_env(credential_key: str):
     os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = credential_key
 
-def make_bucket(bucket_name: str, bucket_location: str="US", storage_client: object=None):
+
+def make_bucket(
+    bucket_name: str, bucket_location: str = "US", storage_client: object = None
+):
     """
     버킷 생성하기
         bucket_name: 생성하려는 버킷 이름
@@ -20,7 +24,10 @@ def make_bucket(bucket_name: str, bucket_location: str="US", storage_client: obj
     bucket = storage_client.create_bucket(bucket)
     return bucket
 
-def upload_to_bucket(blob_name: str, file_path: str, bucket_name: str, storage_client: object=None):
+
+def upload_to_bucket(
+    blob_name: str, file_path: str, bucket_name: str, storage_client: object = None
+):
     """
     GCP 버킷에 파일 업로드 하기
         blob_name: GCP에서의, 파일 저장 경로
@@ -38,7 +45,10 @@ def upload_to_bucket(blob_name: str, file_path: str, bucket_name: str, storage_c
         print(e)
         return False
 
-def download_from_bucket(blob_name: str, save_path: str, bucket_name: str, storage_client: object=None):
+
+def download_from_bucket(
+    blob_name: str, save_path: str, bucket_name: str, storage_client: object = None
+):
     """
     GCP 버킷으로부터 파일 다운로드 하기
         blob_name: GCP에서의, 파일 저장 경로 (확장자 제외)

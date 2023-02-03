@@ -1,13 +1,11 @@
 import sys
 
-
 import pandas as pd
-from torch.utils.data import DataLoader
-
 from args import get_args
 from dataloader import *
 from Multi_DAE import *
 from Multi_VAE import *
+from torch.utils.data import DataLoader
 from utils import *
 
 
@@ -58,7 +56,6 @@ def main(args):
     hit_list = []
     recall_list = []
     for epoch in range(1, args.num_epochs + 1):
-
         train_loss = train(
             model=model,
             criterion=criterion,
