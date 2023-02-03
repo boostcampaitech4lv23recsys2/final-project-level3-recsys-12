@@ -8,6 +8,6 @@ def get_args():
     parser.add_argument("--file_path", default="../model/saved_model/best_model.pt", type=str)
     parser.add_argument("--bucket_name", default="model_storage_rayn", type=str)
     parser.add_argument("--save_path", default="../backend/inference/best_model.pt", type=str)
-    parser.add_argument("--bucket_location", default="US", type=str)
+    parser.add_argument("--bucket_location", default="ASIA-NORTHEAST3", type=str)
     args = parser.parse_args()
     return args
