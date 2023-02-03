@@ -14,7 +14,10 @@ CREATE TABLE IF NOT EXISTS `item` (
 	`discount_rate`	VARCHAR(100)	NULL,
 	`image`	VARCHAR(255)	NULL,
 	`available_product`	VARCHAR(100)	NULL,
-	`predict_price`	VARCHAR(100)	NULL
+	`predict_price`	VARCHAR(100)	NULL,
+	`preprocessed_title` VARCHAR(100) NULL,
+	`similarity_list` VARCHAR(255)  NULL,
+	`cluster_id` INT(10)    NULL
 );
 
 -- create house table
@@ -33,9 +36,7 @@ CREATE TABLE IF NOT EXISTS `house` (
 	`prefer`	INT(10)	NULL,
 	`scrab`	INT(10)	NULL,
 	`comment`	INT(10)	NULL,
-	`views`	INT(10)	NULL,
-	`card_space` VARCHAR(100) 	NULL,
-	`card_img_url`	VARCHAR(255)	NULL
+	`views`	INT(10)	NULL
 );
 
 -- create house_item interaction table
@@ -57,6 +58,30 @@ CREATE TABLE IF NOT EXISTS `member_prefer` (
 	`idx` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	`member_email` VARCHAR(255) NOT NULL,
 	`item_id` INT(10) NOT NULL
+);
+
+-- create inference_result table
+CREATE TABLE IF NOT EXISTS `inference_result` (
+	`idx`	INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`member_email`	VARCHAR(255) NOT NULL,
+	`item_id`	INT(10) NOT NULL
+);
+
+-- create cluster_item_math table
+CREATE TABLE IF NOT EXISTS `cluster_item` (
+	`idx`	INT(10)	NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	`cluster_id`	INT(10)	NOT NULL,
+	`item_id`	INT(10)	NOT NULL,
+	`major_item` INT(10) NOT NULL
+);
+
+-- create card table
+CREATE TABLE IF NOT EXISTS `card` (
+	`card_id`	INT(10)	NOT NULL PRIMARY KEY,
+	`img_space`	VARCHAR(100)	NULL,
+	`img_url`	VARCHAR(255)	NULL,
+	`house_id`	INT(10)	NULL,
+	`is_human`	BINARY(1)	NOT NULL	DEFAULT 0
 );
 
 -- create house_color table

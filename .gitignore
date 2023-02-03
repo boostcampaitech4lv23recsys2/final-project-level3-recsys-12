@@ -8,15 +8,23 @@ wandb/
 # log
 *.log
 
-# csv
+# csv & tsv
 *.csv
+*.tsv
+
+# zip
+*.zip
 
 # model
 *.pt
 *.pth
 
+# pickle
+*.pickle
+
 # bash
 *.sh
+!settings.sh
 
 # nohup
 *.out
@@ -193,6 +201,7 @@ celerybeat.pid
 
 # Environments
 .env
+.env.production
 .venv
 env/
 venv/

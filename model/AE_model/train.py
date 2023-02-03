@@ -1,13 +1,11 @@
 import sys
 
-
 import pandas as pd
-from torch.utils.data import DataLoader
-
 from args import get_args
 from dataloader import *
 from Multi_DAE import *
 from Multi_VAE import *
+from torch.utils.data import DataLoader
 from utils import *
 
 
@@ -58,7 +56,6 @@ def main(args):
     hit_list = []
     recall_list = []
     for epoch in range(1, args.num_epochs + 1):
-
         train_loss = train(
             model=model,
             criterion=criterion,
@@ -94,14 +91,14 @@ def main(args):
             f"Epoch: {epoch:3d}| Train loss: {train_loss:.5f}| NDCG@10: {ndcg:.5f}| HIT@10: {hit:.5f}| RECALL@10: {recall:.5f}"
         )
 
-    pd.DataFrame(
-        make_submission(
-            model, data_loader, user_decoder, item_decoder, make_matrix_data_set, args
-        ),
-        columns=["user", "item"],
-    ).sort_values("user").to_csv(
-        args.save_path + f"/{args.model}_submission.csv", index=False
-    )
+    # pd.DataFrame(
+    #     make_submission(
+    #         model, data_loader, user_decoder, item_decoder, make_matrix_data_set, args
+    #     ),
+    #     columns=["user", "item"],
+    # ).sort_values("user").to_csv(
+    #     args.save_path + f"/{args.model}_submission.csv", index=False
+    # )
     if args.wandb != "NO_USE":
         wandb.finish()
 

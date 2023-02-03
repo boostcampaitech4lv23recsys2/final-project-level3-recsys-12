@@ -1,6 +1,8 @@
 from db.db_connect import Database
+
 if __name__ == "__main__":
     import uvicorn
+
     try:
         print("Create tables")
         Database.create_user()

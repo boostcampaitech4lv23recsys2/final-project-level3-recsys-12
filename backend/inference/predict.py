@@ -1,6 +1,7 @@
-import sys
-import torch
 import random
+import sys
+
+import torch
 
 sys.path.append("../model/AE_model/")
 from Multi_DAE import *
@@ -15,14 +16,13 @@ class Model:
         self.p_dims = model_info["parameter"]["p_dims"]
         self.topk = model_info["inference"]["topk"]
         self.model = MultiDAE(
-                p_dims=self.p_dims + [df.item.nunique()],
-            ).to(device)
+            p_dims=self.p_dims + [df.item.nunique()],
+        ).to(device)
         self.model.load_state_dict(torch.load(self.model_path, map_location=device))
         self.device = device
         self.house_encoder, self.house_decoder = generate_encoder_decoder(df, "house")
         self.item_encoder, self.item_decoder = generate_encoder_decoder(df, "item")
         self.dummy_input = torch.zeros((df.item.nunique()), dtype=torch.int64)
-        
 
     def predict(self, data):
         return self.forward(data)
@@ -36,9 +36,10 @@ class Model:
                 tmp.append(self.item_encoder[item_id])
             except:
                 pass
-        # tmp: tmp는 item_encoder에 key값으로 포함된 item들임. 
+        # tmp: tmp는 item_encoder에 key값으로 포함된 item들임.
         # 만약 tmp가 빈 리스트라면, 일단 랜덤으로 채움. (아마 데이터 전처리하고 DB랑 item.csv 간의 차이가 없으면 거의 발생 안할 일로 보임)
-        if not tmp: tmp = random.sample(list(self.item_decoder.keys()), k=50)
+        if not tmp:
+            tmp = random.sample(list(self.item_decoder.keys()), k=50)
         # tmp: 실제로 모델이 inference할 수 있는 label encoding된 item들
         user_selected_data = torch.tensor(tmp)
         tmp = user_selected_data[:]
@@ -56,12 +57,16 @@ class Model:
 
         with torch.no_grad():
             prediction = []
-            model_output = self.model(user_selected_data.type(torch.FloatTensor).to(self.device))
+            model_output = self.model(
+                user_selected_data.type(torch.FloatTensor).to(self.device)
+            )
             recommend_res = model_output.argsort(dim=1).squeeze()
-            up = recommend_res[-self.topk:].cpu().numpy().tolist()
+            up = recommend_res[-self.topk * 3 :].cpu().numpy().tolist()
             for item in up[::-1]:
                 prediction.append(self.item_decoder[item])
-        return prediction
+        random.shuffle(prediction)
+        return prediction[: self.topk]
+
 
 def inference(data, MODEL):
     return MODEL.predict(data)
