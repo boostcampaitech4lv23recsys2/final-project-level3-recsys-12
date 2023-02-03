@@ -146,6 +146,7 @@ class Card(BaseModel):
 
 @app.post('/card')
 async def get_card_image(card: Card): #초기 보여주는 house
+    card.card_id_list = list(map(int, filter(lambda x: x, card.card_id_list.strip('[]').split(','))))
     card_id_result = card_vector.sampling_cards(card.card_id_list)
     return get_card_info(card_id_result)
 

@@ -93,30 +93,6 @@ class ImageUtil:
     #     plt.show()
         
 
-class StyleDataSet(Dataset):
-    def __init__(self, config):
-        super(StyleDataSet, self).__init__()
-        self.config = config
-        self.csv_path = config.csv_path
-
-        self.img_path = config.img_path
-        image_files = os.listdir(self.img_path)
-        self.image_set = set([int(i.strip(".jpg")) for i in image_files])
-
-        house = pd.read_csv(os.path.join(self.csv_path, "house.csv"))
-        card = pd.read_csv(os.path.join(self.csv_path, "card.csv"))
-        hc = pd.read_csv(os.path.join(self.csv_path, "hc_interaction.csv"))
-        data = hc.merge(house, how="left", on="house").merge(card, how="left", on="card")
-        entire_df = data[data.img_space=="거실"]
-        require_df = entire_df.drop(["작업","분야", "지역", "기간","예산","세부공사","좋아요","스크랩","댓글","조회", "img_space"], axis=1).copy()
-        self.df = require_df[require_df.card.isin(self.image_set)].copy()
-
-        self.style_categories = ['모던', '내추럴', '북유럽', '클래식&앤틱', '유니크&믹스매치', '빈티지&레트로', '한국&아시아', '미니멀&심플', '러블리&로맨틱', '프렌치&프로방스', '인더스트리얼']
-        self.style_label = {i:j for i, j in enumerate(self.style_categories)}
-        self.image_util = ImageUtil(self.config)
-        for style_col in self.style_categories:
-            self.df[style_col] = self.df.스타일.str.contains(style_col).apply(lambda x: 1 if x else 0)
-    
     def __len__(self):
         return self.df.shape[0]
 
