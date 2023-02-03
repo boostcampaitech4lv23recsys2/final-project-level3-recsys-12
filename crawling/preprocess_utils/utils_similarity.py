@@ -62,7 +62,11 @@ def get_similarity_list(df:pd.DataFrame, args):
         data.append(sim)
     
     os.makedirs('pkl', exist_ok=True)
-    with open(f"{args.similarity_list_path}","wb") as pkl:
-        pickle.dump(data, pkl)
+    if args.test:
+        with open(args.output_path + "similarity.pickle","wb") as pkl:
+            pickle.dump(data, pkl)
+    else:
+        with open(args.similarity_list_path,"wb") as pkl:
+            pickle.dump(data, pkl)
     
     return data, sim_list, sim_list2

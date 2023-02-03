@@ -67,8 +67,8 @@ def sort_by_rating_review(df:pd.DataFrame):
         review_list.append(m[0][1:-1])
 
     df.review_ = review_list
-    df.review_ = df.review.astype(int)
-    df.rating_ = df.rating.astype(float)
+    df.review_ = df.review_.astype(int)
+    df.rating_ = df.rating_.astype(float)
 
     df = df.sort_values(["cluster_id", "review_", "rating_"], ascending=[True, False, False])
     df.drop(columns=["review_", "rating_"], inplace=True)
