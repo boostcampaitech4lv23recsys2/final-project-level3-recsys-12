@@ -10,7 +10,7 @@ database = Database()
 
 def random_item():
     with database.session_maker() as session:
-        stmt = f"select * from item where rating>='4.7' and price!='' and review>='5'"
+        stmt = f"select * from item where rating>='4.0' and price!='' and review>='1'"
         return session.execute(stmt).fetchall()
 
 
