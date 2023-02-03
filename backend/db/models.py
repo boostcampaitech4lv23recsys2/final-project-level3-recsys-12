@@ -55,6 +55,7 @@ class Member(Base):
     idx = Column(Integer, nullable=False, autoincrement=True, primary_key=True) # 인덱스 (사용 x)
     member_email = Column(String(255), nullable=False) # 회원 email
     house_id = Column(Integer, nullable=False) # 집들이 id
+    cnt = Column(Integer, nullable=False) # AB/test
     
 
 # 회원선호

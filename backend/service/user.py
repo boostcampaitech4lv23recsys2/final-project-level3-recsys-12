@@ -38,8 +38,10 @@ def create_member(member_email:str, house_id_list:str):
     """
     
     with database.session_maker() as session:
+        a = select(Member.cnt).order_by(Member.cnt.desc()).limit(1)
+        b = session.execute(a).fetchall()
         for i in house_id_list:
-            stmt = Member(member_email=member_email, house_id=i)
+            stmt = Member(member_email=member_email, house_id=i, cnt=b[0].cnt+1)
             session.add(stmt)
             session.commit()
 
