@@ -7,7 +7,6 @@
 import pandas as pd
 from tqdm import tqdm
 
-
 # In[57]:
 
 
@@ -109,7 +108,7 @@ item.cls_id.nunique()
 # In[16]:
 
 
-item2cls = {item_id:cls_id for item_id, cls_id in zip(item.item, item.cls_id)}
+item2cls = {item_id: cls_id for item_id, cls_id in zip(item.item, item.cls_id)}
 
 
 # In[17]:
@@ -154,7 +153,8 @@ train.to_csv("clustered_train.csv", index=False)
 predict_price_list = []
 
 import re
-p = re.compile('.+(?=사)')
+
+p = re.compile(".+(?=사)")
 for i in item.predict_price.index:
     m = p.findall(str(item.predict_price.iloc[i]))
     if len(m) == 0:
@@ -174,13 +174,17 @@ item.predict_price = predict_price_list
 # In[25]:
 
 
-item.loc[(item.predict_price != "정보없음"), "price"] = item[(item.predict_price != "정보없음")].predict_price
+item.loc[(item.predict_price != "정보없음"), "price"] = item[
+    (item.predict_price != "정보없음")
+].predict_price
 
 
 # In[27]:
 
 
 import re
+
+
 def f(x):
     pattern = re.compile(r"별점\s+(\d+\.\d+)점")
     try:
@@ -207,7 +211,8 @@ item.review = item.review.fillna("리뷰 쓰기첫 리뷰 두 배 적립")
 review_list = []
 
 import re
-p = re.compile('[(][0-9]*[)]')
+
+p = re.compile("[(][0-9]*[)]")
 for idx, review in enumerate(item.review):
     m = p.findall(review)
     if len(m) == 0:
@@ -244,7 +249,7 @@ item = item.sort_values(["cls_id", "review", "rating"], ascending=[True, False, 
 # In[35]:
 
 
-item.groupby("cls_id")["item"].apply(lambda x:len(list(x)))
+item.groupby("cls_id")["item"].apply(lambda x: len(list(x)))
 
 
 # <!-- 1. 클러스터링 적당히 엄격히하고 (현 수준) -> 생성된 테이블로 백, 프론트, DB 작업하고 -> 검증만 다중선형회귀로
@@ -253,14 +258,21 @@ item.groupby("cls_id")["item"].apply(lambda x:len(list(x)))
 # In[ ]:
 
 
-
-
-
 # In[46]:
 
 
-cls_major_item_id = item.rename(columns={"item":"major_item"}).groupby("cls_id")["major_item"].apply(lambda x:list(x)[0]).reset_index()
-cls_major_item_id_list = item.rename(columns={"item":"item_list"}).groupby("cls_id")["item_list"].apply(lambda x:"|".join(list(map(str, list(x))))).reset_index()
+cls_major_item_id = (
+    item.rename(columns={"item": "major_item"})
+    .groupby("cls_id")["major_item"]
+    .apply(lambda x: list(x)[0])
+    .reset_index()
+)
+cls_major_item_id_list = (
+    item.rename(columns={"item": "item_list"})
+    .groupby("cls_id")["item_list"]
+    .apply(lambda x: "|".join(list(map(str, list(x)))))
+    .reset_index()
+)
 
 
 # In[47]:
@@ -282,7 +294,3 @@ cls_major_item_id.to_csv("cluster_major_item.csv", index=True)
 
 
 # In[ ]:
-
-
-
-

@@ -6,7 +6,6 @@
 
 import pandas as pd
 
-
 # In[97]:
 
 
@@ -44,20 +43,22 @@ item["original_title"] = item.title
 # In[101]:
 
 
-item.rename(columns={"title":"preprocessed_title"}, inplace=True)
+item.rename(columns={"title": "preprocessed_title"}, inplace=True)
 
 
 # In[102]:
 
 
-def df_lower(df:pd.DataFrame, col:str="preprocessed_title"):
-    df[col] = df[col].apply(lambda x:str.lower(x))
+def df_lower(df: pd.DataFrame, col: str = "preprocessed_title"):
+    df[col] = df[col].apply(lambda x: str.lower(x))
     return df
 
+
 # TODO 전처리: [단종], [품목], (당일출고) 등등 -> "" -> 재정렬
-def get_del_words(df:pd.DataFrame):
+def get_del_words(df: pd.DataFrame):
     del_words = set()
     from tqdm import tqdm
+
     for a in tqdm(df.preprocessed_title.unique()):
         tmp = a.strip("\t\n ")
         if tmp.startswith("[") and "]" in tmp:
@@ -68,24 +69,29 @@ def get_del_words(df:pd.DataFrame):
             del_words.add("(" + tmp + ")")
     return del_words
 
-def df_strip(df:pd.DataFrame, del_words:str = "\t\n #&"):
-    df.preprocessed_title = df.preprocessed_title.apply(lambda x:x.strip(del_words))
+
+def df_strip(df: pd.DataFrame, del_words: str = "\t\n #&"):
+    df.preprocessed_title = df.preprocessed_title.apply(lambda x: x.strip(del_words))
     return df
+
 
 # TODO 전처리: 양끝에 \t, \n, " ", ﻿ -> ""
-def df_strip2(df:pd.DataFrame):
-    df.preprocessed_title = df.preprocessed_title.apply(lambda x:x.strip("\t\n ﻿"))
+def df_strip2(df: pd.DataFrame):
+    df.preprocessed_title = df.preprocessed_title.apply(lambda x: x.strip("\t\n ﻿"))
     return df
 
-def df_del_word(df:pd.DataFrame, del_words:list):
+
+def df_del_word(df: pd.DataFrame, del_words: list):
     def f(x, word):
         if x.startswith(word):
-            return x[len(word):].strip(" ")
+            return x[len(word) :].strip(" ")
         else:
             return x
+
     from tqdm import tqdm
+
     for word in tqdm(del_words):
-        df.preprocessed_title = df.preprocessed_title.apply(lambda x:f(x, word))
+        df.preprocessed_title = df.preprocessed_title.apply(lambda x: f(x, word))
     return df
 
 
@@ -117,7 +123,9 @@ item = df_strip2(item)
 # In[107]:
 
 
-item.preprocessed_title = item.preprocessed_title.str.replace(pat=r'[^\w]',repl=r' ',regex=True)
+item.preprocessed_title = item.preprocessed_title.str.replace(
+    pat=r"[^\w]", repl=r" ", regex=True
+)
 
 
 # In[108]:
@@ -129,15 +137,17 @@ item.preprocessed_title.fillna("ETC", inplace=True)
 # In[145]:
 
 
-from tensorflow.keras.preprocessing.text import text_to_word_sequence
-from konlpy.tag import Okt
-from tqdm import tqdm
 import re
 
-reg = re.compile(r'[a-zA-Z]')
+from konlpy.tag import Okt
+from tensorflow.keras.preprocessing.text import text_to_word_sequence
+from tqdm import tqdm
 
-def tokenize(x:str):
-    okt = Okt() # 형태소 분석기 객체 생성
+reg = re.compile(r"[a-zA-Z]")
+
+
+def tokenize(x: str):
+    okt = Okt()  # 형태소 분석기 객체 생성
     noun_list = []
     x = x.split()
     for s in x:
@@ -166,9 +176,10 @@ tt = item[:]
 
 
 from tqdm import tqdm, tqdm_pandas
+
 tqdm.pandas()
 
-item.preprocessed_title = item.preprocessed_title.progress_apply(lambda x:tokenize(x))
+item.preprocessed_title = item.preprocessed_title.progress_apply(lambda x: tokenize(x))
 
 
 # In[157]:
@@ -185,4 +196,3 @@ from time import time
 now = str(round(time()))[5:]
 
 item.to_csv(f"title_preprocessed_item_{now}.csv", index=False)
-
