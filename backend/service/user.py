@@ -76,5 +76,6 @@ def check_user_index(member_email: str) -> int:
     with database.session_maker() as session:
         stmt = select(Member).where(Member.member_email == member_email)
         data = session.execute(stmt).fetchall()
-    
+        print(data) # garbage collector
+
         return ([col[0].cnt for col in data])[0]
