@@ -46,11 +46,14 @@ df_for_model = (
     .groupby("house")
     .filter(lambda x: len(x) >= 15)
 )
+item_df_for_model = (
+    pd.read_csv("data/item.tsv", sep="\t")
+)
 
 with open("inference/model.yaml") as f:
     model_info = yaml.load(f, Loader=yaml.FullLoader)
 
-MODEL = Model(model_info, df_for_model)
+MODEL = Model(model_info, df_for_model, item_df_for_model)
 
 ############ Signup Setting ############
 card_vector = CardVectorizer(Config())
@@ -58,8 +61,8 @@ card_vector.load_data()
 
 ################ Front 연결 ################
 origins = [
-    "http://127.0.0.1:5173"
-    # "http://localhost:5173"
+    # "http://127.0.0.1:5173"
+    "http://localhost:5173"
 ]
 
 app.add_middleware(
@@ -74,12 +77,12 @@ app.add_middleware(
 ###################################배포/개발 환경설정###################################
 # 배포 환경에서는 해당 구역을 활성화하면 됩니다
 # 개발 환경에서는 해당 구역을 주석처리하면 됩니다
-app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
+# app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
 
 
-@app.get("/")
-def index():
-    return FileResponse("../frontend/dist/index.html")
+# @app.get("/")
+# def index():
+#     return FileResponse("../frontend/dist/index.html")
 
 
 #########################################################################################
