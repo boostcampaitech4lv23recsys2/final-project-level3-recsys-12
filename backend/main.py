@@ -46,11 +46,14 @@ df_for_model = (
     .groupby("house")
     .filter(lambda x: len(x) >= 15)
 )
+item_df_for_model = (
+    pd.read_csv("data/item.tsv", sep="\t")
+)
 
 with open("inference/model.yaml") as f:
     model_info = yaml.load(f, Loader=yaml.FullLoader)
 
-MODEL = Model(model_info, df_for_model)
+MODEL = Model(model_info, df_for_model, item_df_for_model)
 
 ############ Signup Setting ############
 card_vector = CardVectorizer(Config())
