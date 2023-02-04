@@ -178,7 +178,7 @@
 			<span class="category-name refresh-button-text">새롭게 추천된 상품들이에요.</span>
 		</div>
 		<hr>
-		<div class="row gx-3 gx-lg-3 row-cols-3 row-cols-md-4 row-cols-xl-5">
+		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-4 row-cols-xl-5">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
 				row-cols-xl-n : 최대 화면에서 n개 보여줌
@@ -223,7 +223,7 @@
 		{#each category_list as category}
 		<div class="category-name">{category}</div>
 		<hr>
-		<div class="row gx-3 gx-lg-3 row-cols-3 row-cols-md-4 row-cols-xl-5">
+		<div class="row gx-3 gx-lg-3 row-cols-2 row-cols-md-4 row-cols-xl-5">
 			<!-- 
 				row-cols-n : 축소 화면에서 n개 보여줌
 				row-cols-xl-n : 최대 화면에서 n개 보여줌
@@ -247,7 +247,7 @@
 								</div>
 								<div class="item-name">
 									<!-- Product name -->
-									<h5 class="fw-bolder">{item.title}</h5>
+									<h5 class="fw-bolder" id="product_title">{item.title}</h5>
 								</div>
 								<div class="item-price">
 									<div class="text-center">
@@ -415,8 +415,38 @@
 	/* 상품명이 짧을 경우에도 price 위치 고정 */
 	.item-name {
 		height: 62%;
+        display: block;
+		/* display: flex;
+		align-items: center; */
+		padding:0;
+		margin:0;
 	}
 
+	#product_title{
+        /* outline: 1px solid black; */
+/*        height: 4.8em;*/
+        display: block;
+        color: black;
+        font-weight: bolder !important;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        /* white-space: normal;
+        line-height: 1.2; */
+        text-align: left;
+        word-wrap: break-word;
+        display: -webkit-box;
+        -webkit-line-clamp: 2 ;
+        -webkit-box-orient: vertical;
+		padding: 0;
+		margin: 0;
+    }
+	.seller{
+        display: -webkit-box;
+        -webkit-line-clamp: 1 ;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+	}
 	.go-top-button {
         position: fixed;
         right: 5%;

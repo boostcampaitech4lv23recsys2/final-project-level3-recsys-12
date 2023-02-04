@@ -111,7 +111,8 @@
                     </div>
                     <div class="item-review">
                         <img class="star-icon" src="https://cdn-icons-png.flaticon.com/512/1828/1828884.png" alt="...">
-                    <span> 별점 {item.rating} <span style="color:gray;">|</span> {item.review}개 리뷰 </span>
+                        <span> 별점 {item.rating} </span>
+                        <!-- <span> 별점 {item.rating} <span style="color:gray;">|</span> {item.review}개 리뷰 </span> -->
                     </div>
                 </div>
             </div>
