@@ -163,7 +163,8 @@
 			<img class="heart-icon" src={first_img_url} alt="..." on:mouseenter={() => {change_heart_icon(1)}} on:mouseleave={() => {change_heart_icon(1)}}>
 			를 눌러주세요! <br>
 			<img class="heart-icon" src={second_img_url} alt="..." on:mouseenter={() => {change_heart_icon(2)}} on:mouseleave={() => {change_heart_icon(2)}}>
-			를 많이 고르면 더 좋은 추천 결과를 받아보실 수 있어요!
+			를 많이 고르면 더 좋은 추천 결과를 받아보실 수 있어요! 
+			<br><img class="heart-icon" src={heart_fill} alt="..."> 를 누른 상품은 마이페이지에서 확인할 수 있어요.
 		</div>
 
 		<div class="description">
