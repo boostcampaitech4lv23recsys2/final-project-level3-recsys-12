@@ -3,6 +3,7 @@ path:
   save_path: "../submission"
   data_path: "../data"
   model_path: "inference/best_model.pt"
+  popularity_model_path: "inference/popularity.pickle"
 parameter:
   p_dims:
     - 200

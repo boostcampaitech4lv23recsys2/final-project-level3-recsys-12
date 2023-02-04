@@ -2,6 +2,8 @@ import random
 import sys
 
 import torch
+import random
+import pickle
 
 sys.path.append("../model/AE_model/")
 from Multi_DAE import *
@@ -23,10 +25,17 @@ class Model:
         self.house_encoder, self.house_decoder = generate_encoder_decoder(df, "house")
         self.item_encoder, self.item_decoder = generate_encoder_decoder(item_df, "item")
         self.dummy_input = torch.zeros((item_df.item.nunique()), dtype=torch.int64)
+        with open(model_info['path']['popularity_model_path'], "rb") as pkl:
+            self.popularity_based_result = pickle.load(pkl)
 
-    def predict(self, data):
-        return self.forward(data)
-
+    def predict(self, data, user_index):
+        if user_index % 2:  # 홀수 -> MultiDAE
+            return self.forward(data)
+        else:   # 짝수 -> 인기도 기반
+            random.shuffle(self.popularity_based_result)
+            print(self.popularity_based_result[:50])
+            return self.popularity_based_result[:50]
+        
     # user_selected_data: label encoding되지 않은 item_id list
     def forward(self, user_selected_data):
         self.model.eval()
@@ -68,5 +77,5 @@ class Model:
         return prediction[: self.topk]
 
 
-def inference(data, MODEL):
-    return MODEL.predict(data)
+def inference(data, MODEL, user_index):
+    return MODEL.predict(data, user_index)
