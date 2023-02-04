@@ -13,18 +13,18 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 
 class Model:
-    def __init__(self, model_info, df) -> None:
+    def __init__(self, model_info, df, item_df) -> None:
         self.model_path = model_info["path"]["model_path"]
         self.p_dims = model_info["parameter"]["p_dims"]
         self.topk = model_info["inference"]["topk"]
         self.model = MultiDAE(
-            p_dims=self.p_dims + [df.item.nunique()],
+            p_dims=self.p_dims + [item_df.item.nunique()],
         ).to(device)
         self.model.load_state_dict(torch.load(self.model_path, map_location=device))
         self.device = device
         self.house_encoder, self.house_decoder = generate_encoder_decoder(df, "house")
-        self.item_encoder, self.item_decoder = generate_encoder_decoder(df, "item")
-        self.dummy_input = torch.zeros((df.item.nunique()), dtype=torch.int64)
+        self.item_encoder, self.item_decoder = generate_encoder_decoder(item_df, "item")
+        self.dummy_input = torch.zeros((item_df.item.nunique()), dtype=torch.int64)
         with open(model_info['path']['popularity_model_path'], "rb") as pkl:
             self.popularity_based_result = pickle.load(pkl)
 
