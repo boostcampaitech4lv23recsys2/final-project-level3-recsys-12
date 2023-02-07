@@ -1,3 +1,131 @@
-# Final Project
+# :house_with_garden: 나만의집 - 개인 맞춤형 인테리어 상품 추천
 
-[Front-end 환경설정](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/blob/dev/frontend/README.md)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/67851701/216806796-d05452c4-bdf4-4f8d-a126-ef3dad2cedcb.png" width="600">  
+</p>
+
+<p align="center">
+
+  <!--프론트앤드 관련 태그-->
+  <img src="https://img.shields.io/badge/Svelte-FF3E00?style=for-the-badge&logo=Svelte&logoColor=black">  
+  <img src="https://img.shields.io/badge/npm-CB3837?style=for-the-badge&logo=npm&logoColor=black">
+  <img src="https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=Vite&logoColor=black">  
+  <img src="https://img.shields.io/badge/HTML-E34F26?style=for-the-badge&logo=HTML5&logoColor=black">  
+  <img src="https://img.shields.io/badge/CSS-1572B6?style=for-the-badge&logo=CSS3&logoColor=black"><br>
+  
+  <!--백앤드, 배포 관련 태그-->
+  <img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=Python&logoColor=black">  
+  <img src="https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=black">  
+  <img src="https://img.shields.io/badge/Poetry-60A5FA?style=for-the-badge&logo=Poetry&logoColor=black">  
+  <img src="https://img.shields.io/badge/Google Cloud-4285F4?style=for-the-badge&logo=Google Cloud&logoColor=black">  
+  <img src="https://img.shields.io/badge/Ubuntu-013243?style=for-the-badge&logo=Ubuntu&logoColor=white">
+  <img src="https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=Docker&logoColor=black">
+  <img src="https://img.shields.io/badge/MySQL-4479A1?style=for-the-badge&logo=MySQL&logoColor=black"><br>
+  
+  <!--모델 관련 태그-->
+  <img src="https://img.shields.io/badge/PyTorch-EE4C2C?style=for-the-badge&logo=PyTorch&logoColor=black">  
+  <img src="https://img.shields.io/badge/pandas-150458?style=for-the-badge&logo=pandas&logoColor=white">  
+  <img src="https://img.shields.io/badge/NumPy-E95420?style=for-the-badge&logo=NumPy&logoColor=black">  
+  <img src="https://img.shields.io/badge/Scikit learn-F7931E?style=for-the-badge&logo=scikitlearn&logoColor=white">  
+  <img src="https://img.shields.io/badge/TensorFlow-FF6F00?style=for-the-badge&logo=TensorFlow&logoColor=black">  
+  <img src="https://img.shields.io/badge/W&B-FFBE00?style=for-the-badge&logo=WeightsandBiases&logoColor=white">  
+  <img src="https://img.shields.io/badge/Keras-D00000?style=for-the-badge&logo=Keras&logoColor=black"><br>
+  
+  <!--데이터 관련 태그-->
+  <img src="https://img.shields.io/badge/Plotly-3F4F75?style=for-the-badge&logo=Plotly&logoColor=black">  
+  <img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=Selenium&logoColor=black">  
+  <img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=OpenCV&logoColor=black">
+  <img src="https://img.shields.io/badge/YOLO-00FFFF?style=for-the-badge&logo=YOLO&logoColor=black"><br>
+  
+  <!--협업 관련 태그-->
+  <img src="https://img.shields.io/badge/Zoom-2D8CFF?style=for-the-badge&logo=Zoom&logoColor=black">
+  <img src="https://img.shields.io/badge/GitHub-181717?style=for-the-badge&logo=GitHub&logoColor=white">
+  <img src="https://img.shields.io/badge/Slack-4A154B?style=for-the-badge&logo=Slack&logoColor=white">
+  <img src="https://img.shields.io/badge/Notion-000000?style=for-the-badge&logo=Notion&logoColor=white">
+  <img src="https://img.shields.io/badge/VSCode-007ACC?style=for-the-badge&logo=Visual Studio Code&logoColor=black"><br>
+  
+</p>
+
+[:house_with_garden: 나만의집 이용하러 가기](http://34.64.51.62:8000/)  
+[:tv: 나만의집 시연 영상](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
+[:film_strip: 발표 영상](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
+[:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
+[:blue_book: Wrap-Up Report](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
+
+# :loud_sound: Project Introduction
+
+나만의집 프로젝트 소개 작성 예정
+
+# :card_index_dividers: Data
+
+data 파트. 이미지, 간략한 소개, 위키 링크 추가 예정
+
+# :desktop_computer: Model
+
+model 파트. 이미지, 간략한 소개, 위키 링크 추가 예정
+
+# :cake: Service
+
+- ### System Architecture
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/67851701/216807835-225f09bf-69f6-46e5-b53f-1c3150b0beb9.png" width="900">  
+</p>
+
+- ### Project Contents
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/67851701/216807924-682433cb-2bd5-42de-9236-76639df1e729.png" width="900">  
+</p>
+
+간략한 설명과 함께 wiki 링크 추가 
+
+# :gear: Tech Stack
+
+- ### Front-end
+
+Svelte | npm
+:---: | :---: 
+<img src="https://user-images.githubusercontent.com/67851701/216808877-5262456f-e3f3-4673-aae0-8b04a0e634b2.png" width="100px" height="100px"> | <img src="https://user-images.githubusercontent.com/67851701/216808955-444cf082-fb2a-46d1-bf66-6fd92fd55fdd.png" width="100px" height="100px">
+
+- ### Back-end
+
+FastAPI | poetry
+:---: | :---:
+<img src="https://user-images.githubusercontent.com/67851701/216809055-6e745f22-3f6f-438a-ad53-7f4c01daba40.png" width="100px" height="100px"> | <img src="https://user-images.githubusercontent.com/67851701/216809026-265ae46d-7123-4754-84c2-aad3b763b164.png" width="100px" height="100px">
+
+- ### Serving
+
+GCP | MySQL
+:---: | :---:
+<img src="https://user-images.githubusercontent.com/67851701/216809494-01bc7465-a1b9-4fbd-ba12-9fe260f652f0.png" width="100px" height="100px"> | <img src="https://user-images.githubusercontent.com/67851701/216809436-be04e4d0-ec1b-402c-a778-bf9cf59245ad.png" width="100px" height="100px">
+
+# :balance_scale: Project Management
+
+- [프로젝트 개발 일정](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/프로젝트-개발-일정)  
+- [Team RAYN의 협업 방식](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Cooperation)
+- [프로젝트 컨벤션](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Convention)
+
+# :rainbow: Team Information
+
+Naver Connect Foundation boostcamp AI Tech 4th,  
+**Team RAYN**, **R**ecommendation is **A**ll **Y**ou **N**eed  
+
+| [<img src="https://github.com/thkyang324.png" width="100px">](https://github.com/thkyang324) | [<img src="https://github.com/tree-jhk.png" width="100px">](https://github.com/tree-jhk) | [<img src="https://github.com/daeni-dang.png" width="100px">](https://github.com/daeni-dang) | [<img src="https://github.com/JisooRyu99.png" width="100px">](https://github.com/JisooRyu99) | [<img src="https://github.com/7dudtj.png" width="100px">](https://github.com/7dudtj) |  
+| :---: | :---: | :---: | :---: | :---: |  
+| [강태훈](https://github.com/thkyang324) | [권준혁](https://github.com/tree-jhk) | [김다은](https://github.com/daeni-dang) | [류지수](https://github.com/JisooRyu99) | [유영서](https://github.com/7dudtj) |
+
+<img src="https://user-images.githubusercontent.com/67851701/216918957-92e9dfbf-3dc0-462c-9eb9-f0409ac7ce44.png" width="400px">
+
+
+# :four_leaf_clover: To see more
+
+프로젝트에 대한 더 많은 내용이 궁금하신가요?<br>
+
+프로젝트를 진행하면서 배운 [:satellite:Tech Talks:satellite:](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Tech-Talks)<br>
+다양한 이슈와 문제를 해결해나가는 과정을 그린 [:100:Trouble Shooting:100:](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Trouble-Shooting)<br>
+프로젝트의 방향성과 미래를 그린 [:airplane:Todo List:airplane:](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Todo-List)<br>
+개발에 필요한 유용한 내용을 모아둔 [:crystal_ball:Tips:crystal_ball:](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Tips)<br>
+이 외에도 다양한 이야기가 있습니다!  
+
+더 자세한 내용을 알고싶으시다면, [:scroll:Project Wiki:scroll:](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki)를 확인하세요!
