@@ -47,22 +47,50 @@
 </p>
 
 [:house_with_garden: 나만의집 이용하러 가기](http://34.64.51.62:8000/)  
-[:tv: 나만의집 시연 영상](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
-[:film_strip: 발표 영상](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
-[:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
-[:blue_book: Wrap-Up Report](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12)  
+[:tv: 나만의집 시연 영상](https://youtu.be/JuKz3PUd5xo)  
+[:film_strip: 발표 영상](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12) TBD  
+[:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12) TBD  
+[:blue_book: Wrap-Up Report](https://dear-queen-578.notion.site/Final-Project-Wrap-Up-Report-99d475442c304775804d41523113e385)  
 
 # :loud_sound: Project Introduction
 
-나만의집 프로젝트 소개 작성 예정
+남들과는 다른 나만의 스타일로 인테리어를 하고 싶으신가요? **<ins>나만의집</ins>** 이 도와드리겠습니다!<br><br>
+가구는 한번 구매하면 오래 사용하고 가격대가 비교적 높기 때문에 신중하게 구매한다는 특징이 있습니다.  
+하지만, 가구를 구매할 때에는 많은 수의 상품 중에서 인기 있는 상품에만 노출이 되며,  
+개인 취향에 맞는 상품을 찾으려면 많은 시간을 들여야 합니다.<br><br>
+**나만의집**은 이러한 문제점을 개선하고자 사용자의 선호에 기반한 개인 맞춤 상품을 추천해줍니다!  
 
 # :card_index_dividers: Data
 
-data 파트. 이미지, 간략한 소개, 위키 링크 추가 예정
+<p>
+  <img src="https://user-images.githubusercontent.com/67851701/217436692-db5d757d-2f3c-4143-97fc-5af8d2b834be.png" width="800">
+</p>
+
+오늘의집 사이트에 사용자들이 자신의 인테리어를 소개하는 글이 있습니다.  
+인테리어 소개글에 포함된 아이템들을 글쓴이가 선호하는 아이템으로 간주하여서  
+User-Item Interaction 데이터로 사용하였습니다.  
+<br>
+데이터 개요, 수집 방법 및 업데이트, 특성, 전처리, ERD 등의 자세한 내용은  
+[나만의집 프로젝트 데이터](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/데이터) 에서 확인하실 수 있습니다.
 
 # :desktop_computer: Model
 
-model 파트. 이미지, 간략한 소개, 위키 링크 추가 예정
+<p>
+  <img src="https://user-images.githubusercontent.com/67851701/217440320-2f450bab-f791-48d8-8c8b-1c3b4e047dfe.png" width="800">
+</p>
+
+개인 맞춤형 인테리어 상품 추천이라는 목표 달성을 위한 추천 모델은 다음 네가지 조건을 충족해야 합니다.  
+
+* 개인화
+* User-Free
+* Sparse Data 학습 가능
+* 빠른 Inference
+
+이러한 조건을 충족하는 모델로 Multi-DAE 모델을 선정하였습니다.  
+<br>
+모델과 관련된 자세한 내용은  
+[나만의집 프로젝트 모델](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/모델) 에서 확인하실 수 있습니다.  
+
 
 # :cake: Service
 
@@ -78,7 +106,18 @@ model 파트. 이미지, 간략한 소개, 위키 링크 추가 예정
   <img src="https://user-images.githubusercontent.com/67851701/216807924-682433cb-2bd5-42de-9236-76639df1e729.png" width="900">  
 </p>
 
-간략한 설명과 함께 wiki 링크 추가 
+* 회원가입을 진행합니다.  
+* 회원가입이 완료되었다면 로그인을 합니다.  
+* 개인 맞춤 추천된 상품들이 메인 페이지를 구성합니다.  
+* 마음에 드는 상품들에 **'좋아요'** 버튼을 눌러줍니다.  
+* **'좋아요'** 된 상품들은 마이 페이지에서 확인할 수 있습니다.  
+* 상품 페이지에서 유사한 연관 상품을 제공합니다.   
+* **'새로운 추천 받기'** 버튼을 누르면 더욱 정밀한 개인 맞춤형 추천을 받을 수 있습니다.  
+  
+<br>
+
+Project Contents와 관련된 자세한 내용은  
+[나만의집 프로젝트 UI & UX](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/UI&UX) 에서 확인하실 수 있습니다.  
 
 # :gear: Tech Stack
 
