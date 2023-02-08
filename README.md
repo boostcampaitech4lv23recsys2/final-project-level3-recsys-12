@@ -48,9 +48,7 @@
 
 [:house_with_garden: 나만의집 이용하러 가기](http://34.64.51.62:8000/)  
 [:tv: 나만의집 시연 영상](https://youtu.be/JuKz3PUd5xo)  
-[:film_strip: 
-
-영상](https://www.youtube.com/watch?v=JuKz3PUd5xo)  
+[:film_strip: 발표 영상](https://www.youtube.com/watch?v=JuKz3PUd5xo) TBD
 [:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12) TBD  
 [:blue_book: Wrap-Up Report](https://dear-queen-578.notion.site/Final-Project-Wrap-Up-Report-99d475442c304775804d41523113e385)  
 
