@@ -48,9 +48,10 @@
 
 [:house_with_garden: 나만의집 이용하러 가기](http://34.64.51.62:8000/)  
 [:tv: 나만의집 시연 영상](https://youtu.be/JuKz3PUd5xo)  
-[:film_strip: 발표 영상](https://www.youtube.com/watch?v=JuKz3PUd5xo) TBD
-[:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12) TBD  
+[:film_strip: 발표 영상](https://www.youtube.com/watch?v=vTB0MS-YP90)  
+[:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/blob/main/나만의집%20발표%20자료.pdf)  
 [:blue_book: Wrap-Up Report](https://dear-queen-578.notion.site/Final-Project-Wrap-Up-Report-99d475442c304775804d41523113e385)  
+
 
 # :loud_sound: Project Introduction
 
@@ -75,8 +76,10 @@ User-Item Interaction 데이터로 사용하였습니다.
 
 # :desktop_computer: Model
 
+## :gift: Recommendation
+
 <p>
-  <img src="https://user-images.githubusercontent.com/67851701/217440320-2f450bab-f791-48d8-8c8b-1c3b4e047dfe.png" width="800">
+  <img src="https://user-images.githubusercontent.com/67851701/217464477-045dd4ea-7eda-4683-958f-86fe5a9e5782.png" width="600">
 </p>
 
 개인 맞춤형 인테리어 상품 추천이라는 목표 달성을 위한 추천 모델은 다음 네가지 조건을 충족해야 합니다.  
@@ -91,6 +94,18 @@ User-Item Interaction 데이터로 사용하였습니다.
 모델과 관련된 자세한 내용은  
 [나만의집 프로젝트 모델](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/모델) 에서 확인하실 수 있습니다.  
 
+## :new: Cold Start
+
+<p>
+  <img src="https://user-images.githubusercontent.com/67851701/217467829-07a30e7d-e125-4145-8277-0cca6726ddc5.png" width="400">
+</p>
+
+Cold Start 문제는 추천 프로젝트의 단골 이슈입니다.  
+아이템 소비내역이 없는 신규 사용자에게는 어떻게 상품을 추천해줄 수 있을까요?  
+Convolutional AutoEncoder를 이용하여 인테리어 이미지를 벡터화하여 문제를 풀어나갔습니다.  
+<br>
+Cold Start 문제를 해결해나가는 과정은  
+[Cold Start 문제 개선하기](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/Cold-start-%EB%AC%B8%EC%A0%9C-%EA%B0%9C%EC%84%A0) 에서 확인하실 수 있습니다.
 
 # :cake: Service
 
