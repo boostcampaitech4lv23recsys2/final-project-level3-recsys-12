@@ -134,6 +134,16 @@ Cold Start 문제를 해결해나가는 과정은
 Project Contents와 관련된 자세한 내용은  
 [나만의집 프로젝트 UI & UX](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/wiki/UI&UX) 에서 확인하실 수 있습니다.  
 
+# :pencil: A/B Test
+
+<p>
+<img src="https://user-images.githubusercontent.com/67851701/217741865-3d69cac0-7f3d-48a6-b3b5-56e8f02f061a.png" width="500">
+</p>
+
+A/B Test를 진행하여 인테리어 상품 추천 모델이 얼마나 다양한 상품을 제공하는지를 확인하였습니다.  
+추천 모델과 인기도 모델을 비교한 결과 추천 모델이 보다 다양한 상품을 제공하는 것으로 나타났습니다.  
+자세한 내용은 [발표 영상](https://www.youtube.com/watch?v=rJuBYWqGv-g)과 [발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/blob/main/나만의집%20발표%20자료.pdf)에서 확인하실 수 있습니다!  
+
 # :gear: Tech Stack
 
 - ### Front-end
