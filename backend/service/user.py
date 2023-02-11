@@ -71,3 +71,12 @@ def create_inference(member_email, inference_item_list):
             session.commit()
 
         return "success"
+
+
+def insert_signup_info(member_email, space, size, family):
+    with database.session_maker() as session:
+        stmt = MemberInfo(member_email=member_email, space=space, size=size, family=family)
+        session.add(stmt)
+        session.commit()
+
+        return "success"

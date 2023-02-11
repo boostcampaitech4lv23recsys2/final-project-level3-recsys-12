@@ -1,6 +1,5 @@
 <script>
     export let is_loading
-    console.log(is_loading)
     const url = "https://cdn-icons-mp4.flaticon.com/512/8722/8722704.mp4"
     
     const width = window.innerWidth
