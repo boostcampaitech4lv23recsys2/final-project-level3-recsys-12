@@ -4,13 +4,18 @@
     import ImageBlock from './SignUpElement/ImageBlock.svelte';
     import { setContext } from 'svelte'
     import TopButton from './GoTop.svelte'
+
     let is_loading = false
     let email, is_success, use_email = false
+    let space_value, family_value, house_size = 0
+
+    // [이메일 확인] 버튼 클릭 시
     async function isEmailDup(e){
         e.preventDefault()
         if (email == null) {
             is_success = 2  // 비어있는 이메일 입력
         }else {
+            // 이메일 중복 체크 API 호출
             let url = import.meta.env.VITE_SERVER_URL + "/signup"
             let params = {
                 "member_email" : email,
@@ -33,6 +38,7 @@
                         let regex = new RegExp(reg_exp);
                         if (regex.test(email)) {
                             is_success = 3
+	                        get_items()
                         }else {
                             is_success = 1  // 형식이 맞지 않는 이메일
                         }
@@ -40,8 +46,9 @@
                 })
             })
         }
-	    get_items()
     }
+
+    // [이메일 변경] 버튼 클릭 시
     function change_use_email(e) {
         e.preventDefault()
         if (use_email) {
@@ -53,24 +60,23 @@
         }
     }
 
+    // [Next!] 버튼 클릭 시
     function goToScroll(e) {
         e.preventDefault()
         var location = document.querySelector(".container_title").offsetTop;
         window.scrollTo({top: location-120, behavior: 'smooth'});
-        
     }
 
     let card_id_list = []
     
-    let space_value, family_value, house_size = 0
 	async function get_items() {
         is_loading = true
         let url = import.meta.env.VITE_SERVER_URL + "/card"
         let params = {
                 "card_id_list": JSON.stringify(Array.from(selected_img)),
-                "space": JSON.stringify(space_value),
+                "space": space_value,
                 "size": JSON.stringify(house_size),
-                "family": JSON.stringify(family_value)
+                "family": family_value
             }
             let options = {
                 method: "post",
@@ -92,7 +98,10 @@
         let url = import.meta.env.VITE_SERVER_URL + "/member"
         let params = {
             "member_email" : email,
-            "selected_card_id" : JSON.stringify(Array.from(selected_img))
+            "selected_card_id" : JSON.stringify(Array.from(selected_img)),
+            "space": space_value,
+            "size": JSON.stringify(house_size),
+            "family": family_value
         }
         let options = {
             method: "post",
@@ -105,7 +114,7 @@
         await fetch(url,options).then((response)=>{
             if(response.status >= 200 && response.status < 300){
                 push("/login-user")
-                alert("회원가입에 성공하였습니다.")
+                alert("회원가입이 완료되었습니다.\n"+email+"을 이용해 로그인해주세요.")
             }else{
                 alert("회원가입에 실패하였습니다.")
                 push("/signup-user")
@@ -113,6 +122,7 @@
         })
     }
 
+    // [회원가입 완료하기] 버튼 클릭 시
     async function post_inference_result() {
         let url = import.meta.env.VITE_SERVER_URL + "/insert-inference-result"
         let params = {
@@ -152,6 +162,7 @@
 
     setContext("is_success",is_success)
 
+    // [더 많은 상품 보기] 버튼 클릭 시
     let next_cnt = 1
     function get_next_items() {
         get_items()
@@ -220,7 +231,7 @@
                     {:else}
                     <button id="dupcheck" on:click={isEmailDup} class="signup-button btn btn-info btn-block">이메일 확인</button>
                     {/if}
-                    {#if is_success == 3 && !use_email && space_value!=null && family_value!=null && house_size!=-1}
+                    {#if is_success == 3 && !use_email && space_value!=null && family_value!=null && house_size!=0}
                     <button class="next-button signup-button btn btn-info" on:click={goToScroll}>Next!</button>
                     {:else}
                     <button class="next-button signup-button btn btn-info" disabled on:click={goToScroll}>Next!</button>
@@ -245,7 +256,7 @@
                 {/if}
             </div>
         </div>
-        {#if is_success == 3 && !use_email && space_value!=null && family_value!=null && house_size!=-1}
+        {#if is_success == 3 && !use_email && space_value!=null && family_value!=null && house_size!=0}
         <div class="container_title">
             <br>
             <h4 style="text-align: center; margin:0;">마음에 드는 이미지를 선택해 주세요.</h4>

@@ -77,12 +77,12 @@ app.add_middleware(
 ###################################배포/개발 환경설정###################################
 # 배포 환경에서는 해당 구역을 활성화하면 됩니다
 # 개발 환경에서는 해당 구역을 주석처리하면 됩니다
-app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
+# app.mount("/assets", StaticFiles(directory="../frontend/dist/assets"))
 
 
-@app.get("/")
-def index():
-    return FileResponse("../frontend/dist/index.html")
+# @app.get("/")
+# def index():
+#     return FileResponse("../frontend/dist/index.html")
 
 
 #########################################################################################
@@ -180,6 +180,9 @@ async def signup(db_signup: Signup, discription="회원가입 API입니다.") ->
 class Image(BaseModel):
     member_email: str
     selected_card_id: str
+    space: str
+    size: str
+    family: str
 
 
 @app.post("/member")
@@ -189,7 +192,7 @@ async def image(item: Image):
     house_id_list = []
     for card_id in card_id_list:
         house_id_list.append([col[0] for col in get_house_from_card(card_id)][0])
-
+    insert_signup_info(item.member_email, item.space, item.size, item.family)
     return create_member(item.member_email, house_id_list)
 
 

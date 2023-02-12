@@ -57,6 +57,15 @@ class Member(Base):
     cnt = Column(Integer, nullable=False, default=0)  # AB/test
 
 
+# 회원에게 입력받은 정보 (공간, 가족형태, 평수)
+class MemberInfo(Base):
+    __tablename__ = "member_info"
+    member_email = Column(String(255), nullable=False, primary_key=True)
+    space = Column(String(255), nullable=False)
+    size = Column(Integer, nullable=False)
+    family = Column(String(255), nullable=False)
+
+
 # 회원선호
 class MemberPrefer(Base):
     __tablename__ = "member_prefer"  # MySQL DB Table 이름

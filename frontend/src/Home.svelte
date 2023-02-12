@@ -16,8 +16,8 @@
 	let category_set = new Set()
 	let category_list = []
 	let price, rate, discount_price
+
 	async function get_items() {
-		
 		let url = import.meta.env.VITE_SERVER_URL
 		if ($is_login) {
 			if ($click_like_item_id != "") {
@@ -88,13 +88,10 @@
 			if (json == "Already Update") {
               // 사용자가 좋아요 누른 상품이 없는 경우
               alert("더 많은 좋아요가 필요해요!")
-              console.log(json)
               // inference 결과에 변경이 없는 경우
             }else {
               new_item_list = json.new_item
               item_list = json.inter
-              console.log(new_item_list)
-              console.log("업데이트 완료!")
               // window.location.reload()
               alert("추천이 완료되었습니다!")
 			}

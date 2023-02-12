@@ -53,6 +53,14 @@ CREATE TABLE IF NOT EXISTS `member` (
 	`house_id`	INT(10)	NOT NULL
 );
 
+-- create member_info table
+CREATE TABLE IF NOT EXISTS `member_info` (
+	`member_email` VARCHAR(255) NOT NULL PRIMARY KEY,
+	`space`	VARCHAR(255)	NOT NULL,
+	`size`	INT(10)	NOT NULL,
+	`family`	VARCHAR(255)	NOT NULL
+);
+
 -- create member_prefer table
 CREATE TABLE IF NOT EXISTS `member_prefer` (
 	`idx` INT(10) NOT NULL AUTO_INCREMENT PRIMARY KEY,
