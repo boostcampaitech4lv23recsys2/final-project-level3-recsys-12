@@ -80,6 +80,7 @@ def train(model, criterion, optimizer, data_loader, make_matrix_data_set, config
     model.train()
     loss_val = 0
     best_loss = float("inf")
+    
     for users in data_loader:
         mat = make_matrix_data_set.make_matrix(users)
         mat = mat.to(config.device)
@@ -98,8 +99,8 @@ def train(model, criterion, optimizer, data_loader, make_matrix_data_set, config
             optimizer.zero_grad()
             loss = criterion(recon_x=recon_mat, x=mat)
 
-        if best_loss > loss:
-            torch.save(model.state_dict(), config.model_path)
+        # if best_loss > loss:
+        #     torch.save(model.state_dict(), config.model_path)
 
         loss_val += loss.item()
 
@@ -117,6 +118,9 @@ def evaluate(model, data_loader, user_train, user_valid, make_matrix_data_set, c
     NDCG = 0.0  # NDCG@10
     HIT = 0.0  # HIT@10
     RECALL = 0.0  # RECALL@10
+    
+    rec_item_set = set()
+    
     with torch.no_grad():
         for users in data_loader:
             mat = make_matrix_data_set.make_matrix(users)
@@ -128,16 +132,24 @@ def evaluate(model, data_loader, user_train, user_valid, make_matrix_data_set, c
 
             for user, rec in zip(users, rec_list):
                 uv = user_valid[user.item()]
-                up = rec[-10:].cpu().numpy().tolist()
+                up = rec[-config.topk:].cpu().numpy().tolist()
                 NDCG += get_ndcg(pred_list=up, true_list=uv)
                 HIT += get_hit(pred_list=up, true_list=uv)
                 RECALL += get_recall(pred_list=up, true_list=uv)
+                
+                rec_item_set.update(rec[-config.topk:].cpu().numpy().tolist())
 
+    tmp = []
+    for item_encoded_id in rec_item_set:
+        tmp.append(make_matrix_data_set.item_decoder[item_encoded_id])
+    rec_item_set = tmp
+    
     NDCG /= len(data_loader.dataset)
     HIT /= len(data_loader.dataset)
     RECALL /= len(data_loader.dataset)
+    DIVERSITY = len(rec_item_set) / make_matrix_data_set.num_item
 
-    return NDCG, HIT, RECALL
+    return NDCG, HIT, RECALL, DIVERSITY, list(rec_item_set)
 
 
 def logging_time(original_fn):
