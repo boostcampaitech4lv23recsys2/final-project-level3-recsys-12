@@ -55,6 +55,9 @@ def main(args):
     ndcg_list = []
     hit_list = []
     recall_list = []
+    
+    best_ndcg, best_diversity = 0, 0
+    
     for epoch in range(1, args.num_epochs + 1):
         train_loss = train(
             model=model,
@@ -65,7 +68,7 @@ def main(args):
             config=args,
         )
 
-        ndcg, hit, recall = evaluate(
+        ndcg, hit, recall, diversity, unique_rec_items = evaluate(
             model=model,
             data_loader=data_loader,
             user_train=user_train,
@@ -88,8 +91,14 @@ def main(args):
         recall_list.append(recall)
 
         print(
-            f"Epoch: {epoch:3d}| Train loss: {train_loss:.5f}| NDCG@10: {ndcg:.5f}| HIT@10: {hit:.5f}| RECALL@10: {recall:.5f}"
+            f"Epoch: {epoch:3d}| Train loss: {train_loss:.5f}| NDCG@{args.topk}: {ndcg:.5f}| HIT@{args.topk}: {hit:.5f}| RECALL@{args.topk}: {recall:.5f}\n"
+            f"DIVERSITY@{args.topk}: {diversity:.5f}| nunique_among_all_user@{args.topk}: {len(unique_rec_items)}| total_items_nuinque: {make_matrix_data_set.num_item}\n"
+            f"recommended_items: {unique_rec_items}"
         )
+        print(make_matrix_data_set.item[make_matrix_data_set.item.item.isin(unique_rec_items)][:10].title)
+        
+        if ndcg > best_ndcg and diversity > best_diversity:
+            torch.save(model.state_dict(), args.model_path)
 
     # pd.DataFrame(
     #     make_submission(

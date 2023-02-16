@@ -22,17 +22,20 @@ class MakeMatrixDataSet:
 
     def __init__(self, args):
         self.config = args
-        self.df = (
+        self.train = (
             pd.read_csv(os.path.join(self.config.data_path, "train.tsv"), sep="\t")
             .groupby("house")
             .filter(lambda x: len(x) >= 15)
         )
+        self.item = (
+            pd.read_csv(os.path.join(self.config.data_path, "item.tsv"), sep="\t")
+        )
         self.item_encoder, self.item_decoder = self.generate_encoder_decoder("item")
         self.user_encoder, self.user_decoder = self.generate_encoder_decoder("house")
-        self.num_item, self.num_user = len(self.item_encoder), len(self.user_encoder)
+        self.num_item, self.num_user = len(self.item_encoder), len(self.user_encoder) # self.num_item은 self.item의 item 개수로 맞춤.
 
-        self.df["item_idx"] = self.df["item"].apply(lambda x: self.item_encoder[x])
-        self.df["house_idx"] = self.df["house"].apply(lambda x: self.user_encoder[x])
+        self.train["item_idx"] = self.train["item"].apply(lambda x: self.item_encoder[x])
+        self.train["house_idx"] = self.train["house"].apply(lambda x: self.user_encoder[x])
 
         self.user_train, self.user_valid = self.generate_sequence_data()
 
@@ -48,7 +51,10 @@ class MakeMatrixDataSet:
 
         encoder = {}
         decoder = {}
-        ids = self.df[col].unique()
+        if col == "house":
+            ids = self.train[col].unique()
+        elif col == "item":
+            ids = self.item[col].unique()
 
         for idx, _id in enumerate(ids):
             encoder[_id] = idx
@@ -66,7 +72,7 @@ class MakeMatrixDataSet:
         users = defaultdict(list)
         user_train = {}
         user_valid = {}
-        for user, item in zip(self.df["house_idx"], self.df["item_idx"]):
+        for user, item in zip(self.train["house_idx"], self.train["item_idx"]):
             users[user].append(item)
 
         for user in users:
