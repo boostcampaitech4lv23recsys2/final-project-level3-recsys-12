@@ -39,7 +39,7 @@
   
 </p>
 
-[:house_with_garden: 나만의집 이용하러 가기](http://34.64.51.62:8000/)  
+:house_with_garden: <strike>나만의집 이용하러 가기</strike> -> 베타 서비스가 종료되었습니다. 추후 개선된 서비스로 돌아오겠습니다!  
 [:tv: 나만의집 시연 영상](https://youtu.be/JuKz3PUd5xo)  
 [:film_strip: 발표 영상](https://www.youtube.com/watch?v=rJuBYWqGv-g)  
 [:books: 발표 자료](https://github.com/boostcampaitech4lv23recsys2/final-project-level3-recsys-12/blob/main/나만의집%20발표%20자료.pdf)  
